@@ -2,6 +2,20 @@
 
 This is the intellectual core: how to reverse-engineer what the exam will ask and how confident to be. Read after intake, before building output.
 
+## 0. Explicit-marker extraction pass (run first)
+
+Before weighting anything, scan transcripts and notes for statements where the professor *explicitly and unequivocally* flagged exam material. This pass produces **facts**, not inferences, and feeds the purple "Professor's Explicit Exam Statements" section.
+
+For each hit, capture: the verbatim statement (original Arabic *and* an English translation if spoken in Arabic), the exact topic/concept it points to, and the source location (which lecture/slide). Do not paraphrase away the professor's wording — the point is fidelity.
+
+**Large transcripts (100+ pages):** run this scan first as a lightweight pass over the whole file, logging hits with their line/section, then chunk-read the rest of the document section by section for the deeper synthesis. Never try to hold the entire transcript in one reasoning pass.
+
+**Purple vs red — keep them distinct:**
+- **Purple** = the professor literally said this is on the exam. A *fact*. Highest study priority, quoted.
+- **Red** = a HIGH-confidence *prediction* (from past papers / convergent signals) or an exam trap. An *inference* or a warning.
+
+A topic can be both (professor flagged it *and* it's in past papers) — show the purple statement and the red prediction together.
+
 ## 1. Signal-weighting hierarchy
 
 Rank every candidate topic by the evidence behind it. Signals from strongest to weakest:

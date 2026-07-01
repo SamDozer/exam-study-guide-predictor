@@ -10,23 +10,27 @@ Build a section only if its trigger is met. Order sections by the mark distribut
 |---|---|---|
 | 1. Table of Contents | Always | Clickable anchors in HTML. |
 | 2. Exam Blueprint | Always | Exam type, total marks, per-section marks, question types, predicted paper structure. The prioritization map. |
-| 3. High-Yield Concepts | Always | The must-know core, sorted by confidence + marks. Tag must-memorize vs must-understand. |
-| 4. Mechanisms & Explanations | Concept/process content present | WHY & HOW, not just WHAT. Include common misunderstanding traps. Blue styling. |
-| 5. Practical Protocols Breakdown | Lab manual present OR practical/OSPE exam | Step → reason-for-step → critical-error point → result interpretation. |
-| 6. Visual / Specimen Identification | Image-based/spot exam, OR user uploaded images | Table: item • purpose • distinguishing features • expected result • "how it appears in the photo." Keep this section's machinery available even when dormant. |
-| 7. Calculations | Quantitative content present (CFU/mL, dilutions, BOD, COD, enzyme activity/units, % solubilization, molarity, Beer–Lambert, yield, etc.) | Formula + every variable defined + ≥2 solved step-by-step examples from the actual sources/past papers + common mistakes. |
-| 8. Predicted Exam Questions + Model Answers | Always | Core deliverable. Each tagged HIGH/MEDIUM/LOW with signal justification. Mirror the professor's phrasing; answer to the mark depth. |
-| 9. Exam Traps & Common Mistakes | Always | Confused-pair contrasts, unit traps, misread mechanisms. |
-| 10. Rapid Revision Sheet | User chose "rapid" or "both" | Ultra-condensed one-pager: memory triggers, must-memorize list, formula strip, top predicted Qs. |
+| 3. Professor's Explicit Exam Statements | Transcripts/notes contain explicit markers | **Purple.** Verbatim quotes (Arabic + English translation) of everything the professor said is on the exam, each linked to its topic. This is the strict-extract deliverable on its own. |
+| 4. High-Yield Concepts & Frameworks | Always | The must-know core, sorted by confidence + marks. Tag must-memorize vs must-understand. Include mnemonics/memory triggers. |
+| 5. Core Mechanisms & Frameworks | Concept/process content present | WHY & HOW, not just WHAT — covers wet-lab mechanisms, analytical frameworks, and algorithmic/bioinformatics logic alike. Common-misunderstanding traps. Blue styling. |
+| 6. Applied Methodologies / Workflows | Lab manual or protocol/code/pipeline present, OR practical/OSPE exam | Step → reason-for-step → critical-error point → result interpretation. Covers wet-lab protocols and computational/analysis pipelines. |
+| 7. Visual / Data Interpretation | Image/graph/code-based exam, OR user uploaded visuals | Table: item • purpose/function • distinguishing features • expected result • "how it appears in the exam." Covers specimens, plates, gels, graphs, code blocks, maps, diagrams. Keep this machinery available even when dormant. |
+| 8. Analytical / Calculations | Quantitative or formula content present (CFU/mL, dilutions, BOD, COD, enzyme activity/units, % solubilization, molarity, Beer–Lambert, yield, statistical tests, etc.) | Formula/framework + every variable defined + ≥2 solved step-by-step examples from the actual sources/past papers + common mistakes. |
+| 9. Predicted Exam Questions + Model Answers | Always (unless strict-extract) | Core deliverable. Each tagged HIGH/MEDIUM/LOW with signal justification. Mirror the professor's phrasing; answer to the mark depth. |
+| 10. Exam Traps & Common Mistakes | Always | Confused-pair contrasts, unit traps, misread mechanisms. |
+| 11. Rapid Revision Sheet | User chose "rapid" or "both" | Ultra-condensed one-pager: memory triggers, mnemonics, must-memorize list, formula strip, top predicted Qs. |
 
 If a triggered section has no real content in the sources, omit it rather than padding.
 
 ## Color coding (consistent across HTML and docx)
 
-- 🔴 **Red** — Exam Alerts, Traps, HIGH-confidence predictions, "the professor said this is coming."
+- 🟣 **Purple** — the professor's *explicit* exam statements, quoted verbatim. Facts, not predictions. Highest priority.
+- 🔴 **Red** — Exam Alerts, Traps, HIGH-confidence *predictions*, "we think this is coming."
 - 🟢 **Green** — Key concepts / must-know facts.
-- 🔵 **Blue** — Mechanisms / the WHY & HOW.
+- 🔵 **Blue** — Mechanisms & frameworks / the WHY & HOW.
 - ⚪ **Grey/italic** — Outside-source clarifications (must be visually distinct so the student knows it wasn't from the professor).
+
+**Strict-extract deliverable:** if the user chose "strict extract," output *only* Section 3 (Professor's Explicit Exam Statements) plus a one-line blueprint — no predictions, no synthesis, ultra-condensed. This mirrors the "extract only what the professor explicitly flagged" objective.
 
 ## HTML template
 
@@ -41,6 +45,7 @@ Self-contained single file, internal CSS, collapsible sections, sticky clickable
 <title>[COURSE] — Exam Master Guide</title>
 <style>
   :root{
+    --exam:#7c3aed; --exam-bg:#f3edfd;
     --alert:#c0392b; --alert-bg:#fdecea;
     --key:#1e8449;   --key-bg:#eafaf1;
     --mech:#1f6feb;  --mech-bg:#eaf2fd;
@@ -57,6 +62,8 @@ Self-contained single file, internal CSS, collapsible sections, sticky clickable
   table{border-collapse:collapse;width:100%;margin:14px 0}
   th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
   th{background:#f5f6f8}
+  .exam{background:var(--exam-bg);border-left:5px solid var(--exam);padding:10px 14px;border-radius:6px;margin:12px 0}
+  .exam blockquote{margin:6px 0;padding-left:10px;border-left:3px solid var(--exam);color:#4c1d95}
   .alert{background:var(--alert-bg);border-left:5px solid var(--alert);padding:10px 14px;border-radius:6px;margin:12px 0}
   .key{background:var(--key-bg);border-left:5px solid var(--key);padding:10px 14px;border-radius:6px;margin:12px 0}
   .mech{background:var(--mech-bg);border-left:5px solid var(--mech);padding:10px 14px;border-radius:6px;margin:12px 0}
@@ -92,6 +99,7 @@ Self-contained single file, internal CSS, collapsible sections, sticky clickable
   </div>
 
   <!-- Callout examples -->
+  <div class="exam">🟣 Professor said (exam): <blockquote>"[verbatim quote]" — [English translation if Arabic]</blockquote>→ points to: [topic]</div>
   <div class="alert">⚠️ Exam alert: …</div>
   <div class="key">✅ Key: …</div>
   <div class="mech">🔵 Mechanism: …</div>
@@ -105,6 +113,10 @@ Fill every `[...]` placeholder. Remove sections that didn't activate and their T
 ## Word (.docx) output
 
 If the user picks docx, first read `/mnt/skills/public/docx/SKILL.md` and build with that skill. Map the same color coding to shaded paragraph/heading styles, keep the same section catalog and predicted-question tagging, and use a real Word table of contents. Save to `/mnt/user-data/outputs/`.
+
+## Optional flashcard export
+
+If the user opts in, also produce an **Anki-ready CSV** (`flashcards.csv`): two columns, `Front,Back`, one predicted or key Q/A per row, properly quoted. This is a bonus artifact, not a replacement for a spaced-repetition plugin — mention that and skip it if they already use one.
 
 ## Delivery
 

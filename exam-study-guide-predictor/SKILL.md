@@ -30,6 +30,8 @@ The objective is **scoring on this specific exam**, not comprehensive mastery. P
 - **Marks-driven.** Always weight coverage by the mark distribution. A 25-mark topic gets more depth and more predicted questions than a 3-mark one. If you don't know the marks, ask.
 - **Evidence-weighted prediction.** Predictions are ranked High / Medium / Low confidence, each justified by *which* signals fired. Past exams are the single strongest signal. Full weighting hierarchy in `references/prediction-and-analysis.md`.
 - **Output in English, but read Arabic.** The professor's transcripts may be Arabic (or code-switched Arabic + English technical terms). Parse them, catch spoken exam cues, and integrate their substance into the English output — attributing them as "professor said (verbal emphasis)."
+- **Separate fact from inference.** What the professor *explicitly said* is exam material is a **fact** — capture it verbatim (translated if Arabic) and render it in the dedicated **purple** style. What you *predict* is likely is an **inference** — render it in the confidence-tagged prediction section. Never let the two blur; a student budgets revision time differently for "he said this is coming" vs "we think this is coming."
+- **Handle large transcripts.** Transcripts can run 100+ pages. Do the explicit-marker extraction pass (below) *first* as a cheap scan, then chunk-read the rest section by section. Do not attempt to reason over the whole document in one pass.
 - **Conditional sections.** Never force lab-science machinery (calculations, media-ID tables, specimen photos) onto material that doesn't contain it. Detect what the material is and build only the sections that apply. Keep the machinery available even for image-light courses — activate it when the user says the exam has images/spots/calculations.
 
 ## Workflow
@@ -45,10 +47,11 @@ Ask:
 3. **Exam format** — which question types: MCQ, true/false, short answer, long/essay, spot-or-photo identification, calculations/problems, diagram labeling, viva. (If they don't know yet, proceed and note the guide isn't format-tuned.)
 4. **Total marks & distribution** — total marks and, if known, marks per section or per question type. This drives prioritization — push for it.
 5. **Sources they have** — run the source checklist below. Explicitly ask for the two prediction-critical ones if not mentioned: **past exam papers** and **official model answers**.
-6. **Deliverable** — study guide, exam prediction, or both (default: both, as a single integrated document).
+6. **Deliverable** — one of: study guide, exam prediction, both (default), or **strict extract** (only the points the professor explicitly flagged as exam material — a lean product, no inference).
 7. **Depth** — deep no-missing-detail guide, ultra-condensed rapid-revision sheet, or both (full guide + rapid sheet appended).
 8. **Output format** — HTML (default; color-coded, collapsible, clickable table of contents) or Word .docx (printable). Ask each time.
 9. **Images** — does this exam include photo/diagram/spot identification? If yes, activate the visual-identification section and ask them to upload the relevant images.
+10. **Optional flashcard export** — offer (don't force) an Anki-ready CSV of Q/A pairs from the predicted questions. Note it's optional; skip if the user already uses a spaced-repetition plugin.
 
 **Source checklist** (tell them each source's role so they know what's worth digging up):
 
@@ -67,6 +70,7 @@ After intake, read `references/prediction-and-analysis.md` before doing anything
 
 ### Step 2 — Ingest and analyze all sources
 
+- **First, the explicit-marker extraction pass.** Before anything else, scan the transcripts and notes for statements where the professor *directly and unequivocally* said something is exam material (Arabic + English cue tables in `references/prediction-and-analysis.md`). Capture each as a verbatim quote (translate Arabic to English, keep the original too), with the topic it points to. These become the **purple** "Professor's Explicit Exam Statements" section and are the backbone of both the strict-extract deliverable and the highest-priority predictions. On large transcripts, do this scan first, then chunk-read the rest.
 - Read every provided file fully. For Arabic transcripts, follow the Arabic-cue parsing in `references/prediction-and-analysis.md`.
 - Do **not** summarize each source in isolation. Cross-link: theory (slides) → practical step (manual) → how it was asked (past exam) → expected answer (model answer).
 - Build an internal signal map of every topic and the evidence weight behind it before writing anything.
