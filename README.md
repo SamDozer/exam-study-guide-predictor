@@ -47,7 +47,7 @@ dist/
 
 ## Credit
 
-Derived from a set of exam-prep prompts by Hossam Mahmoud, generalized from a single Environmental Biotechnology course into a reusable, discipline-adaptive skill.
+Derived from a set of exam-prep prompts by Hossam Mahmoud, Abdelrahman El-Dbeky and Ahmed Hussein (Eddie), generalized from a single Environmental Biotechnology course into a reusable, discipline-adaptive skill.
 
 ## License
 
