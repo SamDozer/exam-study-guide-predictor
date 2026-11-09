@@ -2,6 +2,31 @@
 
 **Predict the paper → build the study guide → learn how to answer it → (optionally) drill it until exam day.**
 
+[![Live example](https://img.shields.io/badge/live%20example-open%20the%20guide-2ea44f)](https://samdozer.github.io/exam-study-guide-predictor/examples/environmental-biotechnology/)
+[![Download the skill](https://img.shields.io/badge/download-.skill-blue)](dist/exam-study-guide-predictor.skill)
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
+![Claude skill](https://img.shields.io/badge/Claude-skill-d97757)
+![Arabic + English](https://img.shields.io/badge/reads-Arabic%20%2B%20English-8a2be2)
+
+> **Free AI exam predictor and study-guide generator for students.** Give it your lecture slides, past papers and the doctor's notes. It tells you what the exam will most likely ask, how to answer it for full marks, and builds the study guide, all from *your* course material, not the internet.
+
+<p align="center">
+  <a href="https://samdozer.github.io/exam-study-guide-predictor/examples/environmental-biotechnology/">
+    <img src="docs/images/example-blueprint.png" alt="Example output: exam blueprint showing what the doctor said is guaranteed on the exam, the exam structure, and what was repeatedly emphasized" width="820">
+  </a>
+  <br><em>A real guide made by the skill for an Environmental Biotechnology practical exam. <a href="https://samdozer.github.io/exam-study-guide-predictor/examples/environmental-biotechnology/">Open the full example →</a></em>
+</p>
+
+## See it in action
+
+| Predicted questions with model answers | Calculations solved step by step |
+|---|---|
+| [![Predicted exam questions with model answers](docs/images/example-predicted-questions.png)](https://samdozer.github.io/exam-study-guide-predictor/examples/environmental-biotechnology/#section-8) | [![Calculations solved step by step with the classic trap highlighted](docs/images/example-calculations.png)](https://samdozer.github.io/exam-study-guide-predictor/examples/environmental-biotechnology/#section-7) |
+| **Identification table for lab photos** | **One-page rapid revision sheet** |
+| [![Selective and differential media identification table](docs/images/example-media-table.png)](https://samdozer.github.io/exam-study-guide-predictor/examples/environmental-biotechnology/#section-5) | [![Rapid revision sheet with formulas, media map and exam-day essentials](docs/images/example-rapid-revision.png)](https://samdozer.github.io/exam-study-guide-predictor/examples/environmental-biotechnology/#section-10) |
+
+The example was made from the course's lab manuals, lecture transcripts and specimen photos, with an early version of the skill. The current version adds confidence tags on every prediction, the "how to answer" layer, per-doctor analysis and the formatting scan described below. The full HTML is in [`docs/examples/`](docs/examples/environmental-biotechnology/index.html).
+
 A [Claude Skill](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) that turns *your own* course material — the doctor's booklet, lecture slides, professor transcripts (English or Arabic), past papers (even phone photos), model answers, lab manuals, notes — into:
 
 1. a **study guide** organized for fast recall,
