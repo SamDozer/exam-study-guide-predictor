@@ -11,26 +11,50 @@ Build a section only if its trigger is met. Order sections by the mark distribut
 | 1. Table of Contents | Always | Clickable anchors in HTML. |
 | 2. Exam Blueprint | Always | Exam type, total marks, per-section marks, question types, predicted paper structure (e.g., "Q1 short notes ×3, Q2 give reasons ×4…"). **Scope:** cutoff, a "Dropped — skip" list, and "Read only" items. **Doctors:** when several teach the course, one row per doctor with their lectures, their marks, and their favourite stems. The prioritization map. |
 | 2b. Asked Before | Past papers provided | From the past-paper ledger: each topic that has appeared, with years, doctor, the stems used, and marks. Repeat topics first. Note any `[illegible]` gaps. |
-| 3. Professor's Explicit Exam Statements | Transcripts/notes contain explicit markers | **Purple.** Verbatim quotes (Arabic + English translation) of everything the professor said is on the exam, each linked to its topic. This is the strict-extract deliverable on its own. |
+| 3. Professor's Explicit Exam Statements | Transcripts/notes/announcements contain explicit markers | **Purple.** Verbatim quotes (Arabic + English translation) of everything the professor said is (or isn't) on the exam: topic, doctor, source tag, date. Recorded statements solid purple; reported ones purple-outline with who reported them; superseded ones struck through next to the statement that replaced them. This is the strict-extract deliverable on its own. |
 | 3b. Slide Emphasis Map | Formatting-emphasis pass found hits | Compact table of what the professor styled: phrase • how (bold/underline/red/highlight) • slide(s) • times emphasized • which predicted question it feeds. Put repeated and red/underlined/highlighted hits first; decode any consistent colour code ("red = enzymes"). |
 | 4. High-Yield Concepts & Frameworks | Always | The must-know core, sorted by confidence + marks. Tag must-memorize vs must-understand. Include mnemonics/memory triggers. Mark terms the professor styled on the slides with 🖍. |
 | 5. Core Mechanisms & Frameworks | Concept/process content present | WHY & HOW, not just WHAT — covers wet-lab mechanisms, analytical frameworks, and algorithmic/bioinformatics logic alike. Common-misunderstanding traps. Blue styling. |
 | 6. Applied Methodologies / Workflows | Lab manual or protocol/code/pipeline present, OR practical/OSPE exam | Step → reason-for-step → critical-error point → result interpretation. Covers wet-lab protocols and computational/analysis pipelines. |
 | 7. Visual / Data Interpretation | Image/graph/code-based exam, OR user uploaded visuals | Table: item • purpose/function • distinguishing features • expected result • "how it appears in the exam." Covers specimens, plates, gels, graphs, code blocks, maps, diagrams. Keep this machinery available even when dormant. |
 | 8. Analytical / Calculations | Quantitative or formula content present (CFU/mL, dilutions, BOD, COD, enzyme activity/units, % solubilization, molarity, Beer–Lambert, yield, statistical tests, etc.) | Formula/framework + every variable defined + ≥2 solved step-by-step examples from the actual sources/past papers + common mistakes. |
-| 9. Predicted Exam Questions + Model Answers | Always (unless strict-extract) | Core deliverable. Grouped by doctor when more than one teaches the course. Each tagged HIGH/MEDIUM/LOW with signal justification. Use the doctor's own stems (or the Egyptian stems in `prediction-and-analysis.md` §3b); write each model answer as markable points, as many points as the marks. Nothing from dropped material. |
-| 10. Exam Traps & Common Mistakes | Always | Confused-pair contrasts, unit traps, misread mechanisms. |
+| 9. Predicted Exam Questions + Model Answers | Always (unless strict-extract) | Core deliverable. Grouped by doctor when more than one teaches the course. Each tagged HIGH/MEDIUM/LOW with signal justification and source tags. Use the doctor's own stems (or the Egyptian stems in `prediction-and-analysis.md` §3b); write each model answer as markable points, as many points as the marks. Total predicted marks per section follow the coverage budget (§1b). Nothing from dropped material. |
+| 9a. Question-Type Recognition | Always (unless strict-extract) | **IF I SEE THIS → IT MEANS THIS → I SHOULD DO THIS**, one row per question type present, using the professor's real past-exam wording. `solving-layer.md` §1. |
+| 9b. Solving Procedures & Worked Examples | Procedural/calculation/practical content present | Numbered *Given → Identify → Choose method → Execute → Interpret → Check* procedures and escalated worked examples, each source-tagged (e.g. *Midterm 2024, Q3*). Blue. §2–4, §14. |
+| 9c. Answer Templates & Mark-Earning Structure | Written questions expected | Exam-ready answer skeletons plus **MUST INCLUDE / GOOD TO INCLUDE / UNNECESSARY DETAIL** per question type. §5–6. |
+| 9d. Distractor Bank | MCQ / true-false on the exam | **QUESTION → TEMPTING WRONG ANSWER → WHY IT LOOKS RIGHT → WHY IT IS WRONG → CORRECT RULE**, using real past-exam distractors. §8. |
+| 9e. Sanity Checks & Stuck-Recovery | Procedural/calculation content present | **ANSWER → QUICK CHECK** table plus the per-type recovery protocol. §7, §9. |
+| 9f. Reusable Question Patterns | Same structure recurs across sources | Lecture → booklet → past exam → model answer mapping, with the invariant solving structure named. §10. |
+| 10. Exam Traps & Common Mistakes | Always | Confused-pair contrasts, unit traps, misread mechanisms, the swapped words behind ✓/✗ and "correct the underlined" questions. |
+| 10a. Source Errors & Contradictions | Audit found confirmed issues | **SOURCE SAYS → PROBLEM → EVIDENCE → WHAT TO FOLLOW FOR THE EXAM.** §12. |
+| 10b. Difficulty Self-Check | Always (unless strict-extract) | Per topic: Recognition / Basic / Application / Trap / Written — so the student sees where they're weak. §13. |
+| 10c. Time Budget & Exam-Room Plan | Student gave a time limit, or exam is close | **TIME AVAILABLE → TOPICS → EXACT TASK**, plus a format-specific in-room plan using minutes-per-mark. §15–16. |
 | 11. Rapid Revision Sheet | User chose "rapid" or "both" | Ultra-condensed one-pager: memory triggers, mnemonics, must-memorize list, formula strip, top predicted Qs. |
+| 11a. Final-Minute Sheet | User chose "rapid" or "both", or exam is close | The tightest layer: formulas, decisive rules/distinctions, top traps, answer templates, recognition cues. Introduces nothing new. |
+| 12. Checked and Skipped | Always | One line per section that did *not* activate and why ("Calculations — no quantitative content in L1–L6"), plus any source that couldn't be read. So the student knows nothing was skipped silently. |
 
-If a triggered section has no real content in the sources, omit it rather than padding.
+If a triggered section has no real content in the sources, omit it rather than padding — and list it under "Checked and Skipped."
+
+## Four revision layers
+
+The guide is built as nested compressions; each later layer is derived from the one before and introduces nothing new:
+
+1. **Full explanation** — for learning the topic (sections 4–8).
+2. **Exam procedure** — for learning how to answer it (sections 9a–9f).
+3. **High-density recall** — the one-page rapid sheet (11).
+4. **Final-minute sheet** — formulas, rules, traps, templates, recognition cues only (11a).
 
 ## Color coding (consistent across HTML and docx)
 
-- 🟣 **Purple** — the professor's *explicit* exam statements, quoted verbatim. Facts, not predictions. Highest priority.
+- 🟣 **Purple (solid)** — the professor's *recorded* explicit exam statements, quoted verbatim. Facts, not predictions. Highest priority.
+- 🟣 **Purple (outline)** — *reported* statements ("a classmate says the Dr said…"), with who reported them. Superseded statements are struck through.
 - 🔴 **Red** — Exam Alerts, Traps, HIGH-confidence *predictions*, "we think this is coming."
 - 🟢 **Green** — Key concepts / must-know facts.
-- 🔵 **Blue** — Mechanisms & frameworks / the WHY & HOW.
-- ⚪ **Grey/italic** — Outside-source clarifications (must be visually distinct so the student knows it wasn't from the professor).
+- 🔵 **Blue** — Mechanisms & frameworks *and* solving procedures — the WHY, HOW, and HOW-TO-DO-IT.
+- ⚫ **Grey (solid)** — supporting explanation or background from the course material.
+- ⚪ **Grey/italic dashed** — Outside-source clarifications (must be visually distinct so the student knows it wasn't from the professor).
+
+Never let these blur: a prediction must never look like a professor statement (red ≠ purple), a reported statement must never look like a recorded one (outline ≠ solid), and outside knowledge must never look like course material (dashed ≠ solid grey).
 - 🖍 **Marker** — inline tag on any term the professor styled on the slides (bold, underline, red/other colour, highlight). Shows *where* the emphasis came from; it is not itself a confidence level.
 
 **Strict-extract deliverable:** if the user chose "strict extract," output *only* Section 3 (Professor's Explicit Exam Statements) plus a one-line blueprint — no predictions, no synthesis, ultra-condensed. This mirrors the "extract only what the professor explicitly flagged" objective.
@@ -71,6 +95,14 @@ Self-contained single file, internal CSS, collapsible sections, sticky clickable
   .key{background:var(--key-bg);border-left:5px solid var(--key);padding:10px 14px;border-radius:6px;margin:12px 0}
   .mech{background:var(--mech-bg);border-left:5px solid var(--mech);padding:10px 14px;border-radius:6px;margin:12px 0}
   .outside{color:var(--outside);font-style:italic;border-left:3px dashed var(--outside);padding-left:10px;margin:10px 0}
+  .exam.reported{background:transparent;border:2px dashed var(--exam);border-left-width:5px}
+  .superseded{text-decoration:line-through;opacity:.6}
+  .proc{background:var(--mech-bg);border-left:5px solid var(--mech);padding:10px 14px;border-radius:6px;margin:12px 0}
+  .proc ol{margin:6px 0 0 18px}
+  .bg{background:#f5f6f8;border-left:5px solid #9ca3af;padding:10px 14px;border-radius:6px;margin:12px 0;color:#374151}
+  .src{font-size:.8em;color:var(--mech);font-weight:700;letter-spacing:.3px}
+  .must{color:var(--alert);font-weight:700} .good{color:#d68910;font-weight:700} .skip{color:var(--outside)}
+  .recog th:first-child{width:32%} .recog td:nth-child(2){font-style:italic}
   .tag{font-size:.75em;font-weight:700;padding:2px 8px;border-radius:20px;color:#fff}
   .high{background:var(--alert)} .med{background:#d68910} .low{background:var(--key)}
   details{border:1px solid var(--line);border-radius:8px;margin:10px 0;padding:6px 12px}
@@ -107,6 +139,22 @@ Self-contained single file, internal CSS, collapsible sections, sticky clickable
   <div class="key">✅ Key: …</div>
   <div class="mech">🔵 Mechanism: …</div>
   <div class="outside">[Outside-source clarification: …]</div>
+  <div class="exam reported">🟣 Reported (via [classmate / group msg, date]): "[quote]" → [topic]</div>
+  <div class="exam"><span class="superseded">"[earlier statement]" — [date]</span><br>Superseded by: "[later statement]" — [date, source]</div>
+
+  <h2 id="sec-9a">9a · Question-Type Recognition</h2>
+  <table class="recog"><tr><th>If I see this</th><th>It means this</th><th>I should do this</th></tr>
+    <tr><td>[professor's actual stem wording]</td><td>[what's really being tested]</td><td>[method + sequence]</td></tr>
+  </table>
+
+  <div class="proc">
+    <span class="src">Source: [Midterm 2024, Q3]</span>
+    <p><strong>Procedure — [question type]</strong></p>
+    <ol><li>Given: …</li><li>Identify: …</li><li>Choose method: …</li><li>Execute: …</li><li>Interpret: …</li><li>Check: …</li></ol>
+    <p><span class="must">MUST INCLUDE</span> … · <span class="good">GOOD</span> … · <span class="skip">UNNECESSARY</span> …</p>
+  </div>
+
+  <div class="bg">⚫ Background (course material, [source tag]): …</div>
 </body>
 </html>
 ```
@@ -115,12 +163,12 @@ Fill every `[...]` placeholder. Remove sections that didn't activate and their T
 
 ## Word (.docx) output
 
-If the user picks docx, first read `/mnt/skills/public/docx/SKILL.md` and build with that skill. Map the same color coding to shaded paragraph/heading styles, keep the same section catalog and predicted-question tagging, and use a real Word table of contents. Save to `/mnt/user-data/outputs/`.
+If the user picks docx, build it with the environment's Word/docx skill if one is available (on claude.ai: `/mnt/skills/public/docx/SKILL.md`). Map the same color coding to shaded paragraph/heading styles, keep the same section catalog and predicted-question tagging, and use a real Word table of contents.
 
-## Optional flashcard export
+## Retention extras (only if the student opted in)
 
-If the user opts in, also produce an **Anki-ready CSV** (`flashcards.csv`): two columns, `Front,Back`, one predicted or key Q/A per row, properly quoted. This is a bonus artifact, not a replacement for a spaced-repetition plugin — mention that and skip it if they already use one.
+Flashcards, Anki import, and the Enhanced Learn FASTER hand-off are **optional** and only built after an explicit yes in intake. Everything about them — card rules, the CSV format, pushing into Anki, and the hand-off pack — lives in `references/spaced-repetition.md`.
 
 ## Delivery
 
-Save the file to `/mnt/user-data/outputs/` and present it with `present_files`. Keep any closing message short: name the sections built, the top few HIGH-confidence predictions, and what extra source (usually past papers) would most improve the prediction next time.
+Save the file where the environment expects outputs (on claude.ai: `/mnt/user-data/outputs/`, then present it; in Claude Code: the working directory) and tell the student where it is. Keep any closing message short: name the sections built, the top few HIGH-confidence predictions, and what extra source (usually past papers) would most improve the prediction next time.

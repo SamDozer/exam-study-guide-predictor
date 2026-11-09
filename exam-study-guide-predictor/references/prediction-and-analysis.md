@@ -6,7 +6,15 @@ This is the intellectual core: how to reverse-engineer what the exam will ask an
 
 Before weighting anything, scan transcripts and notes for statements where the professor *explicitly and unequivocally* flagged exam material. This pass produces **facts**, not inferences, and feeds the purple "Professor's Explicit Exam Statements" section.
 
-For each hit, capture: the verbatim statement (original Arabic *and* an English translation if spoken in Arabic), the exact topic/concept it points to, and the source location (which lecture/slide). Do not paraphrase away the professor's wording — the point is fidelity.
+For each hit, capture: the verbatim statement (original Arabic *and* an English translation if spoken in Arabic), the exact topic/concept it points to, the source location (lecture, slide, transcript timestamp), the **date**, and the **doctor** who said it. Do not paraphrase away the professor's wording — the point is fidelity.
+
+**Recorded vs reported.** Not every "the Dr said" is equally solid:
+- **Recorded** — in a transcript or recording, or written by the professor (slide, booklet, official announcement). Full purple.
+- **Reported** — second-hand: a classmate's note, a group message, "my friend said the Dr said." Still purple (it's a claimed fact, not a prediction) but shown as *purple-outline* with who reported it. If two independent students report the same thing, upgrade it; if a recording contradicts it, the recording wins.
+
+**Latest statement wins.** Professors change their minds. Order purple statements by date; when a later statement contradicts an earlier one ("this is coming" in week 3, "dropped" in week 9), show the earlier one struck through as *superseded*, and apply the later one. A purple "not on the exam" statement goes straight into the scope ledger (§0a) as dropped.
+
+**Per doctor.** A statement binds only the doctor who made it: Dr A saying "the calculation is coming" says nothing about Dr B's part of the paper.
 
 **Large transcripts (100+ pages):** run this scan first as a lightweight pass over the whole file, logging hits with their line/section, then chunk-read the rest of the document section by section for the deeper synthesis. Never try to hold the entire transcript in one reasoning pass.
 
@@ -79,7 +87,10 @@ Rules:
 
 Rank every candidate topic by the evidence behind it. Signals from strongest to weakest:
 
-1. **Past exam papers (strongest).** If a topic, question stem, or figure appeared in a previous paper, weight it heavily. Professors recycle and lightly rephrase. Note whether the item repeats across *multiple* past papers — a recurring past question is close to a guarantee. Track the exact phrasing; predict the rephrase.
+1. **Past exam papers (strongest).** If a topic, question stem, or figure appeared in a previous paper, weight it heavily. Professors recycle and lightly rephrase. Note whether the item repeats across *multiple* past papers — a recurring past question is close to a guarantee. Track the exact phrasing; predict the rephrase. Read the ledger (§0c) three ways:
+   - **Recency.** The last 2–3 years count most; a paper from before a change of doctor or syllabus counts little or nothing for that part.
+   - **Recurrence.** Asked in most years → near-certain. Asked every year with the same stem → predict a stem change (§3b), not a copy.
+   - **Rotation.** Some doctors rotate topics: a topic asked in alternating years, or asked in earlier years but skipped last year, may be "due." Flag it as MEDIUM with "rotation" as the reason — never HIGH on rotation alone.
 2. **Official model answers.** Reveal the depth and wording that earn full marks. If a model answer is long/structured, the exam expects a long/structured answer.
    **Professor's own booklet or book (المذكرة / كتاب الدكتور).** Same tier. In many Egyptian courses the exam is written from the doctor's own booklet, often word for word: its definitions, its lists, its diagrams. Where the booklet and the slides differ, follow the booklet's wording and numbering ("the 5 functions of X" in the booklet means the answer has exactly those 5). Run the §0b formatting pass on it too, and treat its end-of-chapter questions as strong candidates.
 3. **Repetition and formatting emphasis on the slides.** A concept restated on many slides, given its own summary/objectives slide, or styled differently from normal text (bold, underline, red/other colour, highlight — from the §0b pass). Count both repetitions and emphasis hits.
@@ -116,6 +127,17 @@ Use this whenever past papers and/or model answers are missing, thin, or outdate
 When the §1a score and other §1 signals fire on the same concept, they compound — name the convergence in the justification (e.g., "9/10 relevance; red + underlined on slides 4 and 11; verbally flagged in lecture 3").
 
 **Step 4 — check against the mark distribution.** A HIGH-scoring concept in a 2-mark section shouldn't spawn five predicted questions; one in the 25-mark section should. The relevance score decides *whether* to predict a question; the marks decide *how many* and *how deep*.
+
+## 1b. Marks drive everything
+
+Marks decide how much to predict, how deep each answer goes, and how revision time is split.
+
+- **Find the marks.** From intake; if unknown, read them off past papers (marks are usually printed per question); if still unknown, say so and assume an even split across lectures, labelled as an assumption.
+- **Paper skeleton.** From the ledger, sketch the likely paper: questions, stems, and marks per question (e.g., "Q1 short notes 3×5 = 15, Q2 give reasons 4×2.5 = 10…"). Predictions fill the slots, per doctor.
+- **Coverage budget.** The predicted questions' marks should add up to roughly **1.5–2× each section's real marks**: enough that the real questions are very likely covered, few enough that the list still prioritizes. A 30-mark section gets about 45–60 marks of predicted questions, ranked by confidence — not 200.
+- **Answer depth = marks.** About one markable point per mark. A 2-mark "give reason" is two precise lines; a 10-mark "write short notes on two of the following" is about five points each. Never write a textbook paragraph for a 2-mark question.
+- **Time per mark.** Exam minutes ÷ total marks gives the in-exam pace (e.g., 120 min / 60 marks = 2 min per mark). Use it in the exam-room plan (`solving-layer.md` §16).
+- **Revision time.** Split study time by marks × confidence, adjusted for the student's weakness on each topic — never evenly (`solving-layer.md` §15).
 
 ## 2. Confidence tagging
 
@@ -202,13 +224,29 @@ Transcripts are often spoken Arabic with English technical terms mixed in. Read 
 | محذوف / برا المنهج / مش مقرر / مش هسأل فيها / مش هتيجي | dropped / outside the syllabus / not on the exam | **exclude** — scope ledger (§0a) |
 | اقروها بس / دي للفهم بس / مش للحفظ | just read it / for understanding only | read-only: LOW at most (§0a) |
 | الامتحان لحد المحاضرة دي / لحد هنا | the exam goes up to here | scope cutoff (§0a) |
+| حطوا عليها نجمة / علّموا عليها / حطوا خط تحتها | put a star on it / mark it / underline it | HIGH signal (also check the student's copy for the star) |
+| دي جت السنة اللي فاتت / دي بتيجي كل سنة | this came last year / this comes every year | HIGH — cross-check against the ledger (§0c) |
+| خلي بالك من الرسمة / ارسموها | watch the diagram / draw it | diagram question likely |
+| دي سؤال امتحان / دي تتسأل | this is an exam question / this gets asked | HIGH signal |
+| ممكن أجيبها / مش بعيد تيجي | I might bring it / it could come | MEDIUM |
 
-**English cues** (for English transcripts): "important for the exam," "this will be on the test," "you must know this," "expect a question," "key concept for the exam," "focus your study on," "the most critical part here for the exam is," "guaranteed," "exam alert."
+**Franco-Arabic (Arabizi) cues** — class-group messages and student notes are often written in Latin letters with numbers for Arabic sounds (2 = ء, 3 = ع, 5 = خ, 7 = ح). Normalize before scanning: `da mohem lel emte7an` = ده مهم للامتحان, `hayegy fel emte7an` = هييجي في الامتحان, `ma7zoof` = محذوف, `barra el manhag` = برا المنهج, `msh hayes2al feha` = مش هيسأل فيها, `el doctor 2al` = الدكتور قال. Spelling varies freely (`emte7an` / `imti7an` / `exam`); match by sound, not exact spelling.
 
-When a cue fires, capture: the exact topic it points to, translate/paraphrase the professor's statement into English, and log it as a prediction signal with its topic linked back to the relevant slide.
+**English cues** (for English transcripts): "important for the exam," "this will be on the test," "you must know this," "expect a question," "key concept for the exam," "focus your study on," "the most critical part here for the exam is," "guaranteed," "exam alert," "not included," "skip this part."
+
+**Auto-transcribed (speech-to-text) transcripts.** Machine transcripts of Egyptian Arabic lectures garble English technical terms, often writing them in Arabic letters or as near-miss words (e.g., "الميتوكوندريا", "الـ ATP", or a sound-alike word in place of an enzyme name). Before extracting cues:
+- Map garbled terms back to the slide vocabulary by sound and context; when unsure, write `[unclear term — likely X, slide 7]` instead of guessing silently.
+- Treat a cue as real only when the surrounding sentence makes sense; a lone "امتحان" inside garbled text is weak evidence.
+- **Repetition is emphasis.** A professor saying the same sentence two or three times, slowing down, or dictating ("اكتبوا ورايا" / "write after me") is signalling exam material — treat as a MEDIUM/HIGH cue even without the word "exam."
+- Keep the timestamp or line number of each hit so the student can re-listen.
+
+When a cue fires, capture: the exact topic it points to, the verbatim statement + English translation, the source location (lecture, timestamp/line), the date, and the doctor — then log it as a signal linked back to the relevant slide.
 
 ## 5. Faithfulness rule
 
-- Default: build only from the student's sources; preserve the professor's exact terminology, naming, and phrasing (do not "correct" it into standard textbook language — the exam grades *their* terms).
-- Outside knowledge is permitted **only** when a concept is (a) central to the material and (b) mentioned/repeated by slides or professor but explained too poorly to study from. In that case add the minimum clarification and mark it explicitly, e.g. `[Outside-source clarification: …]` in the HTML "outside" style. Never let external content dominate a section or introduce topics the professor never raised.
+- Default: build only from the student's sources; preserve the professor's exact terminology, naming, phrasing, numbering, and methods (do not "correct" them into standard textbook language — the exam grades *their* terms). If the professor's version conflicts with the textbook, follow the professor and flag the conflict in the error-and-contradiction audit (`solving-layer.md` §12).
+- **Source tags everywhere.** Every fact, prediction, and worked example carries where it came from: `L3 s12` (lecture 3, slide 12), `Booklet p45`, `Final 2023 Q2`, `Transcript L5 32:10`, `Group msg 12 Nov`. A claim without a tag is either outside-source (flag it) or shouldn't be there.
+- Outside knowledge is permitted **only** when a concept is (a) central to the material and (b) mentioned/repeated by slides or professor but explained too poorly to study from. Add the minimum clarification — a few lines, never a section — and mark it `[Outside-source clarification: …]` in the "outside" style. Never introduce topics the professor never raised.
+- **No invented exam material.** Never pull generic or web exam questions when the student's own materials exist. If a procedure needs an example and none exists in the sources, label it **[Illustrative example, not from the course]**.
+- **When sources disagree** (two slides, slide vs booklet, transcript vs classmate notes), don't silently pick one: show both with tags, say which to follow for the exam and why (booklet and later sources usually win), and list it in the audit.
 - If asked to verify a fact against the live web, do it only on explicit request; by default web search is OFF because the exam tests the professor's material, not the literature.
