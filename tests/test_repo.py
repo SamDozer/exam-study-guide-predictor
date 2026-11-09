@@ -28,6 +28,16 @@ def test_kit_references_in_sync():
     assert r.returncode == 0, r.stdout + r.stderr
 
 
+def test_skill_frontmatter_fits_upload_limits():
+    text = (ROOT / "exam-study-guide-predictor" / "SKILL.md").read_text(encoding="utf-8")
+    front = text.split("---")[1]
+    name = next(l.split(":", 1)[1].strip() for l in front.splitlines() if l.startswith("name:"))
+    desc_lines = front.split("description:", 1)[1].splitlines()[1:]
+    description = " ".join(l.strip() for l in desc_lines if l.startswith("  "))
+    assert name == "exam-study-guide-predictor"
+    assert 0 < len(description) <= 1024, f"description is {len(description)} chars (claude.ai limit 1024)"
+
+
 def test_skill_references_exist():
     skill = (ROOT / "exam-study-guide-predictor" / "SKILL.md").read_text(encoding="utf-8")
     for ref in ["references/prediction-and-analysis.md", "references/output-format.md",
