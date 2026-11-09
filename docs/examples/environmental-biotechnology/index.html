@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Environmental Biotechnology — Master Practical Exam Study Guide</title>
+<style>
+  :root{
+    --bg:#f6f8fb;
+    --card:#ffffff;
+    --ink:#1f2937;
+    --muted:#4b5563;
+    --primary:#1e3a8a;
+    --primary-soft:#dbeafe;
+    --accent:#0e7490;
+    --green:#065f46;
+    --green-soft:#d1fae5;
+    --red:#991b1b;
+    --red-soft:#fee2e2;
+    --blue:#1e40af;
+    --blue-soft:#dbeafe;
+    --amber:#92400e;
+    --amber-soft:#fef3c7;
+    --gray:#e5e7eb;
+    --shadow:0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.55;
+    font-size:15.5px;
+  }
+  header.hero{
+    background:linear-gradient(135deg,#1e3a8a 0%,#0e7490 100%);
+    color:#fff;
+    padding:32px 24px;
+    box-shadow:var(--shadow);
+  }
+  header.hero h1{margin:0 0 6px 0;font-size:26px;letter-spacing:.2px}
+  header.hero .sub{opacity:.9;font-size:14.5px}
+  .container{max-width:1100px;margin:0 auto;padding:24px 18px 80px}
+  nav.toc{
+    background:var(--card);
+    border:1px solid var(--gray);
+    border-radius:12px;
+    padding:18px 22px;
+    box-shadow:var(--shadow);
+    margin-bottom:28px;
+  }
+  nav.toc h2{margin:0 0 10px 0;font-size:18px;color:var(--primary)}
+  nav.toc ol{margin:0;padding-left:20px;columns:2;column-gap:24px}
+  nav.toc li{margin:4px 0;break-inside:avoid}
+  nav.toc a{color:var(--primary);text-decoration:none;font-weight:500}
+  nav.toc a:hover{text-decoration:underline}
+  section.block{
+    background:var(--card);
+    border:1px solid var(--gray);
+    border-radius:12px;
+    padding:22px 24px;
+    margin-bottom:22px;
+    box-shadow:var(--shadow);
+    scroll-margin-top:14px;
+  }
+  section.block h2{
+    margin:0 0 12px 0;
+    font-size:22px;
+    color:var(--primary);
+    border-bottom:2px solid var(--primary-soft);
+    padding-bottom:8px;
+  }
+  section.block h3{
+    margin:18px 0 8px 0;
+    font-size:17px;
+    color:var(--accent);
+  }
+  section.block h4{margin:12px 0 6px 0;font-size:15.5px;color:var(--muted)}
+  p{margin:8px 0}
+  ul,ol{margin:6px 0 8px 0;padding-left:22px}
+  li{margin:3px 0}
+  .alert{
+    background:var(--red-soft);
+    border-left:5px solid var(--red);
+    color:var(--red);
+    padding:10px 14px;
+    border-radius:8px;
+    margin:10px 0;
+  }
+  .alert strong{color:var(--red)}
+  .key{
+    background:var(--green-soft);
+    border-left:5px solid var(--green);
+    color:var(--green);
+    padding:10px 14px;
+    border-radius:8px;
+    margin:10px 0;
+  }
+  .key strong{color:var(--green)}
+  .mech{
+    background:var(--blue-soft);
+    border-left:5px solid var(--blue);
+    color:var(--blue);
+    padding:10px 14px;
+    border-radius:8px;
+    margin:10px 0;
+  }
+  .mech strong{color:var(--blue)}
+  .tip{
+    background:var(--amber-soft);
+    border-left:5px solid var(--amber);
+    color:var(--amber);
+    padding:10px 14px;
+    border-radius:8px;
+    margin:10px 0;
+  }
+  .tip strong{color:var(--amber)}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0 14px 0;
+    font-size:14.5px;
+    background:#fff;
+  }
+  th,td{
+    border:1px solid var(--gray);
+    padding:8px 10px;
+    text-align:left;
+    vertical-align:top;
+  }
+  th{background:var(--primary-soft);color:var(--primary);font-weight:600}
+  tr:nth-child(even) td{background:#f9fafb}
+  .formula{
+    background:#0f172a;
+    color:#e0f2fe;
+    padding:10px 14px;
+    border-radius:8px;
+    font-family:"SF Mono","Menlo","Consolas",monospace;
+    font-size:14px;
+    margin:8px 0;
+    overflow-x:auto;
+  }
+  .qa{
+    border:1px solid var(--gray);
+    border-radius:10px;
+    padding:12px 16px;
+    margin:10px 0;
+    background:#fff;
+  }
+  .qa .q{font-weight:600;color:var(--primary);margin-bottom:6px}
+  .qa .a{color:var(--ink)}
+  .qa .a strong{color:var(--green)}
+  details{
+    border:1px solid var(--gray);
+    border-radius:10px;
+    margin:8px 0;
+    background:#fff;
+    overflow:hidden;
+  }
+  summary{
+    padding:10px 14px;
+    background:var(--primary-soft);
+    color:var(--primary);
+    font-weight:600;
+    cursor:pointer;
+    user-select:none;
+  }
+  summary:hover{background:#c7dafd}
+  details[open] summary{border-bottom:1px solid var(--gray)}
+  details > div{padding:12px 16px}
+  .pill{
+    display:inline-block;
+    padding:2px 8px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+    margin-right:4px;
+  }
+  .pill.sel{background:#fde68a;color:#92400e}
+  .pill.diff{background:#bfdbfe;color:#1e40af}
+  .pill.both{background:#bbf7d0;color:#065f46}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:760px){.grid2{grid-template-columns:1fr}nav.toc ol{columns:1}}
+  .back{
+    display:inline-block;
+    margin-top:8px;
+    font-size:13px;
+    color:var(--accent);
+    text-decoration:none;
+  }
+  .back:hover{text-decoration:underline}
+  .specimen-card{
+    border:1px solid var(--gray);
+    border-radius:10px;
+    padding:14px;
+    margin:10px 0;
+    background:#fafbfc;
+  }
+  .specimen-card h4{margin-top:0;color:var(--primary)}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 14px}
+  .legend span{font-size:13px;padding:4px 10px;border-radius:6px}
+  code{background:#eef2ff;color:#1e3a8a;padding:1px 6px;border-radius:4px;font-size:13.5px}
+  .small{font-size:13.5px;color:var(--muted)}
+  .center{text-align:center}
+  .num{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>Environmental Biotechnology — Master Practical Exam Guide (BTBio 425)</h1>
+  <div class="sub">A unified, exam-optimized synthesis of all lab manuals, lecture transcripts, sample specimens, and the doctor's verbal "exam alerts." Built for fast recall under time pressure.</div>
+</header>
+
+<div class="container">
+
+<div class="legend">
+  <span style="background:var(--red-soft);color:var(--red)">🚨 Exam Alert / Trap</span>
+  <span style="background:var(--green-soft);color:var(--green)">✓ Key Concept</span>
+  <span style="background:var(--blue-soft);color:var(--blue)">⚙ Mechanism</span>
+  <span style="background:var(--amber-soft);color:var(--amber)">💡 Doctor's Tip</span>
+</div>
+
+<!-- =========== TABLE OF CONTENTS =========== -->
+<nav class="toc" id="toc">
+  <h2>📑 Table of Contents</h2>
+  <ol>
+    <li><a href="#section-1">Exam Blueprint &amp; Doctor's Priorities</a></li>
+    <li><a href="#section-2">High-Yield Concepts (Must-Memorize Core)</a></li>
+    <li><a href="#section-3">Mechanisms &amp; Reasoning (The "Why")</a></li>
+    <li><a href="#section-4">Practical Protocols Breakdown</a></li>
+    <li><a href="#section-5">Selective &amp; Differential Media — Identification Guide</a></li>
+    <li><a href="#section-6">Visual Specimen Recognition (Lab Photo Bank)</a></li>
+    <li><a href="#section-7">Calculations Mastery (Solved Step-by-Step)</a></li>
+    <li><a href="#section-8">Predicted Exam Questions + Model Answers</a></li>
+    <li><a href="#section-9">Exam Traps &amp; Common Mistakes</a></li>
+    <li><a href="#section-10">Rapid Revision Sheet (1-Page Cheat)</a></li>
+  </ol>
+</nav>
+
+<!-- =========================================================
+     SECTION 1 — EXAM BLUEPRINT
+     ========================================================= -->
+<section class="block" id="section-1">
+  <h2>1. Exam Blueprint &amp; Doctor's Priorities</h2>
+
+  <div class="alert">
+    <strong>🚨 GUARANTEED on the exam (doctor stated explicitly):</strong>
+    <ul>
+      <li><strong>Dilution / CFU calculation problem</strong> — "There will definitely be a calculation problem regarding dilutions." Watch the units (mL ↔ L conversion is a known trap).</li>
+      <li><strong>Selective &amp; Differential Media identification from a photo</strong> — name the medium, what it is selective for (and the inhibitory agents), and how it differentiates.</li>
+      <li><strong>Phosphate Solubilization sheet</strong> — measure colony &amp; zone diameter with a ruler and calculate Solubilization Efficiency (SE%).</li>
+      <li><strong>BOD &amp; COD</strong> — definitions, procedures, and simple calculations (the formulas are tested).</li>
+      <li><strong>Gram-stain identification from a photo</strong> + theory of the staining process.</li>
+    </ul>
+  </div>
+
+  <div class="key">
+    <strong>✓ Exam structure (per doctor):</strong> 25 marks. Photos used in the exam are <em>the same images used in lab sessions</em>. Specific details (e.g., naming the inhibitory agents in a medium) carry significant weight.
+  </div>
+
+  <h3>What the doctor repeatedly emphasized</h3>
+  <table>
+    <tr><th>Theme</th><th>Why it matters / What to write</th></tr>
+    <tr><td><strong>Indicator organism logic</strong></td><td>Why test for <em>E. coli</em> instead of every pathogen → cheaper, safer, faster, more abundant. Compare to "pH indicator."</td></tr>
+    <tr><td><strong>Why use 1, 2, 4 in API 20E</strong></td><td>Because 3 would create ambiguous sums (e.g., 1+2 = 3 same as tube 3 alone). Powers of 2 give unique sums.</td></tr>
+    <tr><td><strong>"Zero" rule</strong></td><td>Potable water = <strong>0 coliforms / 100 mL</strong>.</td></tr>
+    <tr><td><strong>Congo Red trap</strong></td><td>Rhizobium = <em>colorless / white</em>; <em>red colonies are contaminants</em>. Easy to flip.</td></tr>
+    <tr><td><strong>Heat-stable enterotoxins</strong></td><td><em>S. aureus</em> can leave toxins in cooked food even after cells are dead.</td></tr>
+    <tr><td><strong>White-rot fungi</strong></td><td>The classical example for laccase / lignin degradation (and PAH biodegradation).</td></tr>
+  </table>
+
+  <a class="back" href="#toc">↑ Back to top</a>
+</section>
+
+
+<!-- =========================================================
+     SECTION 2 — HIGH-YIELD CONCEPTS
+     ========================================================= -->
+<section class="block" id="section-2">
+  <h2>2. High-Yield Concepts (Must-Memorize Core)</h2>
+
+  <h3>2.1 PGPR — Plant Growth Promoting Rhizobacteria</h3>
+  <div class="key"><strong>Definition (verbatim style):</strong> PGPR are a <em>heterogeneous group of bacteria</em> found in the rhizosphere, at root surfaces, and in association with roots, which can improve the extent or quality of plant growth <em>directly and/or indirectly</em>.</div>
+
+  <table>
+    <tr><th>Direct mechanisms</th><th>Indirect mechanisms</th></tr>
+    <tr>
+      <td>
+        <ol>
+          <li>Producing/altering plant growth regulators: <strong>indole-acetic acid (IAA), gibberellic acid, cytokinins, ethylene</strong></li>
+          <li><strong>Symbiotic N₂ fixation</strong></li>
+          <li><strong>Solubilization of mineral phosphates</strong> and other nutrients</li>
+        </ol>
+      </td>
+      <td>
+        <ol>
+          <li><strong>Antagonism</strong> against phytopathogens (siderophores, hydrocyanic acid)</li>
+          <li><strong>Biocontrol</strong> via antibiotic production</li>
+          <li>Triggering <strong>induced local or systemic resistance</strong></li>
+        </ol>
+      </td>
+    </tr>
+  </table>
+
+  <p class="small">Genera reported: <em>Pseudomonas, Azospirillum, Azotobacter, Klebsiella, Enterobacter, Alcaligenes, Arthrobacter, Burkholderia, Bacillus, Serratia.</em></p>
+
+  <h3>2.2 Key Definitions Cheat-Sheet</h3>
+  <table>
+    <tr><th>Term</th><th>Definition</th></tr>
+    <tr><td><strong>Rhizosphere</strong></td><td>Soil zone directly surrounding the plant root system.</td></tr>
+    <tr><td><strong>Rhizoplane</strong></td><td>The actual surface of the root.</td></tr>
+    <tr><td><strong>Endophyte</strong></td><td>Microorganism (e.g., <em>Rhizobium</em>) that lives <em>inside</em> plant tissues.</td></tr>
+    <tr><td><strong>Nitrogen fixation</strong></td><td>Reduction of atmospheric N₂ → NH₃, by the enzyme <strong>nitrogenase</strong> (only in prokaryotes).</td></tr>
+    <tr><td><strong>Diazotroph</strong></td><td>Prokaryote that uses N₂ gas as its sole N source.</td></tr>
+    <tr><td><strong>Siderophores</strong></td><td>Iron-chelating compounds; "starve" pathogens of Fe³⁺.</td></tr>
+    <tr><td><strong>Leghaemoglobin</strong></td><td>Pink/red pigment in active N-fixing nodules; protects nitrogenase from O₂.</td></tr>
+    <tr><td><strong>Mineralization (P)</strong></td><td>Release of inorganic P from organic P by microbes.</td></tr>
+    <tr><td><strong>Coliforms</strong></td><td>Gram-negative, non-spore-forming, lactose-fermenting rods of family <em>Enterobacteriaceae</em>.</td></tr>
+    <tr><td><strong>Indicator organism</strong></td><td>Non-pathogen present in greater numbers than pathogens, used as a proxy for contamination.</td></tr>
+    <tr><td><strong>BOD</strong></td><td>Oxygen required by microbes to break down organic matter (5-day incubation, 20 °C, dark).</td></tr>
+    <tr><td><strong>COD</strong></td><td>Oxygen required by a chemical oxidant to oxidize organic + inorganic matter.</td></tr>
+    <tr><td><strong>CFU</strong></td><td>Colony Forming Unit — counts only <em>viable</em> cells.</td></tr>
+    <tr><td><strong>OD (Optical Density)</strong></td><td>Turbidity-based count; counts dead + live + debris (not viable-only).</td></tr>
+  </table>
+
+  <h3>2.3 Coliform Hierarchy (KNOW THIS)</h3>
+  <table>
+    <tr><th>Group</th><th>Habitat</th><th>Lactose ferments at</th><th>Significance</th><th>Key enzyme</th></tr>
+    <tr><td><strong>Total Coliforms</strong></td><td>Soil, water, plants, intestines</td><td>35 °C, 24–48 h</td><td>General contamination</td><td>β-galactosidase</td></tr>
+    <tr><td><strong>Fecal Coliforms</strong></td><td>Intestines of warm-blooded mammals</td><td>44.5 °C, 24–48 h</td><td>Recent fecal contamination</td><td>β-galactosidase</td></tr>
+    <tr><td><strong><em>E. coli</em></strong></td><td>Human/animal gut (best indicator)</td><td>44.5 °C</td><td>Definitive fecal indicator</td><td>β-galactosidase + <strong>β-glucuronidase</strong></td></tr>
+  </table>
+
+  <div class="alert"><strong>🚨 The "Zero Rule":</strong> Potable water = <strong>0 coliforms / 100 mL</strong>. Detection methods rely on coliforms' ability to <strong>ferment lactose → acid + gas</strong>.</div>
+
+  <h3>2.4 Three Methods for Coliform Monitoring</h3>
+  <table>
+    <tr><th>Method</th><th>Type</th><th>Principle</th><th>Key media / signal</th></tr>
+    <tr><td><strong>Presence-Absence (P-A)</strong></td><td>Qualitative</td><td>Yes / no in 100 mL</td><td>Colilert (ONPG → yellow), Lauryl Sulfate Tryptose broth</td></tr>
+    <tr><td><strong>Membrane Filter (MF)</strong></td><td>Quantitative</td><td>Filter water → place membrane on selective agar → count colonies</td><td>m-Endo agar — <em>red colonies with metallic sheen</em> = coliforms</td></tr>
+    <tr><td><strong>Multiple Tube Fermentation (MTF / MPN)</strong></td><td>Quantitative (statistical)</td><td>3 sets × 5 tubes (10 mL / 1 mL / 0.1 mL); count gas/yellow tubes; read MPN table</td><td>Lactose broth → Brilliant Green Lactose Bile broth → EMB agar</td></tr>
+  </table>
+
+  <h3>2.5 Bioremediation &amp; Ligninolytic Enzymes</h3>
+  <div class="key"><strong>The Triple Threat (memorize):</strong> <strong>Laccase (Lac)</strong> + <strong>Lignin Peroxidase (LiP)</strong> + <strong>Manganese Peroxidase (MnP)</strong>. All three are produced by <strong>White-Rot Fungi</strong> (basidiomycetes), the only organisms able to <em>completely</em> mineralize lignin to CO₂ + H₂O.</div>
+
+  <table>
+    <tr><th>Feature</th><th>Laccase</th><th>LiP / MnP</th></tr>
+    <tr><td>Cofactor</td><td>Copper (blue copper oxidase)</td><td>Heme (Fe-protein)</td></tr>
+    <tr><td>Reaction</td><td>One-electron oxidation of phenolics → e⁻ to O₂ → H₂O</td><td>Peroxidase (uses H₂O₂)</td></tr>
+    <tr><td>Lab assay substrate</td><td><strong>Guaiacol → Tetraguaiacol (brown), λ = 470 nm</strong></td><td>—</td></tr>
+    <tr><td>EC number</td><td>EC 1.10.3.2 (benzenediol:O₂ oxidoreductase)</td><td>—</td></tr>
+  </table>
+
+  <h3>2.6 PAHs (Polycyclic Aromatic Hydrocarbons)</h3>
+  <ul>
+    <li>Two or more <strong>fused benzene rings</strong>, <strong>insoluble &amp; stable</strong>, <strong>carcinogenic</strong>.</li>
+    <li>Degradation order (best → worst): <strong>3-ring (89%) > 4-ring (87%) > 5-ring (48%)</strong> over 7 weeks.</li>
+    <li><strong>Linear</strong> arrangements (anthracene) are <em>more</em> biodegradable than <strong>angular</strong> (benzo[a]pyrene, pyrene).</li>
+    <li>Degradation requires <strong>oxygen insertion</strong> into rings — increases solubility &amp; reactivity. PAHs accumulate where O₂ is low.</li>
+    <li>Ligninolytic enzymes attack PAHs because lignin contains similar benzene-ring chemistry.</li>
+  </ul>
+
+  <a class="back" href="#toc">↑ Back to top</a>
+</section>
+
+
+<!-- =========================================================
+     SECTION 3 — MECHANISMS & REASONING
+     ========================================================= -->
+<section class="block" id="section-3">
+  <h2>3. Mechanisms &amp; Reasoning (The "Why")</h2>
+
+  <details open>
+    <summary>3.1 Why MSA selects + differentiates <em>S. aureus</em></summary>
+    <div>
+      <div class="mech"><strong>⚙ Mechanism:</strong> Two layers act simultaneously.</div>
+      <ol>
+        <li><strong>Selection</strong> — 7.5% NaCl creates a hyper-osmotic environment. Most bacteria lose water and cannot grow. <em>Staphylococci</em> are halotolerant and survive.</li>
+        <li><strong>Differentiation</strong> — The medium contains <strong>mannitol</strong> + <strong>phenol red</strong> indicator. <em>S. aureus</em> ferments mannitol → acid → indicator drops to acidic pH → <strong>red turns yellow</strong> (a yellow halo around colonies). Coagulase-negative <em>S. epidermidis</em> does <em>not</em> ferment mannitol → colonies stay pink/red on a red background.</li>
+      </ol>
+      <p class="small">Memory hook: "<em>aureus</em>" = Latin <em>aurum</em> = gold = yellow.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>3.2 Why MacConkey is selective <em>and</em> differential</summary>
+    <div>
+      <div class="mech"><strong>⚙ Mechanism:</strong></div>
+      <ul>
+        <li><strong>Selection:</strong> <em>Crystal violet</em> + <em>bile salts</em> inhibit Gram-positive organisms.</li>
+        <li><strong>Differentiation:</strong> <em>Lactose</em> + <em>neutral red</em> indicator. Lactose fermenters (e.g., <em>E. coli</em>) produce acid → bile salts precipitate → neutral red is absorbed → <strong>brick-red / pink colonies</strong> with a precipitated bile zone. Non-fermenters (<em>Salmonella, Shigella</em>) → <strong>colorless / transparent</strong> (alkaline reaction).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>3.3 Why XLD shows red colonies with black centers</summary>
+    <div>
+      <div class="mech"><strong>⚙ Three-stage mechanism:</strong></div>
+      <ol>
+        <li><strong>Stage 1 (early):</strong> <em>Salmonella</em> ferments xylose → acid → medium turns yellow (just like <em>E. coli</em>, but <em>E. coli</em> further ferments lactose &amp; sucrose, locking the medium yellow → masking).</li>
+        <li><strong>Stage 2 (xylose exhausted):</strong> <em>Salmonella</em> decarboxylates <strong>lysine</strong> → amines → pH rises again to alkaline → indicator (phenol red) reverts to <strong>red</strong>.</li>
+        <li><strong>Stage 3:</strong> <em>Salmonella</em> reduces <strong>thiosulfate → H₂S</strong>, which reacts with <strong>ferric ammonium citrate</strong> to form a black precipitate (FeS) → <strong>black-centered red colonies</strong>.</li>
+        <li><em>Shigella</em> cannot ferment xylose at all + does NOT make H₂S → <strong>plain red colonies</strong>.</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary>3.4 Why Baird-Parker shows black colonies + halo for <em>S. aureus</em></summary>
+    <div>
+      <div class="mech"><strong>⚙ Mechanism (3 components):</strong></div>
+      <ul>
+        <li><strong>Selection:</strong> <em>Lithium chloride</em> + <em>1% potassium tellurite</em> suppress non-staphylococci.</li>
+        <li><strong>Black color:</strong> <em>S. aureus</em> reduces tellurite → telluride → <strong>grey-to-black colonies</strong>.</li>
+        <li><strong>Clear halo:</strong> <em>S. aureus</em> produces <strong>lecithinase</strong> that breaks down lecithin in the egg yolk in the medium → clear "halo" around the black colony.</li>
+        <li><strong>Opaque halo:</strong> Coagulase converts fibrinogen (if present) → fibrin → opaque halo (coagulase-positive identification).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>3.5 Gram-stain mechanism (and its alternatives)</summary>
+    <div>
+      <div class="mech"><strong>⚙ Mechanism:</strong> Gram⁺ cells have a thick peptidoglycan wall (50–90% of envelope) that traps the crystal violet–iodine complex during decolorization → stay <strong>purple</strong>. Gram⁻ cells have a thin peptidoglycan layer (~10%) inside an outer membrane that is dissolved by alcohol → CV-I washes out → counterstain with safranin → <strong>pink/red</strong>.</div>
+      <h4>Steps</h4>
+      <ol>
+        <li>Heat-fix smear → apply <strong>crystal violet</strong> (2 min) — primary stain</li>
+        <li>Add <strong>iodine</strong> — mordant; binds CV, traps it inside cell</li>
+        <li><strong>Rapid decolorization</strong> with ethanol/acetone (critical step — over-decolorizing = false Gram-negative)</li>
+        <li>Counterstain with <strong>safranin</strong> (2 min)</li>
+      </ol>
+      <h4>Alternatives the doctor mentioned</h4>
+      <table>
+        <tr><th>Test</th><th>Principle</th><th>Positive result</th><th>Implies</th></tr>
+        <tr><td><strong>KOH String Test</strong></td><td>3% KOH lyses Gram⁻ cells → DNA leaks → solution becomes viscous &amp; "strings"</td><td>Stringy/viscous within 60 s</td><td>Gram-<strong>negative</strong></td></tr>
+        <tr><td><strong>Aminopeptidase Test</strong></td><td>L-alanine aminopeptidase (Gram⁻ only) cleaves L-alanine-4-nitroanilide → 4-nitroaniline (yellow)</td><td>Yellow color (5 min)</td><td>Gram-<strong>negative</strong></td></tr>
+        <tr><td><strong>Fluorescent WGA</strong></td><td>Wheat germ agglutinin binds N-acetylglucosamine in <em>exposed</em> peptidoglycan of Gram⁺</td><td>Green fluorescence</td><td>Gram-<strong>positive</strong></td></tr>
+      </table>
+      <div class="alert"><strong>🚨 KOH Trap:</strong> KOH-<em>positive</em> (stringy) = Gram-<em>negative</em>. KOH-<em>negative</em> (no string) = Gram-<em>positive</em>. The result/identity are inverted — easy to flip on the exam.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>3.6 Coliscan / ONPG / MUG (the enzyme-substrate logic)</summary>
+    <div>
+      <div class="mech"><strong>⚙ The clever idea:</strong> Coliforms <em>ferment lactose</em>, which means they have specific enzymes. Detect the <em>enzymes</em> directly using engineered substrates that release a colored or fluorescent product when cleaved.</div>
+      <table>
+        <tr><th>Enzyme</th><th>Substrate</th><th>Product / Signal</th><th>Identifies</th></tr>
+        <tr><td>β-galactosidase</td><td><strong>ONPG</strong> (o-nitrophenyl-β-galactoside)</td><td>o-nitrophenol = <strong>yellow</strong> (read at 420 nm)</td><td>All coliforms (general)</td></tr>
+        <tr><td>β-glucuronidase</td><td><strong>MUG</strong> (4-methylumbelliferyl-β-D-glucuronide)</td><td>4-methylumbelliferone = <strong>fluorescence under UV</strong></td><td><em>E. coli</em> specifically</td></tr>
+      </table>
+      <p>On a <strong>Coliscan Easygel</strong> plate: <span class="pill" style="background:#9ca3af;color:#fff">dark blue / purple</span> = <em>E. coli</em>; <span class="pill" style="background:#fbcfe8;color:#9d174d">pink / red</span> = other coliforms; <span class="pill" style="background:#a7f3d0;color:#065f46">teal / green</span> = other organisms.</p>
+      <p class="small"><strong>ONPG nuance:</strong> Some "non-lactose fermenters" lack <em>permease</em> but still have β-galactosidase — they show ONPG-positive but ferment lactose slowly = "late lactose fermenter" (e.g., <em>Citrobacter</em>).</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>3.7 Phosphate solubilization mechanism</summary>
+    <div>
+      <div class="mech"><strong>⚙ Mechanism:</strong> Plants take up P only as <em>orthophosphate</em> (H₂PO₄⁻ at pH &lt; 7; HPO₄²⁻ at pH &gt; 7.2). In soil, P is "locked":
+        <ul>
+          <li>In <strong>acidic soils</strong>: P binds to Fe³⁺ and Al³⁺ surfaces (sorption).</li>
+          <li>In <strong>calcareous (alkaline) soils</strong>: P precipitates with Ca²⁺ as insoluble calcium phosphates.</li>
+        </ul>
+        Phosphate-Solubilizing Microorganisms (PSMs) — fungi (<em>Aspergillus, Penicillium</em>) and bacteria (<em>Pseudomonas, Bacillus, Rhizobium, Azospirillum</em>) — release <strong>organic acids</strong> that chelate the cations or lower pH, freeing soluble P.
+      </div>
+      <p>On agar with insoluble Ca-phosphate, this appears as a <strong>clear halo (solubilization zone)</strong> around the colony.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>3.8 Why API 20E uses 1, 2, 4 (not 1, 2, 3)</summary>
+    <div>
+      <div class="mech"><strong>⚙ Mechanism (combinatorial logic):</strong> 21 tests (20 strip + 1 oxidase) split into 7 triads. In each triad: tube 1 = 1 pt, tube 2 = 2 pts, tube 3 = <strong>4 pts</strong>. Sum the positives in each triad → 7-digit profile → look up in API database.</div>
+      <p><strong>Why 4 and not 3?</strong> Because every subset must give a unique sum:</p>
+      <table>
+        <tr><th>Positives</th><th>Sum (1,2,3)</th><th>Sum (1,2,4) ✓</th></tr>
+        <tr><td>Tube 1 only</td><td>1</td><td>1</td></tr>
+        <tr><td>Tube 2 only</td><td>2</td><td>2</td></tr>
+        <tr><td>Tube 3 only</td><td>3 ⚠ <em>same as 1+2</em></td><td>4</td></tr>
+        <tr><td>1+2</td><td>3 ⚠</td><td>3</td></tr>
+        <tr><td>1+3</td><td>4</td><td>5</td></tr>
+        <tr><td>2+3</td><td>5</td><td>6</td></tr>
+        <tr><td>1+2+3</td><td>6</td><td>7</td></tr>
+      </table>
+      <p>With (1, 2, 4) every combination has a unique sum (0–7). This is the same logic as binary encoding.</p>
+      <p><strong>Pre-step:</strong> Oxidase test must be <strong>negative</strong> (Enterobacteriaceae are oxidase-negative).</p>
+      <p><strong>Why add reagents AFTER incubation, not before?</strong> Because the reagents could inhibit bacterial growth.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>3.9 Why use indicator organisms instead of direct pathogen detection</summary>
+    <div>
+      <div class="mech"><strong>⚙ Doctor's "pH indicator" analogy:</strong> You don't measure every acid in a solution — you use one indicator. Same for water: don't search for every pathogen.</div>
+      <p>An ideal indicator must be:</p>
+      <ul>
+        <li>Present in <strong>greater numbers</strong> than the pathogen</li>
+        <li>Survive longer (gives time to detect)</li>
+        <li><strong>Non-pathogenic</strong> (safe to handle)</li>
+        <li>Easy to test for in routine labs</li>
+        <li>Reflect contamination (present <em>only when</em> water is contaminated)</li>
+        <li>Useful for all water types</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>3.10 BOD vs COD — what they actually measure</summary>
+    <div>
+      <table>
+        <tr><th>Parameter</th><th>BOD</th><th>COD</th></tr>
+        <tr><td>What's measured</td><td>O₂ used by <strong>microbes</strong> to break down organics</td><td>O₂ used by <strong>chemical oxidant</strong> to break down everything (organic + inorganic)</td></tr>
+        <tr><td>Method</td><td>DO at day 0 vs day 5 (20 °C, dark)</td><td>K₂Cr₂O₇ + H₂SO₄ digestion 2 h at 150 °C → titrate excess</td></tr>
+        <tr><td>Sees acetate?</td><td>Yes (microbes metabolize it)</td><td>No (resists oxidation)</td></tr>
+        <tr><td>Sees cellulose?</td><td>No (slow for microbes within 5 d)</td><td>Yes (oxidant breaks it)</td></tr>
+        <tr><td>Time</td><td>5 days</td><td>~2 hours</td></tr>
+        <tr><td>Interpretation</td><td>Higher = more pollution (more "food" → more O₂ used)</td><td>Higher = more pollution</td></tr>
+      </table>
+      <div class="alert"><strong>🚨 Trap:</strong> Initial DO is <em>always high</em> in fresh samples. The drop over 5 days = BOD. Don't get confused by the high starting reading.</div>
+    </div>
+  </details>
+
+  <a class="back" href="#toc">↑ Back to top</a>
+</section>
+
+
+<!-- =========================================================
+     SECTION 4 — PRACTICAL PROTOCOLS BREAKDOWN
+     ========================================================= -->
+<section class="block" id="section-4">
+  <h2>4. Practical Protocols Breakdown</h2>
+
+  <details open>
+    <summary>4.1 Pour-Plate Procedure (Isolation by Dilution)</summary>
+    <div>
+      <ol>
+        <li>Pipette <strong>1 mL or 0.1 mL</strong> of a known dilution into the <strong>bottom</strong> of a sterile Petri dish (<em>before</em> adding media).</li>
+        <li>Within <strong>20 min</strong>, add 12–15 mL of warm (<strong>46–48 °C</strong>) fluid medium.</li>
+        <li>Cover the dish.</li>
+        <li>Swirl gently in a <strong>figure-eight pattern</strong> (flat on the bench) to disperse the inoculum.
+          <ul><li><em>Why?</em> Ensures homogeneous distribution; avoids splashing onto the lid.</li></ul>
+        </li>
+        <li>Allow to cool and solidify.</li>
+        <li><strong>Invert</strong> the plate (medium-side <em>down</em>) and incubate.
+          <ul><li><em>Why invert?</em> Prevents condensation droplets from pooling on the agar surface — pools could let surface colonies merge or migrate.</li></ul>
+        </li>
+      </ol>
+      <p class="small"><strong>Key constraint:</strong> Agar must be at 46–48 °C — hot enough to stay liquid, cool enough not to kill the cells.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>4.2 Streak-Plate Procedure</summary>
+    <div>
+      <ol>
+        <li>Aseptically introduce inoculum to a small area = <strong>"the well"</strong>.</li>
+        <li>Re-flame loop, cool on remote corner, then streak from the well across one quadrant.</li>
+        <li><strong>Re-flame after each streak</strong> — this dilutes the cell density progressively.</li>
+        <li>3–5 streaks per plate; the last quadrant should yield isolated colonies.</li>
+      </ol>
+      <p class="small">Both pour-plate and streak-plate aim to produce <strong>single, well-isolated colonies</strong> assumed to arise from a single cell — so each colony = one strain.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>4.3 Counting rule — the "30–300" Window</summary>
+    <div>
+      <ul>
+        <li><strong>Lower limit (30):</strong> Statistical accuracy minimum.</li>
+        <li><strong>Upper limit (300):</strong> Beyond this, accurate counting becomes impossible.</li>
+        <li>Pick the dilution plate that falls in this window for CFU/mL calculation.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>4.4 Isolating Pathogenic Staphylococci from Water (full design)</summary>
+    <div>
+      <ol>
+        <li>Prepare <strong>Mannitol Salt Agar (MSA)</strong> containing: mannitol (fermentable sugar), <strong>phenol red</strong> indicator, <strong>7.5% NaCl</strong> (selective).</li>
+        <li>Pipette 1 mL of a known dilution into a sterile Petri dish (before media addition).</li>
+        <li>Within 20 min, add 12–15 mL warm (46–48 °C) fluid MSA.</li>
+        <li>Cover &amp; swirl (figure-8) to disperse evenly.</li>
+        <li>Cool, solidify.</li>
+        <li>Invert and incubate.</li>
+        <li>Read: pathogenic <em>S. aureus</em> = <strong>small colonies surrounded by yellow zones</strong> (mannitol fermentation → acid → phenol red → yellow).</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary>4.5 Isolating <em>Rhizobium</em> from Root Nodules</summary>
+    <div>
+      <ol>
+        <li>Locate legume plants in the field; dig a 15-cm radius / 20-cm-deep soil clump around each.</li>
+        <li>Carefully wash roots under gentle running water — keep nodules on lateral roots intact. <strong>Do NOT freeze nodules</strong> (ice ruptures bacteroids).</li>
+        <li>An active N-fixing nodule has a <strong>pink, red, or brown</strong> interior (leghaemoglobin); ineffective rhizobia → white interiors.</li>
+        <li>Sever each nodule (~0.5 cm of root either side); use forceps on the appendage, not the nodule itself.</li>
+        <li><strong>Surface sterilization:</strong> 95% ethanol or isopropanol 5–10 s → 2.5–3% sodium hypochlorite 2–4 min → rinse with sterile water.</li>
+        <li>Crush nodule in a sterile test tube with a sterile glass rod.</li>
+        <li>Streak one loopful onto <strong>YMA + Congo Red</strong>; another onto YMA + Bromothymol Blue.</li>
+        <li>Incubate <em>in the dark</em> (CR can be photoactivated).</li>
+        <li>Read: <strong>White / colorless glistening colonies</strong> = <em>Rhizobium</em>; <strong>red colonies</strong> = contaminants.</li>
+      </ol>
+      <p class="small"><strong>YMA composition (per L):</strong> K₂HPO₄ 0.5 g; MgSO₄·7H₂O 0.2 g; NaCl 0.1 g; yeast extract 1 g; mannitol 10 g; H₂O up to 1000 mL; pH 6.8–7.0; agar 18 g/L; Congo Red 0.025 g/L. Sterilize 121 °C / 20 min.</p>
+      <div class="alert"><strong>🚨 Congo Red Trap:</strong> <em>Rhizobium</em> = colorless/white. Red colonies = contaminants. Reverse intuition.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>4.6 Phosphate Solubilization Assay</summary>
+    <div>
+      <ol>
+        <li>Inoculate isolate centrally onto Pikovskaya / NBRIP medium containing insoluble Ca-phosphate.</li>
+        <li>Incubate; the colony grows + dissolves nearby insoluble P → <strong>clear "solubilization halo"</strong>.</li>
+        <li>Measure with a ruler:
+          <ul>
+            <li><strong>Diameter of colony</strong> (D<sub>colony</sub>)</li>
+            <li><strong>Diameter of solubilization zone</strong> (D<sub>zone</sub>) — entire halo edge to edge.</li>
+          </ul>
+        </li>
+        <li>Calculate Solubilization Efficiency (formula in §7).</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary>4.7 Bacillus Isolation Protocol</summary>
+    <div>
+      <ol>
+        <li>1 g soil → 9 mL nutrient broth/saline.</li>
+        <li><strong>Heat 10 min at 80 °C</strong> — destroys vegetative bacteria/fungi; spores survive (selects for spore-formers like <em>Bacillus</em>).</li>
+        <li>Make tenfold serial dilutions (10⁻¹ to 10⁻⁷).</li>
+        <li>Plate 100 µL aliquots in duplicate on nutrient agar (spread plate).</li>
+        <li>Incubate 28–30 °C / 24 h.</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary>4.8 Laccase Enzyme Assay (Guaiacol Method)</summary>
+    <div>
+      <p><strong>Reaction mixture:</strong></p>
+      <ul>
+        <li>3.9 mL acetate buffer (10 mmol/L, pH 5.0)</li>
+        <li>1 mL guaiacol (2 mmol/L)</li>
+        <li>0.1 mL diluted enzyme solution</li>
+        <li>Incubate <strong>35 °C / 30 min</strong></li>
+        <li>Read absorbance at <strong>470 nm</strong>; blank uses buffer instead of guaiacol.</li>
+      </ul>
+      <p><strong>Why guaiacol?</strong> Laccase oxidizes it to <strong>tetraguaiacol</strong> (brown). Color intensity ∝ activity.</p>
+      <p>(Formula in §7.)</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>4.9 BOD₅ Procedure</summary>
+    <div>
+      <ol>
+        <li>Take two parallel water samples.</li>
+        <li>Sample A: measure dissolved oxygen <strong>immediately</strong> (DO₀).</li>
+        <li>Sample B: incubate in the <strong>dark at 20 °C for 5 days</strong>; then measure DO₅.</li>
+        <li><strong>BOD = DO₀ − DO₅</strong> (mg/L).</li>
+      </ol>
+      <p>Why dark? Prevents photosynthesis, which would <em>add</em> O₂ and falsify the result.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>4.10 COD Procedure</summary>
+    <div>
+      <p><strong>Reagents:</strong> distilled H₂O; 0.250 N K₂Cr₂O₇; conc. H₂SO₄ + Ag₂SO₄; HgSO₄; 0.25 N ferrous ammonium sulfate; ferroin indicator.</p>
+      <ol>
+        <li>50 mL sample + 1 g HgSO₄ (binds Cl⁻ to prevent interference).</li>
+        <li>Add 5 mL conc. H₂SO₄; swirl until HgSO₄ dissolves.</li>
+        <li>In ice bath, slowly add 25 mL of 0.025 N K₂Cr₂O₇ with swirling.</li>
+        <li>Add 70 mL H₂SO₄–Ag₂SO₄ solution slowly with swirling.</li>
+        <li><strong>Reflux at 150 °C for 2 hours.</strong></li>
+        <li>Cool, dilute to ~300 mL with distilled water, cool to room T.</li>
+        <li>Add 8–10 drops ferroin → titrate excess dichromate with 0.25 N FAS to endpoint (red/brown).</li>
+        <li><strong>Run a blank in parallel</strong> (low-COD water in place of sample).</li>
+      </ol>
+      <p class="small">Mercury is added because chloride is the main interferent (Cl⁻ would consume oxidant via oxidation, falsely raising COD).</p>
+    </div>
+  </details>
+
+  <a class="back" href="#toc">↑ Back to top</a>
+</section>
+
+
+<!-- =========================================================
+     SECTION 5 — SELECTIVE & DIFFERENTIAL MEDIA TABLES
+     ========================================================= -->
+<section class="block" id="section-5">
+  <h2>5. Selective &amp; Differential Media — Master Identification Table</h2>
+
+  <p class="small">For every photo on the exam, you must answer: <strong>(1) name of medium, (2) what is it selective for + the inhibitory agents, (3) how it differentiates (mechanism + color logic), (4) expected positive vs negative result.</strong></p>
+
+  <table>
+    <tr>
+      <th>Medium</th>
+      <th>Type</th>
+      <th>Target / Selective for</th>
+      <th>Selective Agent(s)</th>
+      <th>Differential Mechanism</th>
+      <th>Positive (+) appearance</th>
+      <th>Negative (−) appearance</th>
+    </tr>
+
+    <tr>
+      <td><strong>Mannitol Salt Agar (MSA)</strong></td>
+      <td><span class="pill both">Selective + Differential</span></td>
+      <td><em>Staphylococci</em> (halotolerant)</td>
+      <td><strong>7.5% NaCl</strong></td>
+      <td>Mannitol fermentation + phenol red indicator</td>
+      <td><em>S. aureus</em>: <span style="background:#fef3c7;padding:1px 6px;border-radius:4px">yellow colonies + yellow halo</span></td>
+      <td>Other staph (<em>S. epidermidis</em>): pink/red colonies on red background; non-staph: no growth</td>
+    </tr>
+
+    <tr>
+      <td><strong>Baird-Parker Agar</strong></td>
+      <td><span class="pill both">Selective + Differential</span></td>
+      <td>Coagulase-positive <em>S. aureus</em></td>
+      <td>Lithium chloride; 1% potassium tellurite</td>
+      <td>Tellurite reduction → black; lecithinase → halo; coagulase → opaque ring</td>
+      <td><strong>Black colonies with clear halo</strong> (± opaque halo)</td>
+      <td>No growth or non-black colonies</td>
+    </tr>
+
+    <tr>
+      <td><strong>Blood Agar</strong></td>
+      <td><span class="pill diff">Differential</span></td>
+      <td>—</td>
+      <td>—</td>
+      <td>Hemolysin → RBC lysis pattern</td>
+      <td><strong>α</strong>: greenish/brown (partial; <em>S. pneumoniae</em>); <strong>β</strong>: clear zone (full lysis; <em>S. aureus</em>, <em>S. pyogenes</em>)</td>
+      <td><strong>γ</strong>: no change (<em>Neisseria</em>)</td>
+    </tr>
+
+    <tr>
+      <td><strong>ORSAB</strong> (Oxacillin Resistance Screening Agar Base)</td>
+      <td><span class="pill both">Selective + Differential</span></td>
+      <td><strong>MRSA</strong> (methicillin-resistant <em>S. aureus</em>)</td>
+      <td>5.5% NaCl; lithium chloride; <strong>Oxacillin (2 mg/L)</strong>; polymyxin B</td>
+      <td>Mannitol fermentation + <strong>aniline blue</strong> indicator</td>
+      <td><strong>Intense blue colonies</strong> = MRSA</td>
+      <td>MSSA inhibited by oxacillin; non-staph inhibited by salt</td>
+    </tr>
+
+    <tr>
+      <td><strong>MacConkey Agar</strong></td>
+      <td><span class="pill both">Selective + Differential</span></td>
+      <td>Gram-negative enteric bacteria</td>
+      <td><strong>Bile salts</strong> + <strong>crystal violet</strong> (inhibit Gram⁺)</td>
+      <td>Lactose fermentation + neutral red indicator</td>
+      <td>Lactose fermenters (<em>E. coli</em>): <strong>brick-red / pink colonies</strong> with bile precipitate zone</td>
+      <td>Non-fermenters (<em>Salmonella, Shigella</em>): <strong>colorless / transparent</strong></td>
+    </tr>
+
+    <tr>
+      <td><strong>EMB Agar</strong> (Eosin Methylene Blue)</td>
+      <td><span class="pill both">Selective + Differential</span></td>
+      <td>Gram-negative enterics</td>
+      <td><strong>Eosin Y + methylene blue</strong> (inhibit Gram⁺)</td>
+      <td>Strong lactose fermenters precipitate dye complex at low pH</td>
+      <td><em>E. coli</em>: <strong>green metallic sheen</strong>; other lactose+ : blue-black</td>
+      <td><em>Salmonella, Shigella</em>: colorless / translucent</td>
+    </tr>
+
+    <tr>
+      <td><strong>XLD Agar</strong></td>
+      <td><span class="pill both">Selective + Differential</span></td>
+      <td><em>Salmonella, Shigella</em></td>
+      <td>Sodium deoxycholate</td>
+      <td>Xylose ferment → lysine decarboxylation → H₂S production with ferric ammonium citrate</td>
+      <td><em>Salmonella</em>: <strong>red colonies with black centers</strong>; <em>Shigella</em>: plain red</td>
+      <td><em>E. coli</em>: yellow → yellow-red colonies</td>
+    </tr>
+
+    <tr>
+      <td><strong>Salmonella-Shigella Agar (SS)</strong></td>
+      <td><span class="pill both">Selective + Differential</span></td>
+      <td><em>Salmonella, Shigella</em></td>
+      <td><strong>Bile salts + brilliant green + citrates</strong></td>
+      <td>Lactose fermentation (neutral red) + H₂S (Na thiosulfate + ferric citrate)</td>
+      <td><em>Salmonella</em>: <strong>colorless colonies with black centers</strong>; <em>Shigella</em>: colorless, no center</td>
+      <td>Lactose fermenters: red colonies (e.g., <em>E. coli</em> if present)</td>
+    </tr>
+
+    <tr>
+      <td><strong>m-Endo Agar</strong></td>
+      <td><span class="pill both">Selective + Differential</span></td>
+      <td>Total coliforms (membrane-filter method)</td>
+      <td>Sodium lauryl sulfate; sodium deoxycholate (inhibit Gram⁺)</td>
+      <td>Lactose fermentation + basic fuchsin / sodium sulfite + aldehyde formation</td>
+      <td>Coliforms: <strong>red colonies with green metallic sheen</strong></td>
+      <td>Non-fermenters: clear, colorless colonies</td>
+    </tr>
+
+    <tr>
+      <td><strong>Coliscan Easygel</strong></td>
+      <td><span class="pill both">Selective + Differential</span></td>
+      <td>Coliforms vs <em>E. coli</em> in water</td>
+      <td>Inhibitors of non-coliforms in gel</td>
+      <td>Two chromogenic substrates: β-galactosidase + β-glucuronidase</td>
+      <td><em>E. coli</em> = <strong>dark blue/purple</strong>; other coliforms = <strong>pink/red</strong></td>
+      <td>Other organisms = teal/green or none</td>
+    </tr>
+
+    <tr>
+      <td><strong>YMA + Congo Red</strong> (Yeast-Mannitol Agar)</td>
+      <td><span class="pill diff">Differential (CR)</span></td>
+      <td><em>Rhizobium</em> from nodules</td>
+      <td>—</td>
+      <td>Congo red absorption test</td>
+      <td><em>Rhizobium</em>: <strong>white / colorless</strong> glistening colonies (does NOT absorb)</td>
+      <td>Contaminants: <strong>red colonies</strong> (absorb dye)</td>
+    </tr>
+
+    <tr>
+      <td><strong>Lauryl Sulfate Tryptose (LST) broth</strong></td>
+      <td><span class="pill sel">Selective (presumptive)</span></td>
+      <td>Coliforms</td>
+      <td><strong>Sodium lauryl sulfate</strong> (inhibits Gram⁺)</td>
+      <td>Lactose fermentation → acid + gas (in Durham tube)</td>
+      <td>Acid (color change) + gas bubble in inverted Durham</td>
+      <td>No color change, no gas</td>
+    </tr>
+
+    <tr>
+      <td><strong>Brilliant Green Lactose Bile broth</strong></td>
+      <td><span class="pill sel">Selective (confirmed)</span></td>
+      <td>Coliforms</td>
+      <td>Oxbile + brilliant green</td>
+      <td>Gas in Durham tube (lactose fermentation)</td>
+      <td>Gas formation within 48 h at 35 °C</td>
+      <td>No gas</td>
+    </tr>
+
+    <tr>
+      <td><strong>Levine's EMB</strong> (completed)</td>
+      <td><span class="pill both">Selective + Differential</span></td>
+      <td>Gram-neg enteric bacilli</td>
+      <td>Methylene blue (inhibits Gram⁺)</td>
+      <td>Eosin pH-responsive (acid → black)</td>
+      <td><em>E. coli</em>: blue-black with <strong>green metallic sheen</strong></td>
+      <td>Non-fermenters: colorless, translucent</td>
+    </tr>
+
+    <tr>
+      <td><strong>Mineral Salt Medium (MSM)</strong></td>
+      <td><span class="pill sel">Selective</span></td>
+      <td>Pollutant-degrading microbes</td>
+      <td>Pollutant is the <strong>only carbon source</strong> (e.g., crude oil)</td>
+      <td>Growth = ability to use pollutant as C source</td>
+      <td>Growth on plate</td>
+      <td>No growth → cannot use pollutant</td>
+    </tr>
+
+    <tr>
+      <td><strong>Lactose Broth + phenol red (MTF presumptive)</strong></td>
+      <td><span class="pill sel">Presumptive</span></td>
+      <td>Coliforms</td>
+      <td>—</td>
+      <td>Lactose → acid (red→yellow) + gas (Durham)</td>
+      <td><strong>Yellow + gas bubble</strong> at 24 h, 35 °C = positive</td>
+      <td>Red, no gas</td>
+    </tr>
+  </table>
+
+  <a class="back" href="#toc">↑ Back to top</a>
+</section>
+
+
+<!-- =========================================================
+     SECTION 6 — VISUAL SPECIMEN BANK
+     ========================================================= -->
+<section class="block" id="section-6">
+  <h2>6. Visual Specimen Recognition (The Lab Photo Bank)</h2>
+
+  <p class="small">These are the 19 specimens that appeared in your sample-photos PDF — and per the doctor: <em>"the images used in the exam will be the same ones you saw during lab sessions."</em> Memorize the visual cue → name → mechanism for each.</p>
+
+  <div class="specimen-card">
+    <h4>📷 Phosphate Solubilization Plate (3 photos)</h4>
+    <p><strong>What you see:</strong> A Petri dish with a small bacterial colony in the center; around it is a <strong>clear / lighter halo</strong> (the solubilization zone). A ruler is positioned across the plate.</p>
+    <p><strong>Identify as:</strong> Phosphate Solubilization assay (Pikovskaya / NBRIP-type medium with insoluble Ca-phosphate).</p>
+    <p><strong>What to do:</strong> Measure D<sub>colony</sub> and D<sub>zone</sub> with the ruler. Report SE% using the formula.</p>
+    <div class="formula">SE% = [(D_zone − D_colony) / D_colony] × 100</div>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 Mannitol Salt Agar (split plate)</h4>
+    <p><strong>What you see:</strong> Petri dish split visually — one side <strong>YELLOW</strong> with growth (<em>Staphylococcus aureus</em>), the other side <strong>RED</strong> with NO growth (<em>Serratia marcescens</em>).</p>
+    <p><strong>Identify as:</strong> MSA — selective medium.</p>
+    <p><strong>Reasoning:</strong> 7.5% NaCl inhibits non-staph (<em>Serratia</em>); <em>S. aureus</em> ferments mannitol → acid → phenol red turns yellow.</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 Baird-Parker Agar (Specimen A)</h4>
+    <p><strong>What you see:</strong> Two plate views — small <strong>black colonies surrounded by clear (lecithinase) halos</strong>.</p>
+    <p><strong>Identify as:</strong> Baird-Parker for <em>S. aureus</em>.</p>
+    <p><strong>Mechanism:</strong> Tellurite reduction → black; lecithinase → clear halo; coagulase → opaque inner ring (if present).</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 Fluorescence-Labeled WGA Method</h4>
+    <p><strong>What you see:</strong> Two microscope fields — <span style="color:#16a34a"><strong>green-glowing rod cells</strong></span> on the LEFT (Gram-positive); <span style="color:#525252"><strong>dark-grey, non-fluorescent rods</strong></span> on the RIGHT (Gram-negative).</p>
+    <p><strong>Identify as:</strong> Wheat-germ agglutinin (WGA) fluorescence = alternative to Gram stain.</p>
+    <p><strong>Mechanism:</strong> WGA binds N-acetylglucosamine in the <em>exposed</em> peptidoglycan of Gram-positive cells. In Gram-negative cells, peptidoglycan is hidden under the outer membrane → no labeling.</p>
+    <div class="alert"><strong>🚨 Memory aid:</strong> Glowing = positive (Gram+). Dark = negative (Gram−).</div>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 Potassium Hydroxide (KOH) String Test</h4>
+    <p><strong>What you see:</strong> 4-panel image showing a loop being lifted off a slide. Some panels show a <strong>thick, viscous string</strong> following the loop; others show no string.</p>
+    <p><strong>Identify as:</strong> KOH 3% String Test — Gram alternative.</p>
+    <p><strong>Read it:</strong> <strong>Stringy &amp; viscous</strong> (within 60 s) = Gram-<em>negative</em> (DNA released by alkali lysis). <strong>No string</strong> = Gram-<em>positive</em>.</p>
+    <div class="alert"><strong>🚨 The classic flip-trap.</strong> Positive test (string) ≠ Gram positive! Stringy = Gram-NEGATIVE.</div>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 API 20E Strip</h4>
+    <p><strong>What you see:</strong> Three strips of microtubes — <strong>Positive control</strong> (multiple distinct colors), <strong>Negative control</strong> (mostly uniform/yellow), and <strong>Test</strong> sample (mixed pattern). A 7-digit code interpretation table is provided.</p>
+    <p><strong>Identify as:</strong> API 20E system — phenotypic identification of Enterobacteriaceae.</p>
+    <p><strong>To answer:</strong></p>
+    <ol>
+      <li>Compare each tube to the reference chart → mark + or − (and read the oxidase test result for the 21st position).</li>
+      <li>Group into 7 triads of 3 tubes each.</li>
+      <li>Within each triad, sum: tube 1 (+) = 1, tube 2 (+) = 2, tube 3 (+) = 4.</li>
+      <li>Concatenate the 7 group sums → 7-digit profile code.</li>
+      <li>Look up code in API database for species ID.</li>
+    </ol>
+    <p><em>Worked example from sheet:</em> Triad results 7-0-3-1-6-4-5 → code <strong>7031645</strong>.</p>
+    <div class="mech"><strong>⚙ Why 1-2-4?</strong> Powers of 2 ensure unique sums for any subset of positives (binary encoding). 1-2-3 would create ambiguity (1+2 = 3 same as tube 3 alone).</div>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 XLD Agar</h4>
+    <p><strong>What you see:</strong> Red plate covered in many tiny <strong>black-centered colonies</strong>.</p>
+    <p><strong>Identify as:</strong> XLD agar.</p>
+    <p><strong>Organism:</strong> <em>Salmonella</em> sp.</p>
+    <p><strong>Mechanism (3-stage):</strong> xylose ferment → acid (initial yellow) → lysine decarboxylated to alkaline (back to red) → thiosulfate → H₂S + ferric ammonium citrate → black FeS centers.</p>
+    <p><em>Compare:</em> <em>Shigella</em> = plain red, no black; <em>E. coli</em> = yellow to yellow-red.</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 Eosin Methylene Blue (EMB) Agar</h4>
+    <p><strong>What you see:</strong> Dark red agar with two streaks. One streak is <strong>dark purple/black</strong>; the other is <strong>green-metallic-sheen</strong>.</p>
+    <p><strong>Identify as:</strong> EMB agar.</p>
+    <p><strong>Read it:</strong> Green metallic sheen = <strong><em>E. coli</em></strong> (strong lactose fermenter, very acidic local pH precipitates dye). Purple/blue-black streak = other lactose fermenter (e.g., <em>Enterobacter</em>). Colorless = non-fermenter (<em>Salmonella, Shigella</em>).</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 Blood Agar</h4>
+    <p><strong>What you see:</strong> Reddish blood agar plate with grey/white colonies; around them are <strong>clear/colorless zones</strong> where the red blood cells have been completely lysed.</p>
+    <p><strong>Identify as:</strong> Blood Agar — differential medium.</p>
+    <p><strong>Pattern:</strong> Clear zone = <strong>β-hemolysis</strong> (complete lysis) — typical of <em>S. aureus</em> and <em>S. pyogenes</em>.</p>
+    <p>Other patterns: <strong>α</strong> = greenish-brown discoloration (partial lysis, e.g. <em>S. pneumoniae</em>); <strong>γ</strong> = no change (e.g. <em>Neisseria</em>).</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 ORSAB Selective Supplement</h4>
+    <p><strong>What you see:</strong> Plate stained <strong>intense BLUE</strong> with small blue colonies (matrix is dark blue).</p>
+    <p><strong>Identify as:</strong> ORSAB (Oxacillin Resistance Screening Agar Base).</p>
+    <p><strong>Organism:</strong> <strong>MRSA</strong> (methicillin-resistant <em>S. aureus</em>).</p>
+    <p><strong>Mechanism:</strong> Oxacillin (2 mg/L) inhibits MSSA. MRSA grows + ferments mannitol → drops pH → <strong>aniline blue</strong> indicator → intense blue colonies. NaCl (5.5%) + lithium chloride suppress non-staph; polymyxin B suppresses Proteus.</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 Salmonella-Shigella Agar (SSA)</h4>
+    <p><strong>What you see:</strong> Pale/tan plate with abundant <strong>colorless colonies that have black centers</strong>.</p>
+    <p><strong>Identify as:</strong> SSA.</p>
+    <p><strong>Organism:</strong> <em>Salmonella</em>.</p>
+    <p><strong>Mechanism:</strong> Bile salts + brilliant green + citrate inhibit Gram⁺ &amp; coliforms. <em>Salmonella</em> doesn't ferment lactose (colorless), but reduces thiosulfate → H₂S → black FeS centers via ferric citrate. <em>Shigella</em> = colorless, no black center.</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 MacConkey Agar (Media for Salmonella)</h4>
+    <p><strong>What you see:</strong> Dark red/brown agar with two streaks — both appear <strong>red/pink</strong> here, indicating <strong>lactose-positive growth</strong> in this image.</p>
+    <p><strong>Identify as:</strong> MacConkey Agar.</p>
+    <p><strong>Read:</strong> Brick-red/pink colonies = <strong>lactose fermenters</strong> (<em>E. coli</em>, coliforms). Colorless transparent = non-fermenters (<em>Salmonella, Shigella</em>).</p>
+    <p><strong>Selective agents:</strong> Crystal violet + bile salts (inhibit Gram⁺).</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 Test-tube Rack — Multiple Tube Fermentation (MTF)</h4>
+    <p><strong>What you see:</strong> Rack of cotton-plugged test tubes containing <strong>red, yellow, and orange</strong> liquids — corresponds to <strong>lactose broth + phenol red</strong> tubes from MPN setup.</p>
+    <p><strong>Identify as:</strong> MTF / MPN test (presumptive).</p>
+    <p><strong>Read:</strong> <strong>Yellow tubes</strong> = positive (lactose ferment → acid → red→yellow); also gas in inverted Durham tubes. <strong>Red tubes</strong> = negative.</p>
+    <p><strong>Setup:</strong> 5-5-5 series (3 sets × 5 tubes inoculated with 10 mL / 1 mL / 0.1 mL of sample). Count yellow tubes per set → look up MPN/100 mL in reference table.</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 Pour-Plate Series (red plates with colonies)</h4>
+    <p><strong>What you see:</strong> Four red Petri dishes with isolated visible colonies dispersed throughout the agar (not just surface) — classic look of a pour-plate dilution series.</p>
+    <p><strong>Identify as:</strong> Pour-plate technique on a colored selective medium (looks like MacConkey or m-Endo from coloration).</p>
+    <p><strong>Use:</strong> Count colonies in the 30–300 range → calculate CFU/mL.</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 Coliscan Easygel Guide</h4>
+    <p><strong>What you see:</strong> Reference plate with numbered colonies: ① <strong>dark blue/purple colonies</strong> = <em>E. coli</em>; ② <strong>pink/red colonies</strong> = other coliforms; ③ <strong>teal/green colonies</strong> = other organisms.</p>
+    <p><strong>Identify as:</strong> Coliscan Easygel — quantitative method that uses two chromogenic substrates simultaneously.</p>
+    <p><strong>Reasoning:</strong> ONPG-type substrate cleaved by β-galactosidase = pink (all coliforms); MUG-type cleaved by β-glucuronidase = blue/purple (<em>E. coli</em> only). When BOTH enzymes act, the colors superimpose → dark blue/purple.</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 m-Endo Media (membrane filter)</h4>
+    <p><strong>What you see:</strong> Pink/red agar with abundant tiny dark/red colonies, some showing a metallic sheen.</p>
+    <p><strong>Identify as:</strong> m-Endo agar — used for membrane-filter method (quantitative coliform detection).</p>
+    <p><strong>Read:</strong> <strong>Red colonies with green metallic sheen</strong> = total coliforms (lactose fermentation → aldehyde + basic fuchsin/sodium sulfite reaction). Clear/colorless colonies = non-coliforms.</p>
+    <p><strong>Selective agents:</strong> Sodium lauryl sulfate, sodium deoxycholate (inhibit Gram⁺).</p>
+  </div>
+
+  <div class="specimen-card">
+    <h4>📷 Test-Tube Rack — biochemical test series</h4>
+    <p><strong>What you see:</strong> Rack of small tubes containing <strong>red, pink, orange, and yellow</strong> liquids — classic biochemical fermentation tubes.</p>
+    <p><strong>Identify as:</strong> Sugar fermentation / pH-indicator tubes (e.g., phenol-red broth) or part of an MPN run.</p>
+    <p><strong>Read:</strong> Yellow = acid (positive fermentation); red = no fermentation; orange = partial.</p>
+  </div>
+
+  <a class="back" href="#toc">↑ Back to top</a>
+</section>
+
+
+<!-- =========================================================
+     SECTION 7 — CALCULATIONS MASTERY
+     ========================================================= -->
+<section class="block" id="section-7">
+  <h2>7. Calculations Mastery — Every Formula, Solved</h2>
+
+  <div class="alert"><strong>🚨 Doctor's Warning:</strong> "They might give you a value in milliliters but ask for it in liters, or vice versa. Always write the unit for the final result." Convert before plugging in. Always.</div>
+
+  <h3>7.1 CFU/mL Formula</h3>
+  <div class="formula">CFU/mL = (Number of colonies × Dilution Factor) / Volume plated (mL)</div>
+
+  <p><strong>Variable definitions:</strong></p>
+  <ul>
+    <li><strong>Number of colonies</strong> — counted on the plate; must be in the 30–300 window for accuracy.</li>
+    <li><strong>Dilution Factor (DF)</strong> — the <em>reciprocal</em> of the dilution. If the dilution = 10⁻⁵, DF = 10⁵.</li>
+    <li><strong>Volume plated</strong> — actual volume pipetted onto the plate (NOT the volume of the broth; usually 0.1 mL or 0.2 mL).</li>
+  </ul>
+
+  <h4>Solved Example 1 — Final-Answers PDF Question 1</h4>
+  <div class="qa">
+    <div class="q">For a soil sample, it was initially diluted 1:100. A subsequent 1:10 dilution was prepared. Finally, 0.2 mL of the final dilution was inoculated on a plate; 64 colonies were counted. Calculate CFU/mL.</div>
+    <div class="a">
+      <p>Step 1 — Total Dilution Factor: DF = 100 × 10 = <strong>1000</strong></p>
+      <p>Step 2 — Plug in: CFU/mL = (64 × 1000) / 0.2 = <strong>3.2 × 10⁵ CFU/mL</strong></p>
+    </div>
+  </div>
+
+  <h4>Solved Example 2 — Lab Manual Problem</h4>
+  <div class="qa">
+    <div class="q">5 mL of bacterial culture is added to 45 mL of sterile diluent. From this suspension, two serial 1:100 dilutions are made, and 0.1 mL is plated from the last dilution. After incubation, 137 colonies are counted. Calculate CFU/mL.</div>
+    <div class="a">
+      <p>Step 1 — Initial dilution: <strong>final volume / sample volume = 50/5 = 10</strong> ⇒ first DF = 10 (or 1:10).</p>
+      <p>Step 2 — Two more 1:100 dilutions: 10 × 100 × 100 = <strong>10⁵</strong></p>
+      <p>Step 3 — Plug in: CFU/mL = (137 × 10⁵) / 0.1 = <strong>1.37 × 10⁸ CFU/mL</strong></p>
+    </div>
+  </div>
+
+  <div class="alert"><strong>🚨 The classic trap:</strong> When 5 mL is added to 45 mL of diluent, the <em>total volume</em> is 50 mL (not 45). The dilution = 5/50 = 1:10. Forgetting to add the sample volume gives you 5/45 = 1:9 (wrong) and is the leading "near-miss" multiple-choice option.</div>
+
+  <h4>Solved Example 3 — Lab Manual Quick Example</h4>
+  <div class="qa">
+    <div class="q">The plate of the 10⁶ dilution yielded 130 colonies. Find CFU/mL.</div>
+    <div class="a">
+      <p>Bacteria/mL = 130 × 10⁶ = <strong>1.3 × 10⁸ CFU/mL</strong> (volume plated ≈ 1 mL implied).</p>
+    </div>
+  </div>
+
+  <h3>7.2 Solubilization Efficiency (SE%) — Phosphate Solubilization</h3>
+  <div class="formula">SE% = [(Diameter of solubilization zone − Diameter of colony) / Diameter of colony] × 100</div>
+
+  <p><strong>Variable definitions:</strong></p>
+  <ul>
+    <li><strong>D<sub>zone</sub></strong> — total diameter of the clear halo (edge of clear zone to opposite edge), measured with a ruler.</li>
+    <li><strong>D<sub>colony</sub></strong> — diameter of the colony itself.</li>
+  </ul>
+
+  <h4>Worked Example</h4>
+  <div class="qa">
+    <div class="q">A bacterial colony has D<sub>colony</sub> = 0.8 cm and a clear halo with D<sub>zone</sub> = 3.2 cm. Calculate SE%.</div>
+    <div class="a">
+      <p>SE% = [(3.2 − 0.8) / 0.8] × 100 = (2.4 / 0.8) × 100 = <strong>300%</strong></p>
+    </div>
+  </div>
+
+  <div class="tip"><strong>💡 Tip:</strong> Always include cm or mm. Whatever unit you use, both diameters must match. Higher SE% = better phosphate solubilizer.</div>
+
+  <h3>7.3 Laccase Enzyme Activity</h3>
+  <div class="formula">U/mL/min = (ΔAbs × 10⁶) / (ε × R × T)</div>
+  <p><strong>Variable definitions:</strong></p>
+  <ul>
+    <li><strong>ΔAbs</strong> — Final absorbance − Initial absorbance, at 470 nm.</li>
+    <li><strong>ε</strong> — extinction coefficient of laccase product (<strong>ε<sub>max</sub> = 6,740 M⁻¹ cm⁻¹</strong>).</li>
+    <li><strong>R</strong> — volume of supernatant (enzyme) used, in mL.</li>
+    <li><strong>T</strong> — reaction time in minutes.</li>
+    <li><strong>10⁶</strong> — converts mol → µmol so that activity is in µmol/mL/min = U/mL.</li>
+  </ul>
+
+  <h4>Worked Example</h4>
+  <div class="qa">
+    <div class="q">After a 30-min reaction with 0.1 mL enzyme, ΔAbs at 470 nm = 0.404. Calculate laccase activity.</div>
+    <div class="a">
+      <p>U/mL = (0.404 × 10⁶) / (6,740 × 0.1 × 30)<br>
+      = 404,000 / 20,220<br>
+      ≈ <strong>20 U/mL</strong></p>
+    </div>
+  </div>
+
+  <div class="alert"><strong>🚨 Units matter!</strong> The doctor said: "Always include the unit U/mL or you'll lose points!"</div>
+
+  <h3>7.4 BOD Calculation</h3>
+  <div class="formula">BOD (mg/L) = DO₀ − DO₅</div>
+  <ul>
+    <li><strong>DO₀</strong> — dissolved oxygen at day 0 (initial)</li>
+    <li><strong>DO₅</strong> — dissolved oxygen after 5 days at 20 °C, dark</li>
+  </ul>
+  <p>Higher BOD ↔ more pollution (more organic matter for microbes).</p>
+
+  <h4>Worked Example (instructor's example)</h4>
+  <div class="qa">
+    <div class="q">Sample A: BOD = 8 mg/L. Sample B: BOD = 5 mg/L. Which is more polluted?</div>
+    <div class="a">Sample A — more O₂ was consumed, meaning more organic matter was decomposed.</div>
+  </div>
+
+  <h3>7.5 COD Calculation</h3>
+  <div class="formula">COD (mg/L) = [8000 × N × (A − B)] / S</div>
+  <ul>
+    <li><strong>A</strong> — mL of FAS (ferrous ammonium sulfate) used to titrate the <em>blank</em></li>
+    <li><strong>B</strong> — mL of FAS used to titrate the <em>sample</em></li>
+    <li><strong>N</strong> — normality of the FAS solution (typically 0.25 N)</li>
+    <li><strong>S</strong> — volume of sample (typically 50 mL)</li>
+    <li><strong>8000</strong> — 8 mg of oxygen per milliequivalent × 1000 mL per L (gives the result in mg/L when S is in mL)</li>
+  </ul>
+
+  <h4>Worked Example</h4>
+  <div class="qa">
+    <div class="q">Blank titration: A = 30 mL FAS. Sample titration: B = 20 mL FAS. N = 0.25. Sample volume S = 50 mL. Calculate COD.</div>
+    <div class="a">
+      <p>COD = [8000 × 0.25 × (30 − 20)] / 50<br>
+      = [8000 × 0.25 × 10] / 50<br>
+      = 20,000 / 50<br>
+      = <strong>400 mg/L</strong> <em>Always state the unit!</em></p>
+      <p><strong>Trap:</strong> writing the formula with 8 instead of 8000 gives 0.4 — off by a factor of 1000. The 1000 converts the sample volume from mL to L.</p>
+    </div>
+  </div>
+
+  <div class="tip"><strong>💡 Doctor's note:</strong> COD &gt; BOD almost always, because COD oxidizes <em>everything</em> (organic + inorganic), while BOD only counts what microbes can degrade in 5 days. The ratio BOD/COD tells you how biodegradable the wastewater is.</div>
+
+  <h3>7.6 API 20E 7-digit Profile (worked from sample sheet)</h3>
+  <p>From the sample sheet provided in the photo:</p>
+  <table>
+    <tr><th>Triad</th><th>I</th><th>II</th><th>III</th><th>IV</th><th>V</th><th>VI</th><th>VII</th></tr>
+    <tr><th>Tubes</th><td>1,2,3</td><td>4,5,6</td><td>7,8,9</td><td>10,11,12</td><td>13,14,15</td><td>16,17,18</td><td>19,20,oxidase</td></tr>
+    <tr><th>Reaction</th><td>+,+,+</td><td>−,−,−</td><td>+,+,−</td><td>+,−,−</td><td>−,+,+</td><td>−,−,+</td><td>+,−,+</td></tr>
+    <tr><th>Points</th><td>1+2+4</td><td>0+0+0</td><td>1+2+0</td><td>1+0+0</td><td>0+2+4</td><td>0+0+4</td><td>1+0+4</td></tr>
+    <tr><th>Sum</th><td><strong>7</strong></td><td><strong>0</strong></td><td><strong>3</strong></td><td><strong>1</strong></td><td><strong>6</strong></td><td><strong>4</strong></td><td><strong>5</strong></td></tr>
+  </table>
+  <p><strong>7-digit code: 7031645</strong> → look up in API database for species ID.</p>
+
+  <h3>7.7 Common Calculation Mistakes</h3>
+  <ul>
+    <li><strong>Forgetting to add sample volume</strong> when computing the first dilution (5 mL into 45 mL ⇒ 5/50, not 5/45).</li>
+    <li><strong>Confusing dilution and dilution factor</strong> (DF is the reciprocal: 10⁻⁵ ⇒ DF = 10⁵).</li>
+    <li><strong>Wrong volume in denominator</strong> — use the volume <em>plated</em>, not the broth volume.</li>
+    <li><strong>Plate outside 30–300</strong> — answer should note this.</li>
+    <li><strong>Missing units</strong> — explicit loss of marks.</li>
+    <li><strong>SE%</strong>: dividing by D<sub>zone</sub> instead of D<sub>colony</sub>. The denominator is the COLONY.</li>
+  </ul>
+
+  <a class="back" href="#toc">↑ Back to top</a>
+</section>
+
+
+<!-- =========================================================
+     SECTION 8 — PREDICTED EXAM Q & A
+     ========================================================= -->
+<section class="block" id="section-8">
+  <h2>8. Predicted Exam Questions + Model Answers</h2>
+
+  <h3>8.1 Confirmed Question Templates (from sample sheet)</h3>
+
+  <div class="qa">
+    <div class="q">Q1 — Dilution / CFU Problem (template)</div>
+    <div class="a">
+      <em>Setup:</em> Soil/water diluted in stages → final dilution plated → colonies counted → calculate CFU/mL or CFU/g.<br>
+      <em>Strategy:</em> (1) Compute total DF by multiplying each step. (2) For first dilution involving "x mL into y mL diluent," remember <strong>total = x + y</strong>. (3) Plug into <code>CFU = (colonies × DF) / V_plated</code>. (4) Always state units.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q2 — Define PGPR and mention the mechanisms used by PGPR which directly and indirectly promote plant growth.</div>
+    <div class="a">
+      <strong>Definition:</strong> PGPR = Plant growth promoting rhizobacteria — a heterogeneous group found in the rhizosphere, at root surfaces and in association with roots.<br><br>
+      <strong>Direct growth promotion</strong> — PGPR provides plant growth-promoting substances or facilitates uptake of nutrients:
+      <ul>
+        <li>(i) Production / change in concentration of plant growth regulators: indole-acetic acid, gibberellic acid, cytokinins, ethylene.</li>
+        <li>(ii) Symbiotic N₂ fixation.</li>
+        <li>(iii) Solubilization of mineral phosphates and other nutrients.</li>
+      </ul>
+      <strong>Indirect growth promotion</strong> — PGPR lessens or prevents deleterious effects of phytopathogens:
+      <ul>
+        <li>(i) Antagonism by production of siderophores, hydrocyanic acid.</li>
+        <li>(ii) Acting as biocontrol agents through antibiotic production, triggering induced local or systemic resistance.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q3 — Design an experiment to isolate pathogenic staphylococci from a water sample.</div>
+    <div class="a">
+      <ol>
+        <li>Prepare <strong>Mannitol Salt Agar (MSA)</strong> containing mannitol, phenol red indicator (red→yellow at acid pH), and 7.5% NaCl (high salt inhibits non-staph).</li>
+        <li>Pipette 1 mL of a known dilution into the bottom of a sterile Petri dish (before adding media).</li>
+        <li>Within 20 min add 12–15 mL warm (46–48 °C) fluid medium.</li>
+        <li>Cover and swirl gently in a figure-8 to disperse the sample.</li>
+        <li>Cool, solidify.</li>
+        <li>Invert the Petri dish (medium-side down) and incubate.</li>
+        <li>Read after incubation.</li>
+      </ol>
+      <strong>Result:</strong> Pathogenic <em>S. aureus</em> produces small colonies surrounded by yellow zones.<br>
+      <strong>Reason:</strong> <em>S. aureus</em> ferments mannitol → acid → indicator changes red to yellow.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q4 — Identify the provided specimen (MacConkey Agar) and write short notes.</div>
+    <div class="a">
+      <strong>MacConkey's Agar</strong>
+      <ul>
+        <li><strong>Selective for:</strong> Gram-negative enteric bacteria.</li>
+        <li><strong>Differential:</strong> differentiates lactose fermenters from lactose non-fermenters.</li>
+        <li><strong>Inhibitor:</strong> Crystal violet + bile salts inhibit Gram-positives.</li>
+        <li><strong>Use:</strong> Detection / isolation of dysentery, typhoid, and paratyphoid; differentiating <em>Salmonella typhosa</em> from coliforms; supports <em>Salmonella</em> &amp; <em>Shigella</em>.</li>
+        <li><strong>Brick-red colonies with bile precipitate zone</strong> = lactose-fermenting coliforms.</li>
+        <li><strong>Colorless / transparent colonies</strong> = non-fermenters (dysentery, typhoid, paratyphoid bacilli).</li>
+        <li><strong>Reason for color:</strong> Acid from lactose fermentation acts on bile salts; neutral red is absorbed by the precipitated salts. Transparent ones don't ferment lactose — alkaline reaction.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>8.2 Likely Additional Questions (built from the doctor's emphases)</h3>
+
+  <div class="qa">
+    <div class="q">Q5 — Why are E. coli used as the indicator of fecal contamination instead of testing for pathogens directly?</div>
+    <div class="a">
+      <ul>
+        <li>Pathogens are usually present in low numbers and are difficult/expensive/unsafe to detect directly.</li>
+        <li><em>E. coli</em> lives in the intestines of warm-blooded mammals → its presence in water = fecal contamination = high probability of pathogens.</li>
+        <li>Indicator criteria met: present in greater numbers, non-pathogenic, easy to test, reflects environmental change, useful for all water types.</li>
+        <li>Specifically, <em>E. coli</em> uniquely possesses <strong>β-glucuronidase</strong>, distinguishing it from other coliforms.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q6 — Identify the medium and specimen: red plate, abundant tiny black-centered colonies on red background. Explain the mechanism.</div>
+    <div class="a">
+      <strong>Medium:</strong> XLD agar. <strong>Organism:</strong> <em>Salmonella</em>.<br>
+      <strong>Mechanism (3-stage):</strong> (1) <em>Salmonella</em> ferments xylose initially → yellow. (2) Xylose exhausted → decarboxylates lysine → alkaline reaction → indicator (phenol red) reverts to red. (3) Reduces thiosulfate → H₂S; with ferric ammonium citrate → black FeS precipitate at colony center. <em>Shigella</em> doesn't ferment xylose or produce H₂S — appears as plain red colonies.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q7 — Define BOD. Describe the procedure and interpret a result.</div>
+    <div class="a">
+      BOD = amount of oxygen required by microorganisms (typically aerobic) to break down organic materials in a water sample.<br><br>
+      <strong>Procedure (BOD₅):</strong>
+      <ol>
+        <li>Take two parallel samples.</li>
+        <li>Measure DO of sample 1 immediately (DO₀).</li>
+        <li>Incubate sample 2 in the dark at 20 °C for 5 days.</li>
+        <li>Measure DO at day 5 (DO₅).</li>
+        <li>BOD = DO₀ − DO₅ (mg/L).</li>
+      </ol>
+      <strong>Interpretation:</strong> BOD = 8 mg/L means more polluted than BOD = 5 mg/L (more organics → more O₂ consumption).<br>
+      <strong>Why dark?</strong> Prevents algal photosynthesis from artificially adding O₂.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q8 — Define COD. Why do we add HgSO₄ and Ag₂SO₄? Give the formula.</div>
+    <div class="a">
+      COD = amount of oxygen required to chemically oxidize all organic + inorganic matter in water.<br>
+      <strong>HgSO₄</strong> — binds Cl⁻ (the main interferent) to prevent its oxidation falsely raising COD.<br>
+      <strong>Ag₂SO₄</strong> — catalyst that promotes oxidation of straight-chain alcohols and certain organics.<br>
+      <strong>Formula:</strong> COD (mg/L) = [8000 × N × (A − B)] / S, where A = blank titration volume, B = sample titration volume, N = FAS normality, S = sample volume.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q9 — Identify the test (image showing a viscous string from a loop). State what it tells you and the underlying mechanism.</div>
+    <div class="a">
+      <strong>Test:</strong> KOH 3% String Test — a Gram-stain alternative.<br>
+      <strong>Result:</strong> A loopful of cells from a colony mixed with a drop of 3% KOH on a slide → if the mixture becomes viscous &amp; "strings" within 60 s = positive = <strong>Gram-NEGATIVE</strong>.<br>
+      <strong>Mechanism:</strong> The dilute alkali lyses Gram-negative cells (thin peptidoglycan + lipid outer membrane), releasing chromosomal DNA. The released DNA makes the suspension viscous.<br>
+      Gram-positive cells resist lysis → no string = negative test.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q10 — Explain how the API 20E system works and how the 7-digit code is derived.</div>
+    <div class="a">
+      <strong>API 20E</strong> is a phenotypic identification kit for Enterobacteriaceae and other non-fastidious Gram-negative rods. The strip has 20 microtubes containing dehydrated substrates. A bacterial suspension rehydrates the substrates → some tubes give color reactions immediately; others need post-incubation reagents and/or mineral oil for anaerobiosis.<br><br>
+      Pre-step: <strong>oxidase test</strong> must be NEGATIVE (Enterobacteriaceae are oxidase-negative).<br><br>
+      <strong>Scoring (1, 2, 4 logic):</strong> The 21 tests (20 + oxidase) are grouped into 7 triads. Inside each triad the tubes are weighted 1, 2, and 4. Sum the positives in each triad → 7 numbers concatenated → 7-digit profile code → look up in API database.<br><br>
+      <strong>Why 1, 2, 4 (not 1, 2, 3)?</strong> To guarantee unique sums for every subset of positive results. With 1+2+3, the sum 3 could mean "tube 3 only" or "tubes 1 + 2" — ambiguous. With 1+2+4 every combination is unique (binary encoding).
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q11 — Explain the Coliscan test. What do blue, pink, and other colors mean?</div>
+    <div class="a">
+      <strong>Principle:</strong> Coliscan uses two chromogenic substrates simultaneously, each cleaved by a coliform-specific enzyme: ONPG by β-galactosidase (all coliforms), and a glucuronide substrate by β-glucuronidase (<em>E. coli</em> only).<br>
+      <strong>Color interpretation:</strong>
+      <ul>
+        <li><span style="color:#7c3aed"><strong>Dark blue / purple</strong></span> = <em>E. coli</em> (both enzymes active).</li>
+        <li><span style="color:#db2777"><strong>Pink / red</strong></span> = other coliforms (β-galactosidase only).</li>
+        <li><span style="color:#0d9488"><strong>Teal / green</strong></span> = other organisms.</li>
+      </ul>
+      Total coliform count = blue/purple + pink/red.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q12 — A solubilization plate shows D<sub>colony</sub> = 1 cm and D<sub>zone</sub> = 4 cm. What is the SE% and what does it mean biologically?</div>
+    <div class="a">
+      SE% = [(4 − 1) / 1] × 100 = <strong>300%</strong>.<br>
+      Biologically, the bacterium is releasing organic acids that solubilize insoluble Ca-phosphate (or chelate Fe³⁺/Al³⁺ in the medium), freeing soluble orthophosphate. The bigger the halo relative to the colony, the more efficient the strain is at making P bioavailable to plants.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q13 — Identify the medium (intense blue colonies / blue background). What organism does it select for and how?</div>
+    <div class="a">
+      <strong>Medium:</strong> ORSAB. <strong>Organism:</strong> MRSA.<br>
+      Oxacillin (2 mg/L) inhibits methicillin-sensitive <em>S. aureus</em>; high salt + lithium chloride suppress non-staph; polymyxin B suppresses Proteus. MRSA grows + ferments mannitol → acid → aniline blue indicator → intense blue colonies.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q14 — Why does Baird-Parker agar show a clear halo around <em>S. aureus</em> colonies?</div>
+    <div class="a">
+      Egg yolk in the medium contains lecithin. <em>S. aureus</em> produces <strong>lecithinase</strong> (a phospholipase) that hydrolyzes lecithin into diglycerides → the precipitated lecithin is dissolved → <strong>clear "halo"</strong> around the black colony. The black color comes from tellurite reduction. An additional opaque halo indicates coagulase activity (fibrinogen → fibrin).
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q15 — A Gram-stain photo shows pink/red rod-shaped cells. State Gram reaction, shape, and theory of staining.</div>
+    <div class="a">
+      <strong>Gram reaction:</strong> Negative (pink/red, counterstained by safranin).<br>
+      <strong>Shape:</strong> Bacilli (rods).<br>
+      <strong>Theory:</strong> Gram-positive cells have thick peptidoglycan (50–90% of envelope) that traps the crystal violet–iodine complex through alcohol decolorization → stay purple. Gram-negative cells have thin peptidoglycan + outer membrane that is dissolved by alcohol → CV–I washes out → safranin counterstain → pink/red.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q16 — What is the laccase enzyme assay? Write the formula and one application.</div>
+    <div class="a">
+      Laccase activity is assayed using <strong>guaiacol</strong> as substrate. Reaction mix: 3.9 mL acetate buffer (pH 5), 1 mL guaiacol (2 mM), 0.1 mL diluted enzyme, incubated at 35 °C for 30 min, absorbance read at <strong>470 nm</strong>. Blank = guaiacol replaced by buffer.<br>
+      <strong>Formula:</strong> U/mL/min = (ΔAbs × 10⁶) / (ε × R × T), where ε = 6,740 M⁻¹ cm⁻¹.<br>
+      <strong>Applications:</strong> degradation of PAHs, dyes, phenolic compounds in wine, biopulping/bioleaching of paper, biosensors.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q">Q17 — In an MTF / MPN test, which set of tubes is positive and how do you read it?</div>
+    <div class="a">
+      Three sets of 5 tubes are inoculated with 10 mL, 1 mL, and 0.1 mL of sample respectively. After 24 h at 35 °C in lactose broth + phenol red:<br>
+      <strong>Positive:</strong> tube turns from red (pH 6.8) to <strong>yellow (pH 5.2)</strong> due to acid from lactose fermentation, AND gas trapped in the inverted Durham tube.<br>
+      Count yellow/gas-positive tubes per set → look up the combination in an MPN table → result reported as MPN/100 mL. The MPN is a statistical estimate, not an exact count.
+    </div>
+  </div>
+
+  <a class="back" href="#toc">↑ Back to top</a>
+</section>
+
+
+<!-- =========================================================
+     SECTION 9 — TRAPS & MISTAKES
+     ========================================================= -->
+<section class="block" id="section-9">
+  <h2>9. Exam Traps &amp; Common Mistakes</h2>
+
+  <table>
+    <tr><th>Trap</th><th>The wrong answer</th><th>The correct answer</th></tr>
+    <tr><td><strong>Congo Red on YMA</strong></td><td>"Red colonies = Rhizobium"</td><td><em>Rhizobium</em> = white/colorless. Red = contaminant.</td></tr>
+    <tr><td><strong>KOH String Test</strong></td><td>"Positive (string) = Gram positive"</td><td>String = Gram <em>negative</em> (DNA leak from lysed cell wall).</td></tr>
+    <tr><td><strong>Initial dilution math</strong></td><td>5 mL into 45 mL = 1:9</td><td>5 mL into 45 mL = 1:10 (5/50, not 5/45).</td></tr>
+    <tr><td><strong>Volume in CFU formula</strong></td><td>Using broth volume</td><td>Use the volume <em>plated</em> (e.g., 0.1 or 0.2 mL).</td></tr>
+    <tr><td><strong>SE% denominator</strong></td><td>Dividing by D<sub>zone</sub></td><td>Divide by D<sub>colony</sub>.</td></tr>
+    <tr><td><strong>Selective vs differential</strong></td><td>Calling MSA "selective only"</td><td>MSA is <em>both</em> selective (NaCl) and differential (mannitol + phenol red).</td></tr>
+    <tr><td><strong>BOD vs COD</strong></td><td>Saying COD &lt; BOD</td><td>COD ≥ BOD (chemical oxidant attacks more substances than microbes can in 5 days).</td></tr>
+    <tr><td><strong>EMB green sheen</strong></td><td>Identifying it as <em>Salmonella</em></td><td>Green metallic sheen = <em>E. coli</em>. <em>Salmonella</em> = colorless/translucent.</td></tr>
+    <tr><td><strong>API oxidase</strong></td><td>Skipping the oxidase test</td><td>It's the 21st test. Enterobacteriaceae are oxidase <em>negative</em> — must check first.</td></tr>
+    <tr><td><strong>Why 4 in API</strong></td><td>"Random number"</td><td>Powers of 2 give unique sums (binary encoding).</td></tr>
+    <tr><td><strong>30–300 rule</strong></td><td>Counting any plate</td><td>Below 30 = unreliable; above 300 = inaccurate.</td></tr>
+    <tr><td><strong>BOD incubation</strong></td><td>"In light at 25 °C"</td><td>5 days, <strong>dark</strong>, <strong>20 °C</strong>. Dark prevents photosynthesis adding O₂.</td></tr>
+    <tr><td><strong>Mannitol fermentation color</strong></td><td>"Yellow → Red"</td><td>Phenol red goes <strong>red → yellow</strong> in acid (drops on pH).</td></tr>
+    <tr><td><strong>Forgetting the unit</strong></td><td>Giving "1.37 × 10⁸"</td><td>1.37 × 10⁸ <strong>CFU/mL</strong>. Doctor explicitly said: write the unit.</td></tr>
+    <tr><td><strong>Rhizobium location</strong></td><td>"Lives on the root surface"</td><td>It's an <strong>endophyte</strong> — lives <em>inside</em> the nodule.</td></tr>
+    <tr><td><strong>OD vs CFU</strong></td><td>"Both count viable cells"</td><td>OD counts everything (alive, dead, debris). CFU counts only viable cells.</td></tr>
+    <tr><td><strong>Pathogenic identification on MacConkey</strong></td><td>"Pink colony = Salmonella"</td><td>Pink/brick-red = lactose fermenter (<em>E. coli</em>). <em>Salmonella</em> = colorless.</td></tr>
+    <tr><td><strong>Cooking kills risk</strong></td><td>"Cooked food is always safe from <em>S. aureus</em>"</td><td><em>S. aureus</em> enterotoxins are <strong>heat-stable</strong> — toxin remains even after cells are killed.</td></tr>
+    <tr><td><strong>Hemolysis</strong></td><td>Confusing α (clear zone) and β (greenish)</td><td><strong>β = clear</strong> (full lysis); <strong>α = green/brown</strong> (partial); γ = no change.</td></tr>
+  </table>
+
+  <h3>9.2 Confusable Concept Pairs</h3>
+  <div class="grid2">
+    <div class="key"><strong>Selective vs Differential</strong><br>Selective = some can't grow at all (inhibited). Differential = all grow but look different. Most exam media are <em>both</em>.</div>
+    <div class="key"><strong>Total vs Fecal coliforms</strong><br>Total: 35 °C / environment-wide. Fecal: 44.5 °C / gut origin. <em>E. coli</em> is the gold-standard fecal indicator (β-glucuronidase positive).</div>
+    <div class="mech"><strong>Rhizosphere vs Rhizoplane</strong><br>Rhizosphere = soil volume around the root. Rhizoplane = the root <em>surface</em> itself.</div>
+    <div class="mech"><strong>α vs β vs γ hemolysis</strong><br>α = partial (greenish-brown methemoglobin). β = complete (clear zone). γ = none.</div>
+    <div class="alert"><strong>P-A vs MTF vs MF</strong><br>P-A = qualitative (yes/no). MF = quantitative (count colonies on m-Endo). MTF/MPN = statistical estimate via tube series.</div>
+    <div class="alert"><strong>ONPG vs MUG</strong><br>ONPG → β-galactosidase → yellow → ALL coliforms. MUG → β-glucuronidase → fluorescence → <em>E. coli</em> only.</div>
+  </div>
+
+  <a class="back" href="#toc">↑ Back to top</a>
+</section>
+
+
+<!-- =========================================================
+     SECTION 10 — RAPID REVISION SHEET
+     ========================================================= -->
+<section class="block" id="section-10">
+  <h2>10. Rapid Revision Sheet — One-Page Cheat Sheet</h2>
+
+  <div class="key">
+    <strong>FORMULAS — memorize cold:</strong>
+    <ul>
+      <li><strong>CFU/mL</strong> = (colonies × DF) / V<sub>plated</sub> &nbsp;|&nbsp; DF is reciprocal of dilution</li>
+      <li><strong>SE%</strong> = [(D<sub>zone</sub> − D<sub>colony</sub>) / D<sub>colony</sub>] × 100</li>
+      <li><strong>Laccase U/mL</strong> = (ΔAbs × 10⁶) / (ε × R × T) &nbsp;|&nbsp; ε = 6,740 M⁻¹ cm⁻¹</li>
+      <li><strong>BOD</strong> = DO₀ − DO₅ (mg/L) &nbsp;|&nbsp; 5 d, 20 °C, dark</li>
+      <li><strong>COD</strong> = [8000 × N × (A − B)] / S (mg/L)</li>
+    </ul>
+  </div>
+
+  <div class="mech">
+    <strong>MEDIA QUICK MAP — color → organism</strong>
+    <ul>
+      <li>MSA — <em>S. aureus</em> = yellow halo; others = pink/red on red</li>
+      <li>Baird-Parker — <em>S. aureus</em> = black colonies + clear halo</li>
+      <li>Blood agar — β = clear (<em>S. aureus</em>); α = green; γ = none</li>
+      <li>ORSAB — MRSA = intense blue</li>
+      <li>MacConkey — <em>E. coli</em> = brick-red/pink; <em>Salmonella, Shigella</em> = colorless</li>
+      <li>EMB — <em>E. coli</em> = green metallic sheen; <em>Salmonella</em> = colorless</li>
+      <li>XLD — <em>Salmonella</em> = red colonies + black centers; <em>Shigella</em> = plain red</li>
+      <li>SS agar — <em>Salmonella</em> = colorless + black centers; <em>Shigella</em> = colorless</li>
+      <li>m-Endo — coliforms = red colonies + green metallic sheen</li>
+      <li>YMA + Congo Red — <em>Rhizobium</em> = white/colorless; contaminants = red</li>
+      <li>Coliscan — <em>E. coli</em> = blue/purple; coliforms = pink</li>
+    </ul>
+  </div>
+
+  <div class="alert">
+    <strong>TOP 12 EXAM-DAY ESSENTIALS:</strong>
+    <ol>
+      <li>Always state the unit on every numerical answer.</li>
+      <li>For dilutions: total volume = sample + diluent (5 + 45 = 50, not 45).</li>
+      <li>30–300 colony rule.</li>
+      <li>SE% denominator is D<sub>colony</sub>.</li>
+      <li>Potable water = 0 coliforms / 100 mL.</li>
+      <li>BOD: 5 days, dark, 20 °C.</li>
+      <li>COD &gt; BOD (always).</li>
+      <li>Rhizobium on Congo Red = WHITE (not red).</li>
+      <li>KOH-positive string = Gram-NEGATIVE.</li>
+      <li>API: 1-2-4 → unique 7-digit code; oxidase first, must be negative.</li>
+      <li>Mannitol fermentation: phenol red goes red → yellow.</li>
+      <li>Petri dishes incubate <strong>inverted</strong> (no condensation on agar).</li>
+    </ol>
+  </div>
+
+  <div class="key">
+    <strong>KEY ENZYMES &amp; SUBSTRATES</strong>
+    <ul>
+      <li>β-galactosidase + ONPG → yellow → all coliforms</li>
+      <li>β-glucuronidase + MUG → fluorescence → <em>E. coli</em></li>
+      <li>Laccase + guaiacol → tetraguaiacol (brown, 470 nm) → white-rot fungi</li>
+      <li>Lecithinase + lecithin → diglycerides → halo on Baird-Parker</li>
+      <li>Coagulase + fibrinogen → fibrin → opaque halo / clot</li>
+      <li>Aminopeptidase + L-alanine-4-nitroanilide → 4-nitroaniline (yellow) → Gram-NEG</li>
+      <li>Nitrogenase: N₂ → NH₃ (only in prokaryotes; protected by leghaemoglobin in nodules)</li>
+    </ul>
+  </div>
+
+  <div class="tip">
+    <strong>5-second specimen recognition (visual cues):</strong>
+    <ul>
+      <li>🟡 Yellow halo on red plate → MSA + <em>S. aureus</em></li>
+      <li>⚫ Black colonies + clear halo → Baird-Parker + <em>S. aureus</em></li>
+      <li>🌈 Green metallic sheen → EMB or m-Endo + <em>E. coli</em></li>
+      <li>🔴⚫ Red colonies w/ black centers → XLD + <em>Salmonella</em></li>
+      <li>🟦 Intense blue colonies on blue → ORSAB + MRSA</li>
+      <li>⚪ White colonies on red plate → YMA + Congo Red + <em>Rhizobium</em></li>
+      <li>🟣🩷 Mixed dark blue + pink colonies → Coliscan (blue = <em>E. coli</em>, pink = coliforms)</li>
+      <li>💡 Green-glowing rods + dark rods side by side → Fluorescent WGA (Gram⁺ vs Gram⁻)</li>
+      <li>🔴⚪ Halo around colony with ruler → Phosphate Solubilization → measure D<sub>colony</sub> &amp; D<sub>zone</sub> → SE%</li>
+      <li>🧪 Tubes + Durham + yellow color → MTF / MPN positive</li>
+      <li>🧪 20-tube colored strip → API 20E → 7-digit code</li>
+    </ul>
+  </div>
+
+  <p class="center small" style="margin-top:24px"><strong>Good luck. Aim for the bullet points, name the inhibitors, write the units.</strong></p>
+
+  <a class="back" href="#toc">↑ Back to top</a>
+</section>
+
+</div><!-- /container -->
+
+</body>
+</html>
