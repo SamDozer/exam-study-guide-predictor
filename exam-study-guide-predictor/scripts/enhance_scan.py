@@ -1,34 +1,43 @@
 #!/usr/bin/env python3
-"""Make phone photos of exam papers and handwritten notes readable.
+"""Make phone photos and scans of exam papers and handwritten notes readable.
 
-For each photo it writes several differently-processed versions, because each
-one fails on different damage (shadows, glare, faint pencil, coloured ink,
-blur). Read the page in more than one version and compare — see
-references/reading-images.md.
+For each photo (or each page of a scanned PDF) it writes several differently
+processed versions, because each one fails on different damage (shadows,
+glare, faint pencil, coloured ink, blur, tilt), plus a quality report that
+says what is wrong with the photo. Read the page in more than one version and
+compare — see references/reading-images.md.
 
-    python enhance_scan.py photo1.jpg photo2.png --out scans/
-        [--no-warp] [--tiles auto|RxC|0] [--max-side 3000]
+    python enhance_scan.py photo1.jpg scanned_exam.pdf --out scans/
+        [--no-warp] [--tiles auto|RxC|0] [--max-side 3000] [--pdf-dpi 200]
 
-Per photo, in scans/<name>/ (read in this order):
-    01_page.jpg            orientation fixed, page found and flattened (perspective)
+PDFs: for each page, the original embedded photo is pulled out at its full
+resolution (like `pdfimages -all`); pages without one are rendered at --pdf-dpi.
+
+Per photo / page, in scans/<name>/ (read in this order):
+    01_page.jpg            page found, flattened (perspective) and deskewed
     02_flat_color.jpg      shadows / uneven light removed, ink colours kept
     03_contrast.png        grayscale with local contrast (CLAHE)
     04_faint_boost.png     darkened + strong contrast, for faint pencil / faded ink
     05_bw_sauvola.png      black & white, Sauvola threshold (best for handwriting)
     06_bw_adaptive.png     black & white, adaptive Gaussian threshold (second opinion)
     07_sharp.jpg           sharpened colour, for slightly blurred photos
-    ink_<colour>.png       one layer per ink colour found (e.g. blue pen, red marking, pencil)
-    tiles/                 overlapping zoomed crops of 02 for small handwriting
+    ink_red.png            red / pink ink (grader ticks, scores, corrections), found by hue
+    ink_<colour>.png       other ink colours when there is more than one (blue pen, pencil…)
+    tiles/                 overlapping zoomed crops (small images are upscaled first)
     contact_sheet.jpg      all versions side by side
-    report.json            quality scores, warnings, ink colours, file list
+    report.json            source, resolution, quality checks, warnings, file list
+
+Checks reported: resolution, blur, darkness, ink-vs-paper contrast, glare
+(bright colourless patches brighter than the paper), something covering the
+page (e.g. a finger), moiré / screen pattern, text running off an edge, tilt.
 
 Requires: opencv-python-headless, numpy  (pip install opencv-python-headless numpy)
-HEIC photos also need pillow + pillow-heif, or convert them to JPG first.
+PDFs also need pymupdf. HEIC photos need pillow + pillow-heif, or convert them first.
 
 Techniques (independent implementations of standard methods): four-corner
-perspective correction; background division for shadow removal; CLAHE;
-Sauvola binarization; k-means ink-colour separation (the idea behind
-mzucker/noteshrink).
+perspective correction; projection-profile deskew; background division for
+shadow removal; CLAHE; Sauvola binarization; k-means ink-colour separation
+(the idea behind mzucker/noteshrink).
 """
 from __future__ import annotations
 
@@ -43,6 +52,9 @@ try:
 except ImportError:
     sys.exit("needs OpenCV and numpy: pip install opencv-python-headless numpy")
 
+LOW_RES = 1000          # long side below this: warn, small writing may be unreadable
+WORK_MIN = 1400         # small images are upscaled to at least this for processing
+
 
 def odd(n: float) -> int:
     n = int(n)
@@ -51,7 +63,7 @@ def odd(n: float) -> int:
 
 # ---------------------------------------------------------------- loading
 
-def load(path: Path, max_side: int) -> np.ndarray:
+def load_image(path: Path) -> np.ndarray:
     img = cv2.imread(str(path), cv2.IMREAD_COLOR)  # applies EXIF orientation
     if img is None:
         try:  # HEIC and other formats through Pillow, if available
@@ -65,14 +77,96 @@ def load(path: Path, max_side: int) -> np.ndarray:
             img = cv2.cvtColor(np.array(pil), cv2.COLOR_RGB2BGR)
         except Exception as exc:  # noqa: BLE001
             raise SystemExit(f"cannot read {path} ({exc}); convert it to JPG or PNG") from exc
-    h, w = img.shape[:2]
-    scale = max_side / max(h, w)
-    if scale < 1:
-        img = cv2.resize(img, (int(w * scale), int(h * scale)), interpolation=cv2.INTER_AREA)
     return img
 
 
-# ---------------------------------------------------------------- page / perspective
+def _pix_to_bgr(pix) -> np.ndarray:
+    arr = np.frombuffer(pix.samples, np.uint8).reshape(pix.height, pix.width, pix.n)
+    if pix.n == 1:
+        return cv2.cvtColor(arr, cv2.COLOR_GRAY2BGR)
+    if pix.n == 4:
+        return cv2.cvtColor(arr, cv2.COLOR_RGBA2BGR)
+    return cv2.cvtColor(arr, cv2.COLOR_RGB2BGR)
+
+
+def _extract_xref(doc, xref, fitz) -> np.ndarray | None:
+    try:
+        data = doc.extract_image(xref)["image"]
+        img = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR)
+        if img is not None:
+            return img
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        pix = fitz.Pixmap(doc, xref)
+        if pix.n - pix.alpha >= 4:
+            pix = fitz.Pixmap(fitz.csRGB, pix)
+        if pix.alpha:
+            pix = fitz.Pixmap(pix, 0)
+        return _pix_to_bgr(pix)
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _match_orientation(page, rect, img: np.ndarray) -> np.ndarray:
+    """Rotate an extracted image to how it is displayed on the page (compares with a small render)."""
+    ref = cv2.cvtColor(_pix_to_bgr(page.get_pixmap(clip=rect, dpi=36)), cv2.COLOR_BGR2GRAY).astype(np.float32)
+    if min(ref.shape) < 8:
+        return img
+    best, best_score = img, -2.0
+    for k in range(4):
+        cand = np.ascontiguousarray(np.rot90(img, k))
+        g = cv2.resize(cv2.cvtColor(cand, cv2.COLOR_BGR2GRAY), (ref.shape[1], ref.shape[0]),
+                       interpolation=cv2.INTER_AREA).astype(np.float32)
+        a, b = g - g.mean(), ref - ref.mean()
+        score = float((a * b).sum() / (np.sqrt((a * a).sum() * (b * b).sum()) + 1e-6))
+        aspect_ok = (cand.shape[1] >= cand.shape[0]) == (ref.shape[1] >= ref.shape[0])
+        score += 0.2 if aspect_ok else -0.2
+        if score > best_score:
+            best, best_score = cand, score
+    return best
+
+
+def load_pdf(path: Path, dpi: int) -> list[tuple[str, np.ndarray, str]]:
+    try:
+        import pymupdf as fitz
+    except ImportError:
+        try:
+            import fitz  # older PyMuPDF releases
+        except ImportError:
+            sys.exit("reading PDFs needs PyMuPDF: pip install pymupdf")
+    doc = fitz.open(path)
+    out = []
+    for pno, page in enumerate(doc, start=1):
+        name = f"{path.stem}_p{pno}"
+        parea = page.rect.width * page.rect.height
+        best = None
+        for info in page.get_images(full=True):
+            try:
+                rects = page.get_image_rects(info[0])
+            except Exception:  # noqa: BLE001
+                continue
+            for r in rects:
+                cover = fitz.Rect(r).intersect(page.rect).get_area() / parea
+                if best is None or cover > best[0]:
+                    best = (cover, info[0], fitz.Rect(r).intersect(page.rect))
+        if best and best[0] >= 0.5:
+            img = _extract_xref(doc, best[1], fitz)
+            if img is not None:
+                img = _match_orientation(page, best[2], img)
+                out.append((name, img, f"embedded photo, original {img.shape[1]}x{img.shape[0]} px"))
+                continue
+        out.append((name, _pix_to_bgr(page.get_pixmap(dpi=dpi)), f"page rendered at {dpi} dpi (no embedded photo)"))
+    return out
+
+
+def load_inputs(path: Path, pdf_dpi: int) -> list[tuple[str, np.ndarray, str]]:
+    if path.suffix.lower() == ".pdf":
+        return load_pdf(path, pdf_dpi)
+    return [(path.stem, load_image(path), "photo")]
+
+
+# ---------------------------------------------------------------- page / perspective / skew
 
 def order_corners(pts: np.ndarray) -> np.ndarray:
     pts = pts.reshape(4, 2).astype("float32")
@@ -115,6 +209,51 @@ def warp(img: np.ndarray, corners: np.ndarray) -> np.ndarray:
     return cv2.warpPerspective(img, cv2.getPerspectiveTransform(corners, dst), (w, h), flags=cv2.INTER_CUBIC)
 
 
+def text_mask(gray: np.ndarray) -> np.ndarray:
+    """Character-sized dark marks only (drops page edges, background, big blobs)."""
+    h, w = gray.shape
+    bw = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV,
+                               odd(max(15, max(h, w) // 40)), 15)
+    n, cc, st, _ = cv2.connectedComponentsWithStats(bw, connectivity=8)
+    keep = ((st[:, cv2.CC_STAT_HEIGHT] < 0.08 * h) & (st[:, cv2.CC_STAT_WIDTH] < 0.3 * w)
+            & (st[:, cv2.CC_STAT_AREA] >= 4))
+    keep[0] = False
+    return keep[cc] & (bw > 0)
+
+
+def estimate_skew(img: np.ndarray) -> float:
+    """Text-line angle in degrees (projection profile); rotating by it makes lines horizontal."""
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    k = 1000 / max(gray.shape)
+    if k < 1:
+        gray = cv2.resize(gray, None, fx=k, fy=k, interpolation=cv2.INTER_AREA)
+    ys, xs = np.nonzero(text_mask(gray))
+    if len(xs) < 300:
+        return 0.0
+    xs = xs - xs.mean()
+    ys = ys - ys.mean()
+
+    def score(a: float) -> float:
+        t = np.deg2rad(a)
+        y2 = -xs * np.sin(t) + ys * np.cos(t)
+        hist = np.bincount((y2 - y2.min()).astype(np.int64))
+        return float((hist.astype(np.float64) ** 2).sum())
+
+    coarse = max(np.arange(-15, 15.01, 0.5), key=score)
+    fine = max(np.arange(coarse - 0.5, coarse + 0.51, 0.1), key=score)
+    return round(float(fine), 1)
+
+
+def rotate_bound(img: np.ndarray, angle: float) -> np.ndarray:
+    h, w = img.shape[:2]
+    m = cv2.getRotationMatrix2D((w / 2, h / 2), angle, 1.0)
+    cos, sin = abs(m[0, 0]), abs(m[0, 1])
+    nw, nh = int(h * sin + w * cos), int(h * cos + w * sin)
+    m[0, 2] += nw / 2 - w / 2
+    m[1, 2] += nh / 2 - h / 2
+    return cv2.warpAffine(img, m, (nw, nh), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+
+
 # ---------------------------------------------------------------- enhancement
 
 def flatten_illumination(img: np.ndarray) -> np.ndarray:
@@ -145,69 +284,83 @@ def sauvola(gray: np.ndarray, window: int, k: float = 0.2, r: float = 128.0) -> 
     return np.where(g > thresh, 255, 0).astype(np.uint8)
 
 
-def hue_name(bgr) -> str:
-    hsv = cv2.cvtColor(np.uint8([[bgr]]), cv2.COLOR_BGR2HSV)[0, 0]
-    h, s, v = int(hsv[0]) * 2, int(hsv[1]), int(hsv[2])
-    if s < 50 or v < 60:
-        return "black" if v < 90 else "pencil-grey"
+def colour_name(lab_center) -> str:
+    """Name an ink colour. Uses Lab chroma first: HSV saturation is unreliable for dark ink."""
+    lum, a, b = (float(x) for x in lab_center)
+    chroma = float(np.hypot(a - 128, b - 128))
+    if chroma < 20 or (lum < 80 and chroma < 30):
+        return "black" if lum < 110 else "pencil-grey"
+    bgr = cv2.cvtColor(np.uint8([[lab_center]]), cv2.COLOR_LAB2BGR)[0, 0]
+    hue = int(cv2.cvtColor(np.uint8([[bgr]]), cv2.COLOR_BGR2HSV)[0, 0, 0]) * 2
     # red pen often reads as pink once its edges blend with the paper, so pink counts as red
     for limit, name in ((15, "red"), (40, "orange"), (70, "yellow"), (160, "green"),
                         (200, "cyan"), (260, "blue"), (295, "purple"), (361, "red")):
-        if h < limit:
+        if hue < limit:
             return name
     return "red"
 
 
+def red_ink(flat: np.ndarray) -> np.ndarray:
+    """Red / pink marks (grader ticks, scores, corrections) found directly by hue."""
+    hsv = cv2.cvtColor(flat, cv2.COLOR_BGR2HSV)
+    lab = cv2.cvtColor(flat, cv2.COLOR_BGR2LAB).astype(np.int16)
+    chroma = np.hypot(lab[:, :, 1] - 128, lab[:, :, 2] - 128)
+    h, s, v = hsv[:, :, 0], hsv[:, :, 1], hsv[:, :, 2]
+    mask = (((h <= 10) | (h >= 160)) & (s >= 60) & (v >= 60) & (chroma >= 25)).astype(np.uint8)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, np.ones((2, 2), np.uint8))
+    return mask > 0
+
+
 def ink_layers(flat: np.ndarray, binary: np.ndarray, max_k: int = 4) -> dict[str, np.ndarray]:
-    """Split ink pixels into colour groups; each layer = that ink in black on white."""
-    ink = binary == 0
-    n = int(ink.sum())
-    if n < 200:
-        return {}
-    lab = cv2.cvtColor(flat, cv2.COLOR_BGR2LAB)
-    pixels = lab[ink].astype(np.float32)
-    sample = pixels[np.random.default_rng(0).choice(n, min(n, 60000), replace=False)]
-    k = min(max_k, len(sample))
-    crit = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.5)
-    _, _, centers = cv2.kmeans(sample, k, None, crit, 3, cv2.KMEANS_PP_CENTERS)
-    dists = np.linalg.norm(pixels[:, None, :] - centers[None, :, :], axis=2)
-    labels = dists.argmin(1)
-    # Anti-aliased stroke edges blend with the paper and land in the wrong colour
-    # group, so give every connected stroke the colour most of its pixels have.
-    n_cc, cc = cv2.connectedComponents(ink.astype(np.uint8), connectivity=8)
-    comp = cc[ink]
-    votes = np.bincount(comp * k + labels, minlength=n_cc * k).reshape(n_cc, k)
-    comp_label = votes.argmax(1)
-    # Tiny marks (i-dots, decimal points, minus signs) are too small to vote
-    # reliably: give each the colour of the nearest real stroke, so "0.25"
-    # never loses its point in a colour layer.
-    sizes = votes.sum(1)
-    small_lim = max(12, int(0.00004 * binary.size))
-    big = sizes >= small_lim
-    big[0] = False
-    if big.any() and (~big[1:]).any():
-        big_px = big[cc] & ink
-        _, nearest = cv2.distanceTransformWithLabels((~big_px).astype(np.uint8), cv2.DIST_L2, 5,
-                                                     labelType=cv2.DIST_LABEL_PIXEL)
-        ys, xs = np.nonzero(big_px)
-        seed_label = np.zeros(nearest.max() + 1, np.int64)
-        seed_label[nearest[ys, xs]] = comp_label[cc[ys, xs]]
-        small_px = ink & ~big[cc]
-        pix_label = comp_label[cc].copy()
-        pix_label[small_px] = seed_label[nearest[small_px]]
-        labels = pix_label[ink]
-    else:
-        labels = comp_label[comp]
+    """One layer per ink colour, each = that ink in black on white.
+
+    Red is detected directly by hue (grader marks are often light and thin);
+    the remaining inks are grouped by k-means, and every connected stroke gets
+    the colour most of its pixels have.
+    """
     masks: dict[str, np.ndarray] = {}
-    for i, c in enumerate(centers):
-        if float((labels == i).mean()) < 0.03:
-            continue
-        bgr = cv2.cvtColor(np.uint8([[c]]), cv2.COLOR_LAB2BGR)[0, 0]
-        name = hue_name(bgr)
-        m = np.zeros(binary.shape, bool)
-        m[ink] = labels == i
-        masks[name] = masks.get(name, np.zeros(binary.shape, bool)) | m
-    if len(masks) < 2:  # a single ink colour: the B/W versions already show it
+    red = red_ink(flat)
+    if red.sum() >= max(40, int(0.0002 * red.size)):
+        masks["red"] = red
+    ink = (binary == 0) & ~red
+    n = int(ink.sum())
+    if n >= 200:
+        lab = cv2.cvtColor(flat, cv2.COLOR_BGR2LAB)
+        pixels = lab[ink].astype(np.float32)
+        sample = pixels[np.random.default_rng(0).choice(n, min(n, 60000), replace=False)]
+        k = min(max_k, len(sample))
+        crit = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.5)
+        _, _, centers = cv2.kmeans(sample, k, None, crit, 3, cv2.KMEANS_PP_CENTERS)
+        labels = np.linalg.norm(pixels[:, None, :] - centers[None, :, :], axis=2).argmin(1)
+        n_cc, cc = cv2.connectedComponents(ink.astype(np.uint8), connectivity=8)
+        comp = cc[ink]
+        votes = np.bincount(comp * k + labels, minlength=n_cc * k).reshape(n_cc, k)
+        comp_label = votes.argmax(1)
+        # Tiny marks (i-dots, decimal points, minus signs) take the colour of the nearest stroke.
+        sizes = votes.sum(1)
+        big = sizes >= max(12, int(0.00004 * binary.size))
+        big[0] = False
+        if big.any() and (~big[1:]).any():
+            big_px = big[cc] & ink
+            _, nearest = cv2.distanceTransformWithLabels((~big_px).astype(np.uint8), cv2.DIST_L2, 5,
+                                                         labelType=cv2.DIST_LABEL_PIXEL)
+            ys, xs = np.nonzero(big_px)
+            seed_label = np.zeros(nearest.max() + 1, np.int64)
+            seed_label[nearest[ys, xs]] = comp_label[cc[ys, xs]]
+            pix_label = comp_label[cc].copy()
+            small_px = ink & ~big[cc]
+            pix_label[small_px] = seed_label[nearest[small_px]]
+            labels = pix_label[ink]
+        else:
+            labels = comp_label[comp]
+        for i, c in enumerate(centers):
+            if float((labels == i).mean()) < 0.03:
+                continue
+            name = colour_name(c)
+            m = np.zeros(binary.shape, bool)
+            m[ink] = labels == i
+            masks[name] = masks.get(name, np.zeros(binary.shape, bool)) | m
+    if len(masks) < 2 and "red" not in masks:  # a single ink colour: the B/W versions already show it
         return {}
     layers = {}
     for name, m in masks.items():
@@ -217,43 +370,154 @@ def ink_layers(flat: np.ndarray, binary: np.ndarray, max_k: int = 4) -> dict[str
     return layers
 
 
-# ---------------------------------------------------------------- quality
+# ---------------------------------------------------------------- quality checks
 
-def quality(img: np.ndarray) -> tuple[dict, list[str]]:
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    k = 1000 / max(gray.shape)
-    g = cv2.resize(gray, None, fx=k, fy=k, interpolation=cv2.INTER_AREA) if k < 1 else gray
-    q = {"blur": round(float(cv2.Laplacian(g, cv2.CV_64F).var()), 1),
-         "brightness": round(float(g.mean()), 1),
-         "contrast": round(float(g.std()), 1),
-         "glare": round(float((g >= 250).mean()), 3)}
+def where(mask: np.ndarray) -> str:
+    ys, xs = np.nonzero(mask)
+    h, w = mask.shape
+    cy, cx = ys.mean() / h, xs.mean() / w
+    v = "top" if cy < 0.33 else "bottom" if cy > 0.67 else "middle"
+    hz = "left" if cx < 0.33 else "right" if cx > 0.67 else "centre"
+    return f"{v}-{hz}"
+
+
+def check_glare(img: np.ndarray) -> tuple[float, str | None]:
+    """Blown-out, colourless patches clearly brighter than the paper. Clean white scans don't count."""
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    s, v = hsv[:, :, 1], hsv[:, :, 2]
+    paper = float(np.percentile(v, 75))
+    if paper >= 238:  # paper already near white (scan or bright photo): glare can't be told apart
+        return 0.0, None
+    mask = ((v >= 248) & (s <= 40) & (v.astype(np.int16) >= paper + 12)).astype(np.uint8)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+    n, cc, st, _ = cv2.connectedComponentsWithStats(mask)
+    keep = st[:, cv2.CC_STAT_AREA] >= 0.001 * mask.size
+    keep[0] = False
+    blobs = keep[cc]
+    frac = float(blobs.mean())
+    return round(frac, 4), (where(blobs) if frac > 0 else None)
+
+
+def check_occlusion(img: np.ndarray) -> tuple[float, str | None]:
+    """A large skin-coloured blob touching the edge: usually a finger or hand over the page."""
+    ycc = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
+    y, cr, cb = ycc[:, :, 0], ycc[:, :, 1], ycc[:, :, 2]
+    mask = ((cr >= 138) & (cr <= 178) & (cb >= 80) & (cb <= 125) & (y >= 50)).astype(np.uint8)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, np.ones((7, 7), np.uint8))
+    n, cc, st, _ = cv2.connectedComponentsWithStats(mask)
+    h, w = mask.shape
+    best = np.zeros(mask.shape, bool)
+    for i in range(1, n):
+        x, yy, bw, bh, area = st[i]
+        touches = x == 0 or yy == 0 or x + bw >= w or yy + bh >= h
+        solid = area / float(bw * bh) > 0.35
+        if touches and solid and area >= 0.01 * mask.size:
+            best |= cc == i
+    frac = float(best.mean())
+    return round(frac, 4), (where(best) if frac > 0 else None)
+
+
+def check_moire(gray: np.ndarray, n: int = 512) -> float:
+    """How sharply one fine-grained frequency stands out from its neighbours (screen photos, halftone moiré).
+
+    Measured on full-resolution crops: shrinking the page first would filter the pattern out.
+    Text, even very regular text, spreads its energy; a moiré pattern is a narrow spike.
+    """
+    h, w = gray.shape
+    if min(h, w) < n:
+        gray = cv2.resize(gray, (max(w, n), max(h, n)), interpolation=cv2.INTER_CUBIC)
+        h, w = gray.shape
+    yy, xx = np.mgrid[-n // 2:n // 2, -n // 2:n // 2]
+    r = np.hypot(yy, xx)
+    band = (r > 0.25 * n / 2) & (r < 0.95 * n / 2) & (np.abs(xx) > 6) & (np.abs(yy) > 6)
+    window = np.outer(np.hanning(n), np.hanning(n))
+    best = 0.0
+    for fy, fx in ((1 / 3, 1 / 3), (1 / 3, 2 / 3), (2 / 3, 1 / 3), (2 / 3, 2 / 3), (1 / 2, 1 / 2)):
+        y0 = int(min(h - n, max(0, fy * h - n / 2)))
+        x0 = int(min(w - n, max(0, fx * w - n / 2)))
+        g = gray[y0:y0 + n, x0:x0 + n].astype(np.float32)
+        mag = np.abs(np.fft.fftshift(np.fft.fft2((g - g.mean()) * window)))
+        spike = np.where(band, mag / (cv2.blur(mag, (15, 15)) + 1e-6), 0)
+        best = max(best, float(spike.max()))
+    return round(best, 1)
+
+
+def check_edges(binary: np.ndarray) -> list[str]:
+    """Edges where several character-sized marks touch the border: text probably cut off."""
+    h, w = binary.shape
+    n, cc, st, _ = cv2.connectedComponentsWithStats((binary == 0).astype(np.uint8), connectivity=8)
+    x, y, bw, bh, area = st[:, 0], st[:, 1], st[:, 2], st[:, 3], st[:, 4]
+    text = (bh >= 0.004 * h) & (bh <= 0.06 * h) & (bw <= 0.25 * w) & (area >= max(6, 0.00001 * h * w))
+    text[0] = False
+    hits = {"left": (x == 0), "right": (x + bw >= w), "top": (y == 0), "bottom": (y + bh >= h)}
+    return [edge for edge, m in hits.items() if int((m & text).sum()) >= 2]
+
+
+def quality(native: np.ndarray, page: np.ndarray, binary: np.ndarray, skew: float,
+            page_found: bool, warp_tried: bool) -> tuple[dict, list[str]]:
+    gray_native = cv2.cvtColor(native, cv2.COLOR_BGR2GRAY)
+    k = 1000 / max(gray_native.shape)
+    g = cv2.resize(gray_native, None, fx=k, fy=k, interpolation=cv2.INTER_AREA) if k < 1 else gray_native
+    gp = cv2.cvtColor(page, cv2.COLOR_BGR2GRAY)
+    paper = float(np.percentile(gp, 90))
+    ink = float(np.percentile(gp, 1))
+    glare, glare_at = check_glare(page)
+    occl, occl_at = check_occlusion(page)
+    moire = check_moire(gp)
+    edges = check_edges(binary)
+    long_side = max(native.shape[:2])
+    q = {"long_side_px": int(long_side), "blur": round(float(cv2.Laplacian(g, cv2.CV_64F).var()), 1),
+         "paper_level": round(paper, 1), "ink_contrast": round(paper - ink, 1),
+         "glare": glare, "covered": occl, "moire": moire, "skew_deg": skew, "text_at_edges": edges}
     warn = []
-    if q["blur"] < 60:
+    if long_side < LOW_RES:
+        warn.append(f"low resolution ({native.shape[1]}x{native.shape[0]} px): small writing may be unreadable "
+                    "and the blur score is unreliable at this size; ask for the original photo "
+                    "(not a screenshot or WhatsApp copy) and read from the zoomed tiles")
+    elif q["blur"] < 60:
         warn.append("very blurry: ask for a retake (hold steady, tap to focus, more light)")
     elif q["blur"] < 150:
         warn.append("somewhat blurry: use 07_sharp and the tiles; double-check every number")
-    if q["brightness"] < 90:
+    if paper < 120:
         warn.append("dark photo: rely on 02_flat_color and 04_faint_boost")
-    if q["glare"] > 0.04:
-        warn.append("glare / blown-out areas: text there may be lost; ask for a retake without flash if words are missing")
-    if q["contrast"] < 30:
-        warn.append("low contrast (faint pencil or faded print): rely on 04_faint_boost and 05_bw_sauvola")
+    if q["ink_contrast"] < 70:
+        warn.append("low ink contrast (faint pencil or faded print): rely on 04_faint_boost and 05_bw_sauvola")
+    if glare >= 0.003:
+        warn.append(f"glare at {glare_at} ({glare:.1%} of the page): text there may be washed out; "
+                    "ask for a retake without flash if words are missing")
+    if occl > 0:
+        warn.append(f"something covers part of the page at {occl_at} (finger or hand?): "
+                    "text under it is missing, mark it [illegible]")
+    if moire >= 20:
+        warn.append("moiré / screen pattern detected (photo of a screen or halftone): "
+                    "fine detail may be distorted; ask for the original file if possible")
+    if edges:
+        warn.append(f"text touches the {', '.join(edges)} edge: words there may be cut off; "
+                    "mark partial words [cut off] and ask for a wider photo")
+    if abs(skew) > 3:
+        warn.append(f"page tilted {skew:+.1f} deg (corrected in these versions); check lines near the edges")
+    if not page_found and warp_tried:
+        warn.append("page edges not found: perspective not corrected (fine for flat scans/screenshots)")
     return q, warn
 
 
 # ---------------------------------------------------------------- outputs
 
 def tiles(img: np.ndarray, spec: str) -> list[tuple[str, np.ndarray]]:
-    h, w = img.shape[:2]
+    """Overlapping zoomed crops. Small images are upscaled first, so they always get tiles."""
     if spec == "0":
         return []
-    if spec == "auto":  # aim for ~900 px tiles; vision models downscale whole pages
-        cols = max(1, round(w / 900))
-        rows = max(1, round(h / 900))
-        if rows * cols == 1:
-            return []
+    h, w = img.shape[:2]
+    up = min(3.0, max(1.0, 1800 / max(h, w)))
+    if up > 1:
+        img = cv2.resize(img, None, fx=up, fy=up, interpolation=cv2.INTER_CUBIC)
+        h, w = img.shape[:2]
+    if spec == "auto":  # ~1000 px tiles; vision models downscale whole pages
+        cols, rows = max(1, round(w / 1000)), max(1, round(h / 1000))
     else:
         rows, cols = (int(x) for x in spec.lower().split("x"))
+    if rows * cols == 1:
+        return [("full", img)]
     ov = 0.12
     th, tw = int(h / (rows - (rows - 1) * ov)), int(w / (cols - (cols - 1) * ov))
     out = []
@@ -261,10 +525,7 @@ def tiles(img: np.ndarray, spec: str) -> list[tuple[str, np.ndarray]]:
         for c in range(cols):
             y0 = min(int(r * th * (1 - ov)), h - th)
             x0 = min(int(c * tw * (1 - ov)), w - tw)
-            t = img[y0:y0 + th, x0:x0 + tw]
-            if max(t.shape[:2]) < 1000:
-                t = cv2.resize(t, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
-            out.append((f"r{r + 1}c{c + 1}", t))
+            out.append((f"r{r + 1}c{c + 1}", img[y0:y0 + th, x0:x0 + tw]))
     return out
 
 
@@ -283,13 +544,21 @@ def contact_sheet(items: list[tuple[str, np.ndarray]], width: int = 420) -> np.n
     return np.vstack(rows)
 
 
-def process(path: Path, out_root: Path, args) -> dict:
-    img = load(path, args.max_side)
+def process(name: str, native: np.ndarray, source: str, out_root: Path, args) -> dict:
+    img = native
+    h, w = img.shape[:2]
+    if max(h, w) > args.max_side:
+        s = args.max_side / max(h, w)
+        img = cv2.resize(img, (int(w * s), int(h * s)), interpolation=cv2.INTER_AREA)
+    elif max(h, w) < WORK_MIN:  # small images: upscale so the filters work at a sensible scale
+        s = min(3.0, WORK_MIN / max(h, w))
+        img = cv2.resize(img, (int(w * s), int(h * s)), interpolation=cv2.INTER_CUBIC)
+
     corners = None if args.no_warp else find_page(img)
     page = warp(img, corners) if corners is not None else img
-    q, warnings = quality(page)
-    if corners is None and not args.no_warp:
-        warnings.append("page edges not found: perspective not corrected (fine for flat scans/screenshots)")
+    skew = estimate_skew(page)
+    if 0.7 <= abs(skew) <= 15:
+        page = rotate_bound(page, skew)
 
     flat = flatten_illumination(page)
     gray = cv2.cvtColor(flat, cv2.COLOR_BGR2GRAY)
@@ -302,52 +571,58 @@ def process(path: Path, out_root: Path, args) -> dict:
                                  odd(max(25, long_side // 50)), 12)
     sharp = cv2.addWeighted(flat, 1.7, cv2.GaussianBlur(flat, (0, 0), 2.5), -0.7, 0)
     inks = ink_layers(flat, bw_s)
+    q, warnings = quality(native, page, bw_s, skew, corners is not None, not args.no_warp)
 
-    d = out_root / path.stem
+    d = out_root / name
     (d / "tiles").mkdir(parents=True, exist_ok=True)
     variants = [("01_page.jpg", page), ("02_flat_color.jpg", flat), ("03_contrast.png", contrast),
                 ("04_faint_boost.png", faint), ("05_bw_sauvola.png", bw_s), ("06_bw_adaptive.png", bw_a),
                 ("07_sharp.jpg", sharp)] + [(f"ink_{n}.png", m) for n, m in inks.items()]
     written = []
-    for name, im in variants:
-        params = [cv2.IMWRITE_JPEG_QUALITY, 92] if name.endswith(".jpg") else []
-        cv2.imwrite(str(d / name), im, params)
-        written.append(name)
-    for name, t in tiles(flat, args.tiles):
-        cv2.imwrite(str(d / "tiles" / f"flat_{name}.jpg"), t, [cv2.IMWRITE_JPEG_QUALITY, 92])
-        written.append(f"tiles/flat_{name}.jpg")
+    for fname, im in variants:
+        params = [cv2.IMWRITE_JPEG_QUALITY, 92] if fname.endswith(".jpg") else []
+        cv2.imwrite(str(d / fname), im, params)
+        written.append(fname)
+    for tname, t in tiles(flat, args.tiles):
+        cv2.imwrite(str(d / "tiles" / f"flat_{tname}.jpg"), t, [cv2.IMWRITE_JPEG_QUALITY, 92])
+        written.append(f"tiles/flat_{tname}.jpg")
     cv2.imwrite(str(d / "contact_sheet.jpg"), contact_sheet([(n, im) for n, im in variants]),
                 [cv2.IMWRITE_JPEG_QUALITY, 85])
     written.append("contact_sheet.jpg")
 
-    report = {"file": str(path), "folder": str(d), "page_found": corners is not None,
-              "size": [int(page.shape[1]), int(page.shape[0])], "quality": q, "warnings": warnings,
-              "ink_colors": list(inks), "outputs": written}
+    report = {"name": name, "source": source, "folder": str(d),
+              "native_size": [int(native.shape[1]), int(native.shape[0])], "page_found": corners is not None,
+              "size": [int(page.shape[1]), int(page.shape[0])], "skew_deg": skew, "deskewed": 0.7 <= abs(skew) <= 15,
+              "quality": q, "warnings": warnings, "ink_colors": list(inks), "outputs": written}
     (d / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     return report
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("images", nargs="+", type=Path)
+    ap.add_argument("images", nargs="+", type=Path, help="photos (jpg/png/heic…) and/or scanned PDFs")
     ap.add_argument("--out", type=Path, default=Path("scans"))
     ap.add_argument("--no-warp", action="store_true", help="skip page detection (flat scans, screenshots)")
     ap.add_argument("--tiles", default="auto", help="auto, RxC (e.g. 3x2), or 0 for none")
     ap.add_argument("--max-side", type=int, default=3000)
+    ap.add_argument("--pdf-dpi", type=int, default=200, help="render dpi for PDF pages with no embedded photo")
     ap.add_argument("--json", action="store_true", help="print the reports as JSON")
     a = ap.parse_args()
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
 
-    reports = [process(p, a.out, a) for p in a.images]
+    reports = []
+    for p in a.images:
+        for name, img, source in load_inputs(p, a.pdf_dpi):
+            reports.append(process(name, img, source, a.out, a))
     if a.json:
         print(json.dumps(reports, indent=2))
         return
     for r in reports:
         q = r["quality"]
-        print(f"{r['file']} -> {r['folder']}")
-        print(f"  page found: {r['page_found']} | blur {q['blur']} | brightness {q['brightness']} "
-              f"| contrast {q['contrast']} | glare {q['glare']}")
+        print(f"{r['name']} ({r['source']}) -> {r['folder']}")
+        print(f"  {q['long_side_px']} px | page found: {r['page_found']} | skew {r['skew_deg']:+.1f} deg | "
+              f"blur {q['blur']} | ink contrast {q['ink_contrast']} | glare {q['glare']:.2%}")
         if r["ink_colors"]:
             print(f"  ink colours: {', '.join(r['ink_colors'])}")
         for w in r["warnings"]:
