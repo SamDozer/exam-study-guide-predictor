@@ -410,3 +410,19 @@ def test_emphasis_extractor_on_synthetic_pdf(tmp_path):
 
     out = run(SCRIPTS / "extract_emphasis.py", pdf, "--json", "--ignore-annotations")
     assert "student highlight" not in {h["text"] for h in json.loads(out.stdout)["hits"]}
+
+
+def test_scan_writes_coverage_inventory_and_flags_blank_pages(tmp_path):
+    pytest.importorskip("cv2")
+    import cv2
+    import numpy as np
+
+    good, blank = tmp_path / "good.png", tmp_path / "blank.png"
+    cv2.imwrite(str(good), text_page())
+    cv2.imwrite(str(blank), np.full((1600, 1200, 3), 235, np.uint8))
+    r = run(SCRIPTS / "enhance_scan.py", good, blank, "--out", tmp_path / "scans", "--no-warp")
+    assert r.returncode == 0, r.stderr
+    assert "COVERAGE: 2 source pages in, 2 processed, 1 blank (blank)" in r.stdout, r.stdout
+    assert "STOP" in r.stdout
+    inv = json.loads((tmp_path / "scans" / "_inventory.json").read_text(encoding="utf-8"))
+    assert inv["pages_in"] == 2 and inv["blank"] == ["blank"] and inv["ok"] is False

@@ -44,6 +44,8 @@ Do **not** invent practice questions when real examples exist. If an invented mi
 
 ## 5. Exact answer templates
 
+**Only for written answers.** If the exam is all objective (MCQ, true/false, matching, fill-in), skip §5–6 entirely: they add length but no marks. Put that effort into the distractor bank (§8), elimination rules (§7), and the trap list.
+
 For constructed responses, give exam-ready structures, adapted to the professor's terminology and expected depth. Activate only where useful — don't template everything. For Egyptian papers, build one template per stem the doctor uses (Give reasons, Write short notes, Compare, ✓/✗ with correction…) following `prediction-and-analysis.md` §3b, with about one point per mark (§1b).
 
 - **Definition:** *[Term] is ______. Its key feature/function is ______.*

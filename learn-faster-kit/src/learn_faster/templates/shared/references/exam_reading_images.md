@@ -45,13 +45,28 @@ Read `report.json` / the printed warnings:
 - **ink_red.png** holds red/pink marks found by colour (grader ticks, scores, corrections) even when they're faint.
 - **page edges not found** → fine for flat scans; for a tilted photo, read from `02` anyway and expect some distortion at the edges.
 
-## 3. Read twice, from different versions
+## 3. Read twice where it matters
+
+Reading every page twice is slow and expensive. **Do the second, independent pass only when a page has a quality warning** (blur, low resolution, glare, covered, moiré, cut-off text, tilt, low contrast), **or when the page supplies an answer key or a fact behind a HIGH prediction.** Clean pages get one careful pass from `02_flat_color` (tiles for small writing), plus a re-check of every number, unit, and symbol (§4).
 
 1. Look at `contact_sheet.jpg` to see which versions are clearest for this page.
 2. **Pass 1** — transcribe from `02_flat_color.jpg`. If the handwriting is small, read from the tiles instead of the whole page (whole pages get downscaled before you see them; tiles don't).
 3. **Pass 2** — transcribe again, independently, from `05_bw_sauvola.png` (or `04_faint_boost.png` for pencil, `07_sharp.jpg` for blur).
 4. **Compare.** Where the two passes agree, mark the text as checked. Where they differ, look at `06` and the tile; if still unsure, write both readings: `[? "citrate" / "nitrate"]`. Never pick one silently.
 5. **Ink colours for attribution.** Use the `ink_*` layers to separate the printed question, the student's answer (often blue/black), and the grader's marks (often red: scores, ticks, corrections). A red "3/5" next to an answer tells you the answer was only partly right — record it. Never read text *only* from an ink layer: very thin marks (hyphens, decimal points) can end up on the wrong layer.
+
+## 3a. Whose answer is it? (before using anything as a key)
+
+Handwritten answers on a past paper are often the **student's own**, and often wrong. Tag every answer before using it:
+
+| Tag | Evidence | Use as key? |
+|---|---|---|
+| **official key** | professor's model answer, printed key, or posted solution | yes |
+| **graded correct** | grader's tick, full marks, or score that confirms this specific answer | yes |
+| **student's own** | handwriting with no grading, or marked wrong / partial | **no** — check it against the slides; flag disagreements |
+| **derived from slides** | no answer on the paper; worked out from the course material | as a prediction, with its source tag |
+
+Use the ink layers and the grader's marks as evidence, but red-ink detection can miss faint marks: when grading isn't clearly visible, tag the answer **student's own**. Never teach a student's ungraded answer as correct.
 
 ## 4. Character traps — check every one
 
