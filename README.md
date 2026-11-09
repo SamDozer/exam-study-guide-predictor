@@ -7,7 +7,9 @@ Built for **biology-family courses** — biotechnology, biology, biochemistry, b
 ## What it does
 
 - **Study guide + exam prediction in one pass.** Not a generic summary — it links theory → practical step → how it was asked before → expected answer.
-- **Evidence-weighted predictions.** Every predicted question is tagged **HIGH / MEDIUM / LOW** confidence with the signals that justify it. Past exam papers are the strongest signal, then model answers, slide repetition, professor verbal emphasis, your insider tips, and textbook prominence last.
+- **Evidence-weighted predictions.** Every predicted question is tagged **HIGH / MEDIUM / LOW** confidence with the signals that justify it. Past exam papers are the strongest signal, then model answers, slide repetition and formatting, professor verbal emphasis, your insider tips, and textbook prominence last.
+- **Reads slide formatting.** Every slide PDF/PPTX goes through `scripts/extract_emphasis.py`, which finds the text the professor made **bold**, underlined, red or another off-palette colour, or highlighted. Those hits feed the prediction and show up in the guide as a 🖍 "Slide Emphasis Map". Titles, repeated headers/footers, grey template text and hyperlinks are ignored.
+- **Works without past papers.** A relevance rubric scores every concept on testability, formatting emphasis, coverage depth, cross-source recurrence and question-archetype fit, so topics can reach HIGH confidence even when no past paper exists.
 - **Reads Arabic professor transcripts.** Parses spoken Arabic (and code-switched Arabic + English) lecture transcripts, catches spoken exam cues like *"ده مهم للامتحان"* / *"هييجي في الامتحان"*, and folds them into the English output as verbal-emphasis signal.
 - **Marks-driven prioritization.** Asks for the total marks and distribution, then allocates depth and predicted questions proportionally.
 - **Conditional sections.** Lab machinery (CFU/BOD/COD/enzyme-activity calculations, media/specimen identification tables, protocol breakdowns, spot-photo ID) activates only when the material justifies it.
@@ -38,8 +40,10 @@ It then interviews you on: course, exam type, format, total marks + distribution
 ```
 exam-study-guide-predictor/
 ├── SKILL.md                              # workflow + intake interview
+├── scripts/
+│   └── extract_emphasis.py               # bold/underline/colour/highlight extractor (PDF + PPTX)
 └── references/
-    ├── prediction-and-analysis.md        # signal weighting, Arabic cue tables, faithfulness rule
+    ├── prediction-and-analysis.md        # signal weighting, relevance rubric, Arabic cue tables, faithfulness rule
     └── output-format.md                  # section catalog + HTML/.docx templates
 dist/
 └── exam-study-guide-predictor.skill      # packaged, installable skill
