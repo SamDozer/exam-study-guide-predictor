@@ -45,6 +45,9 @@ Built for **biology-family courses** and **Egyptian university midterms and fina
 - **Reads Arabic — even messy Arabic.** Catches spoken cues like *"ده مهم للامتحان"*, *"حطوا عليها نجمة"*, *"دي جت السنة اللي فاتت"*, scope cues like *"محذوف / برا المنهج"*, Franco-Arabic group messages (*"da mohem lel emte7an"*), and repairs garbled speech-to-text transcripts.
 - **Marks-driven.** Total marks and their split drive how many questions are predicted (a coverage budget of about 1.5–2× the real marks), how deep each answer goes (about one point per mark), and how your revision time is divided.
 - **Reads slide formatting.** `scripts/extract_emphasis.py` finds text the professor made **bold**, underlined, red or another colour, or highlighted, in PDFs and PowerPoints — and keeps your own highlights from being mistaken for the professor's.
+- **Reads bad phone photos carefully.** `scripts/enhance_scan.py` straightens tilted pages, removes shadows, rescues faint pencil, makes black-and-white versions tuned for handwriting, separates blue pen / red grading / pencil into their own layers, and cuts zoomed tiles for small writing. Every photographed page is then read twice from different versions, every digit, unit and symbol is checked (µL vs mL, 0.25 vs 025, Eastern Arabic ٥ vs 0), spelling is matched to the course vocabulary, and anything uncertain is listed for you instead of guessed.
+
+  ![Before and after: a tilted, shadowed phone photo of an exam answer; the flattened, shadow-free version; a black-and-white version for handwriting; and the red grading separated onto its own layer](docs/images/photo-enhancement-demo.jpg)
 - **Built for Egyptian exams.** Per-doctor analysis when a course is split between doctors; an exam-scope ledger so nothing dropped gets predicted; past papers transcribed from photos into a year-by-year ledger; questions written with the real stems (Give reasons, Write short notes, Compare, ✓/✗ with correction…).
 - **Executable.** IF I SEE THIS → IT MEANS THIS → I SHOULD DO THIS recognition tables, solving procedures, answer templates with MUST / GOOD / UNNECESSARY parts, a distractor bank, stuck-recovery, a time budget and an exam-room plan.
 - **Conditional sections.** Calculations, visual/spot-ID tables, and protocol breakdowns activate only when the material contains them, and a "Checked and Skipped" list shows what was left out and why.
@@ -86,6 +89,7 @@ Everything added since the original skill (July 2026), by area:
 - **Solving layer** (from ExamForge, [#3](https://github.com/SamDozer/exam-study-guide-predictor/pull/3)): recognition tables, step-by-step procedures, source-tagged worked examples, answer templates with MUST / GOOD / UNNECESSARY parts, a distractor bank, sanity checks, stuck-recovery, difficulty self-check, a source-error audit, a time budget, an exam-room plan, and a final-minute sheet.
 
 **Trust and output**
+- **Phone photos and handwriting** ([#7](https://github.com/SamDozer/exam-study-guide-predictor/pull/7)): an enhancer that produces perspective-corrected, shadow-free, contrast-boosted, black-and-white, sharpened, per-ink-colour and zoomed versions of each photo, with a quality report that asks for a retake when a photo is too blurry or glared. A reading protocol then requires two independent passes, character-level checks (digits, units, sub/superscripts, Greek, Eastern Arabic digits, Arabic dots), spelling against the course vocabulary, scientific plausibility checks, and a reading status on every transcribed item.
 - **Source tags on every claim** ([#3](https://github.com/SamDozer/exam-study-guide-predictor/pull/3)) (`L3 s12`, `Booklet p45`, `Final 2023 Q2`). Conflicts between sources are shown with which one to follow, and illustrative examples are labelled as not from the course.
 - **New guide sections**: Asked Before (from the ledger), Slide Emphasis Map with 🖍 markers, Checked and Skipped, plus the solving-layer sections.
 
@@ -129,14 +133,16 @@ exam-study-guide-predictor/                 # the skill (source of truth)
 │   ├── prediction-and-analysis.md          # signals, scope & doctors, past-paper ledger, Arabic cues, rubric, Egyptian stems
 │   ├── solving-layer.md                    # how to answer: recognition, procedures, templates, distractors, time budget
 │   ├── output-format.md                    # section catalog, colour coding, HTML/.docx templates
-│   └── spaced-repetition.md                # optional Anki / Learn FASTER retention
+│   ├── spaced-repetition.md                # optional Anki / Learn FASTER retention
+│   └── reading-images.md                   # how to read and verify phone photos and handwriting
 └── scripts/
     ├── extract_emphasis.py                 # bold/underline/colour/highlight extractor (PDF + PPTX)
+    ├── enhance_scan.py                     # phone-photo enhancer: perspective, shadows, contrast, B/W, ink layers, tiles
     └── anki_import.py                      # push flashcards into Anki via AnkiConnect (stdlib only)
 learn-faster-kit/                           # Enhanced Learn FASTER (MIT © Hugo Lau, extended)
 dist/exam-study-guide-predictor.skill       # packaged, installable skill
 tools/sync_kit.py                           # copies the skill's references/scripts into the kit
-tests/                                      # sync, Anki importer, and emphasis extractor tests
+tests/                                      # sync, Anki importer, emphasis extractor and photo enhancer tests
 docs/how-it-fits.md                         # how the skill and the kit share one method
 NOTICE.md                                   # component attribution
 ```
@@ -147,7 +153,7 @@ The skill is the source of truth. After editing anything in `exam-study-guide-pr
 
 ```bash
 python tools/sync_kit.py          # copy into the kit
-python -m pytest tests            # sync check, Anki importer, emphasis extractor
+python -m pytest tests            # sync check, Anki importer, emphasis extractor, photo enhancer
 ```
 
 Then rebuild `dist/exam-study-guide-predictor.skill` (a zip of the `exam-study-guide-predictor/` folder).

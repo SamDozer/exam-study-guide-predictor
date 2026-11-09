@@ -42,7 +42,8 @@ def test_skill_references_exist():
     skill = (ROOT / "exam-study-guide-predictor" / "SKILL.md").read_text(encoding="utf-8")
     for ref in ["references/prediction-and-analysis.md", "references/output-format.md",
                 "references/solving-layer.md", "references/spaced-repetition.md",
-                "scripts/extract_emphasis.py", "scripts/anki_import.py"]:
+                "references/reading-images.md", "scripts/extract_emphasis.py",
+                "scripts/anki_import.py", "scripts/enhance_scan.py"]:
         assert ref in skill, f"SKILL.md never mentions {ref}"
         assert (ROOT / "exam-study-guide-predictor" / ref).exists(), ref
 
@@ -118,6 +119,69 @@ def test_anki_unreachable_falls_back(cards_csv):
     r = run(SCRIPTS / "anki_import.py", cards_csv, "--deck", "X", "--url", "http://127.0.0.1:9")
     assert r.returncode != 0
     assert "cannot reach AnkiConnect" in r.stderr and "import" in r.stderr.lower()
+
+
+# ---------------------------------------------------------------- phone-photo enhancer
+
+def make_degraded_photo(path: Path) -> None:
+    """A tilted exam page on a dark desk, with a shadow, blue pen, red marking, faint pencil, blur, JPEG."""
+    import cv2
+    import numpy as np
+
+    page = np.full((1400, 1000, 3), 238, np.uint8)
+    font = cv2.FONT_HERSHEY_SCRIPT_SIMPLEX
+    cv2.putText(page, "Q1 Give reason: PFK-1 is rate limiting", (40, 120), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (30, 30, 30), 2)
+    for i, line in enumerate(["It catalyses the committed step", "inhibited by ATP and citrate", "activated by AMP"]):
+        cv2.putText(page, line, (60, 230 + 90 * i), font, 1.6, (170, 60, 20), 3)           # blue pen (BGR)
+    cv2.putText(page, "3/5", (800, 230), font, 2.2, (30, 30, 210), 4)                       # red marking
+    cv2.putText(page, "see lecture 3 slide 12", (60, 600), font, 1.4, (150, 150, 150), 2)  # faint pencil
+    canvas = np.full((2000, 1600, 3), (40, 55, 70), np.uint8)                                # dark desk
+    src = np.float32([[0, 0], [999, 0], [999, 1399], [0, 1399]])
+    dst = np.float32([[260, 180], [1300, 260], [1380, 1820], [180, 1700]])
+    m = cv2.getPerspectiveTransform(src, dst)
+    warped = cv2.warpPerspective(page, m, (1600, 2000))
+    mask = cv2.warpPerspective(np.full((1400, 1000), 255, np.uint8), m, (1600, 2000))
+    canvas[mask > 0] = warped[mask > 0]
+    shade = np.tile(np.linspace(1.0, 0.45, 1600, dtype=np.float32), (2000, 1))[:, :, None]  # shadow across
+    photo = np.clip(canvas * shade + np.random.default_rng(1).normal(0, 6, canvas.shape), 0, 255).astype(np.uint8)
+    photo = cv2.GaussianBlur(photo, (3, 3), 0)
+    cv2.imwrite(str(path), photo, [cv2.IMWRITE_JPEG_QUALITY, 70])
+
+
+def test_enhance_scan_on_degraded_phone_photo(tmp_path):
+    pytest.importorskip("cv2")
+    import cv2
+    import numpy as np
+
+    photo = tmp_path / "exam_photo.jpg"
+    make_degraded_photo(photo)
+    r = run(SCRIPTS / "enhance_scan.py", photo, "--out", tmp_path / "scans", "--json")
+    assert r.returncode == 0, r.stderr
+    rep = json.loads(r.stdout)[0]
+    assert rep["page_found"], rep
+    for name in ["01_page.jpg", "02_flat_color.jpg", "03_contrast.png", "04_faint_boost.png",
+                 "05_bw_sauvola.png", "06_bw_adaptive.png", "07_sharp.jpg", "contact_sheet.jpg"]:
+        assert (tmp_path / "scans" / "exam_photo" / name).exists(), name
+    # perspective corrected back to roughly the page's 1000x1400 portrait shape
+    w, h = rep["size"]
+    assert 1.25 < h / w < 1.55, rep["size"]
+    # shadow removed: the paper is evenly bright left-to-right after flattening
+    flat = cv2.imread(str(tmp_path / "scans" / "exam_photo" / "02_flat_color.jpg"), cv2.IMREAD_GRAYSCALE)
+    left, right = np.median(flat[:, : w // 6]), np.median(flat[:, -w // 6:])
+    assert abs(float(left) - float(right)) < 25, (left, right)
+    # blue pen and red marking separated into their own layers
+    assert "blue" in rep["ink_colors"] and "red" in rep["ink_colors"], rep["ink_colors"]
+
+
+def test_enhance_scan_flags_blurry_photo(tmp_path):
+    pytest.importorskip("cv2")
+    import cv2
+
+    photo = tmp_path / "blurry.jpg"
+    make_degraded_photo(photo)
+    cv2.imwrite(str(photo), cv2.GaussianBlur(cv2.imread(str(photo)), (0, 0), 6))
+    rep = json.loads(run(SCRIPTS / "enhance_scan.py", photo, "--out", tmp_path / "s", "--json").stdout)[0]
+    assert any("blurry" in w for w in rep["warnings"]), rep["warnings"]
 
 
 # ---------------------------------------------------------------- emphasis extractor
