@@ -27,12 +27,20 @@ python scripts/enhance_scan.py photo1.jpg photo2.jpg … --out scans
 
 If the script can't run, do the same reading passes on the original image and say so.
 
+**Scanned PDFs:** pass the PDF itself (`python scripts/enhance_scan.py exam.pdf --out scans`, needs `pip install pymupdf`). For each page it pulls out the original embedded photo at full resolution, turned upright (like `pdfimages -all`), instead of a low-resolution render; pages without a photo are rendered at `--pdf-dpi` (default 200). Don't screenshot or re-render scanned pages yourself.
+
 ## 2. Check quality before reading
 
 Read `report.json` / the printed warnings:
 
 - **very blurry** or **glare** with words actually missing → ask the student for a retake of that page (tips in §7) before relying on it. Don't guess the missing words.
 - **somewhat blurry** → read numbers and technical terms only from `07_sharp` and the tiles.
+- **low resolution** (long side under 1000 px) → read only from the tiles (small images are upscaled for them); treat every digit and short word as needing confirmation, and ask for the original photo.
+- **glare at …** (bright colourless patches, not white paper) or **something covers part of the page** (finger, hand) → text there is missing: mark it `[illegible]`, never fill it in.
+- **moiré / screen pattern** → the photo is of a screen or halftone; fine strokes may be distorted, double-check small characters.
+- **text touches the … edge** → words there may be cut off: mark partial words `[cut off]` and don't treat a cut-off answer as a key.
+- **page tilted** → already straightened in the versions; lines near the edges are the least reliable.
+- **ink_red.png** holds red/pink marks found by colour (grader ticks, scores, corrections) even when they're faint.
 - **page edges not found** → fine for flat scans; for a tilted photo, read from `02` anyway and expect some distortion at the edges.
 
 ## 3. Read twice, from different versions
