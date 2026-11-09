@@ -28,7 +28,8 @@ The objective is **scoring on this specific exam**, not comprehensive mastery. P
 
 - **Source-bound.** Build almost entirely from what the student provides. External knowledge is allowed *only* when a concept is central and repeated across the sources but explained poorly there — and every such addition must be visibly flagged as outside-source (see `references/prediction-and-analysis.md` → "Faithfulness rule").
 - **Marks-driven.** Always weight coverage by the mark distribution. A 25-mark topic gets more depth and more predicted questions than a 3-mark one. If you don't know the marks, ask.
-- **Evidence-weighted prediction.** Predictions are ranked High / Medium / Low confidence, each justified by *which* signals fired. Past exams are the single strongest signal. Full weighting hierarchy in `references/prediction-and-analysis.md`.
+- **Evidence-weighted prediction.** Predictions are ranked High / Medium / Low confidence, each justified by *which* signals fired. Past exams are the single strongest signal, but they are not required for HIGH confidence: a content-based relevance rubric (testability, formatting emphasis, coverage depth, cross-source recurrence, question-archetype fit) can carry a topic to HIGH with zero past papers. Full weighting hierarchy in `references/prediction-and-analysis.md`.
+- **Read the slides' formatting, not just their words.** Text the professor made **bold**, underlined, red or another off-palette colour, or highlighted usually carries exam weight, and plain text extraction loses it. Always run the formatting-emphasis pass (`scripts/extract_emphasis.py`) on every slide PDF/PPTX and feed the hits into the prediction.
 - **Output in English, but read Arabic.** The professor's transcripts may be Arabic (or code-switched Arabic + English technical terms). Parse them, catch spoken exam cues, and integrate their substance into the English output — attributing them as "professor said (verbal emphasis)."
 - **Separate fact from inference.** What the professor *explicitly said* is exam material is a **fact** — capture it verbatim (translated if Arabic) and render it in the dedicated **purple** style. What you *predict* is likely is an **inference** — render it in the confidence-tagged prediction section. Never let the two blur; a student budgets revision time differently for "he said this is coming" vs "we think this is coming."
 - **Handle large transcripts.** Transcripts can run 100+ pages. Do the explicit-marker extraction pass (below) *first* as a cheap scan, then chunk-read the rest section by section. Do not attempt to reason over the whole document in one pass.
@@ -57,7 +58,7 @@ Ask:
 
 | Source | Optimizes | Why it matters |
 |---|---|---|
-| Lecture slides | Study guide + prediction | The exam's ground truth; repetition across slides = signal. |
+| Lecture slides (original `.pptx` if available, else PDF) | Study guide + prediction | The exam's ground truth; repetition and bold/underline/coloured text = signal. The `.pptx` keeps formatting most exactly. |
 | Professor audio/voice-note transcripts (Ar/En) | Prediction (strong) | Contains spoken "exam alerts" never written on slides. |
 | **Past exam papers** | Prediction (strongest) | Reveals actual question style, recycled items, real depth. |
 | Official model answers | Study guide + prediction | Shows expected phrasing and how much earns full marks. |
@@ -71,6 +72,7 @@ After intake, read `references/prediction-and-analysis.md` before doing anything
 ### Step 2 — Ingest and analyze all sources
 
 - **First, the explicit-marker extraction pass.** Before anything else, scan the transcripts and notes for statements where the professor *directly and unequivocally* said something is exam material (Arabic + English cue tables in `references/prediction-and-analysis.md`). Capture each as a verbatim quote (translate Arabic to English, keep the original too), with the topic it points to. These become the **purple** "Professor's Explicit Exam Statements" section and are the backbone of both the strict-extract deliverable and the highest-priority predictions. On large transcripts, do this scan first, then chunk-read the rest.
+- **Then, the formatting-emphasis pass — on every slide file, every time.** Run `python scripts/extract_emphasis.py <all slide PDFs/PPTXs> --out emphasis.md --render-dir emphasis_pages` (install `pymupdf python-pptx` if missing). It lists every phrase styled differently from the normal body text: bold, underline, highlight, red or other colour, with page and context, and flags phrases emphasized repeatedly. If it can't run, render the pages to images and inspect them visually instead; also inspect any image-only pages it reports. Weigh the hits as described in `references/prediction-and-analysis.md` §0b.
 - Read every provided file fully. For Arabic transcripts, follow the Arabic-cue parsing in `references/prediction-and-analysis.md`.
 - Do **not** summarize each source in isolation. Cross-link: theory (slides) → practical step (manual) → how it was asked (past exam) → expected answer (model answer).
 - Build an internal signal map of every topic and the evidence weight behind it before writing anything.
@@ -85,7 +87,7 @@ Read `references/output-format.md` for the section catalog (which sections activ
 
 ### Step 5 — Faithfulness & self-check pass
 
-Before delivering, verify: every outside-source insight is flagged; every predicted question cites its signals; the section set matches the material (no empty lab tables on a non-lab course); the highest-mark topics got the most space. Then save the file and present it.
+Before delivering, verify: every slide file went through the formatting-emphasis pass (and the guide says which method was used); every outside-source insight is flagged; every predicted question cites its signals; the section set matches the material (no empty lab tables on a non-lab course); the highest-mark topics got the most space. Then save the file and present it.
 
 ## What good output looks like
 

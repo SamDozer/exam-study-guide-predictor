@@ -11,7 +11,8 @@ Build a section only if its trigger is met. Order sections by the mark distribut
 | 1. Table of Contents | Always | Clickable anchors in HTML. |
 | 2. Exam Blueprint | Always | Exam type, total marks, per-section marks, question types, predicted paper structure. The prioritization map. |
 | 3. Professor's Explicit Exam Statements | Transcripts/notes contain explicit markers | **Purple.** Verbatim quotes (Arabic + English translation) of everything the professor said is on the exam, each linked to its topic. This is the strict-extract deliverable on its own. |
-| 4. High-Yield Concepts & Frameworks | Always | The must-know core, sorted by confidence + marks. Tag must-memorize vs must-understand. Include mnemonics/memory triggers. |
+| 3b. Slide Emphasis Map | Formatting-emphasis pass found hits | Compact table of what the professor styled: phrase • how (bold/underline/red/highlight) • slide(s) • times emphasized • which predicted question it feeds. Put repeated and red/underlined/highlighted hits first; decode any consistent colour code ("red = enzymes"). |
+| 4. High-Yield Concepts & Frameworks | Always | The must-know core, sorted by confidence + marks. Tag must-memorize vs must-understand. Include mnemonics/memory triggers. Mark terms the professor styled on the slides with 🖍. |
 | 5. Core Mechanisms & Frameworks | Concept/process content present | WHY & HOW, not just WHAT — covers wet-lab mechanisms, analytical frameworks, and algorithmic/bioinformatics logic alike. Common-misunderstanding traps. Blue styling. |
 | 6. Applied Methodologies / Workflows | Lab manual or protocol/code/pipeline present, OR practical/OSPE exam | Step → reason-for-step → critical-error point → result interpretation. Covers wet-lab protocols and computational/analysis pipelines. |
 | 7. Visual / Data Interpretation | Image/graph/code-based exam, OR user uploaded visuals | Table: item • purpose/function • distinguishing features • expected result • "how it appears in the exam." Covers specimens, plates, gels, graphs, code blocks, maps, diagrams. Keep this machinery available even when dormant. |
@@ -29,6 +30,7 @@ If a triggered section has no real content in the sources, omit it rather than p
 - 🟢 **Green** — Key concepts / must-know facts.
 - 🔵 **Blue** — Mechanisms & frameworks / the WHY & HOW.
 - ⚪ **Grey/italic** — Outside-source clarifications (must be visually distinct so the student knows it wasn't from the professor).
+- 🖍 **Marker** — inline tag on any term the professor styled on the slides (bold, underline, red/other colour, highlight). Shows *where* the emphasis came from; it is not itself a confidence level.
 
 **Strict-extract deliverable:** if the user chose "strict extract," output *only* Section 3 (Professor's Explicit Exam Statements) plus a one-line blueprint — no predictions, no synthesis, ultra-condensed. This mirrors the "extract only what the professor explicitly flagged" objective.
 
