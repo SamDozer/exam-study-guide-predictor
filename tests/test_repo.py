@@ -184,6 +184,154 @@ def test_enhance_scan_flags_blurry_photo(tmp_path):
     assert any("blurry" in w for w in rep["warnings"]), rep["warnings"]
 
 
+def text_page(w: int = 1700, h: int = 2200, paper: int = 255, ink=(20, 20, 20), x0: int = 90,
+              line: str = "The enzyme catalyses the committed step of glycolysis 0.25 mM"):
+    """A plain printed page (a clean scan when paper=255)."""
+    import cv2
+    import numpy as np
+
+    page = np.full((h, w, 3), paper, np.uint8)
+    for i, y in enumerate(range(150, h - 120, 70)):
+        cv2.putText(page, f"{i + 1}. {line}", (x0, y), cv2.FONT_HERSHEY_SIMPLEX, 1.25, ink, 2, cv2.LINE_AA)
+    return page
+
+
+def scan_report(tmp_path: Path, img, name: str, *extra) -> dict:
+    import cv2
+
+    p = tmp_path / f"{name}.png"
+    cv2.imwrite(str(p), img)
+    r = run(SCRIPTS / "enhance_scan.py", p, "--out", tmp_path / "scans", "--json", *extra)
+    assert r.returncode == 0, r.stderr
+    return json.loads(r.stdout)[0]
+
+
+def warned(rep: dict, word: str) -> bool:
+    return any(word in w for w in rep["warnings"])
+
+
+def test_scan_clean_scan_raises_no_false_alarms(tmp_path):
+    pytest.importorskip("cv2")
+    rep = scan_report(tmp_path, text_page(), "clean", "--no-warp")
+    assert rep["warnings"] == [], rep["warnings"]
+    assert rep["quality"]["glare"] == 0 and abs(rep["skew_deg"]) < 0.7
+
+
+def test_scan_detects_real_glare_not_white_paper(tmp_path):
+    pytest.importorskip("cv2")
+    import cv2
+
+    img = text_page(paper=200)
+    cv2.ellipse(img, (1200, 900), (260, 170), 20, 0, 360, (255, 255, 255), -1)
+    img = cv2.GaussianBlur(img, (0, 0), 3)
+    rep = scan_report(tmp_path, img, "glare", "--no-warp")
+    assert warned(rep, "glare"), rep["warnings"]
+
+
+def test_scan_detects_finger_over_page(tmp_path):
+    pytest.importorskip("cv2")
+    import cv2
+
+    img = text_page(paper=215)
+    cv2.ellipse(img, (900, 2200), (230, 420), 0, 0, 360, (130, 160, 205), -1)  # skin tone, from the bottom edge
+    rep = scan_report(tmp_path, cv2.GaussianBlur(img, (0, 0), 2), "finger", "--no-warp")
+    assert warned(rep, "covers part of the page"), rep["warnings"]
+
+
+def test_scan_small_image_warns_and_still_gets_tiles(tmp_path):
+    pytest.importorskip("cv2")
+    import cv2
+
+    small = cv2.resize(text_page(), (600, 776), interpolation=cv2.INTER_AREA)
+    rep = scan_report(tmp_path, small, "small", "--no-warp")
+    assert warned(rep, "low resolution"), rep["warnings"]
+    assert any(o.startswith("tiles/") for o in rep["outputs"]), rep["outputs"]
+
+
+def test_scan_finds_light_red_grader_marks(tmp_path):
+    pytest.importorskip("cv2")
+    import cv2
+
+    img = text_page()
+    for y in range(200, 1400, 300):  # light red ticks and a score
+        cv2.line(img, (1450, y), (1480, y + 30), (90, 90, 235), 3)
+        cv2.line(img, (1480, y + 30), (1540, y - 40), (90, 90, 235), 3)
+    cv2.putText(img, "8/10", (1300, 1700), cv2.FONT_HERSHEY_SIMPLEX, 2.2, (90, 90, 235), 3)
+    rep = scan_report(tmp_path, img, "ticks", "--no-warp")
+    assert "red" in rep["ink_colors"], rep["ink_colors"]
+    assert "orange" not in rep["ink_colors"], rep["ink_colors"]
+
+
+def test_scan_warns_when_text_runs_off_the_edge(tmp_path):
+    pytest.importorskip("cv2")
+    rep = scan_report(tmp_path, text_page(x0=700), "cutoff", "--no-warp")
+    assert "right" in rep["quality"]["text_at_edges"], rep["quality"]
+    assert warned(rep, "cut off")
+
+
+def test_scan_measures_and_corrects_tilt(tmp_path):
+    pytest.importorskip("cv2")
+    import cv2
+
+    img = text_page()
+    m = cv2.getRotationMatrix2D((850, 1100), 6, 1.0)
+    tilted = cv2.warpAffine(img, m, (1700, 2200), borderValue=(255, 255, 255))
+    rep = scan_report(tmp_path, tilted, "tilt", "--no-warp")
+    assert 5.0 <= abs(rep["skew_deg"]) <= 7.0, rep["skew_deg"]
+    assert rep["deskewed"] and warned(rep, "tilted")
+    page = cv2.imread(str(tmp_path / "scans" / "tilt" / "01_page.jpg"))
+    sys.path.insert(0, str(SCRIPTS))
+    import enhance_scan
+    assert abs(enhance_scan.estimate_skew(page)) < 1.0
+
+
+def test_scan_flags_moire_pattern(tmp_path):
+    pytest.importorskip("cv2")
+    import numpy as np
+
+    img = text_page().astype(np.float32)
+    yy, xx = np.mgrid[0:2200, 0:1700]
+    img += (28 * np.sin(2 * np.pi * (0.21 * xx + 0.17 * yy)))[:, :, None]
+    rep = scan_report(tmp_path, np.clip(img, 0, 255).astype(np.uint8), "moire", "--no-warp")
+    assert warned(rep, "moir"), (rep["quality"]["moire"], rep["warnings"])
+
+
+def test_scan_pdf_uses_embedded_photo_at_full_resolution(tmp_path):
+    pytest.importorskip("cv2")
+    pymupdf = pytest.importorskip("pymupdf")
+    import cv2
+    import numpy as np
+
+    photo = cv2.resize(text_page(paper=225), (1200, 1553), interpolation=cv2.INTER_AREA)
+    ok, jpg = cv2.imencode(".jpg", photo)
+    doc = pymupdf.open()
+    p1 = doc.new_page(width=595, height=770)                      # page = one embedded phone photo
+    p1.insert_image(p1.rect, stream=jpg.tobytes())
+    p2 = doc.new_page(width=595, height=842)                      # vector text only
+    p2.insert_text((72, 100), "Typed question sheet", fontsize=14)
+    # Phone photo stored sideways in the file, displayed upright by the PDF (common for scanner apps).
+    ok, sideways = cv2.imencode(".jpg", np.ascontiguousarray(np.rot90(photo)))
+    for rot in (90, 270):
+        p3 = doc.new_page(width=595, height=770)
+        p3.insert_image(p3.rect, stream=sideways.tobytes(), rotate=rot)
+        pix = p3.get_pixmap(dpi=40)
+        g = np.frombuffer(pix.samples, np.uint8).reshape(pix.height, pix.width, pix.n)[:, :, 0] < 128
+        if g.sum(1).var() > g.sum(0).var():  # keep the rotation that displays text upright
+            break
+        doc.delete_page(-1)
+    pdf = tmp_path / "exam.pdf"
+    doc.save(pdf)
+
+    r = run(SCRIPTS / "enhance_scan.py", pdf, "--out", tmp_path / "scans", "--json", "--no-warp")
+    assert r.returncode == 0, r.stderr
+    reps = {x["name"]: x for x in json.loads(r.stdout)}
+    assert reps["exam_p1"]["source"].startswith("embedded photo") and reps["exam_p1"]["native_size"] == [1200, 1553]
+    assert reps["exam_p2"]["source"].startswith("page rendered")
+    assert reps["exam_p3"]["native_size"] == [1200, 1553], reps["exam_p3"]  # turned back upright
+    bw = cv2.imread(str(tmp_path / "scans" / "exam_p3" / "05_bw_sauvola.png"), cv2.IMREAD_GRAYSCALE) < 128
+    assert bw.sum(1).var() > bw.sum(0).var()  # text lines run horizontally: orientation restored
+
+
 # ---------------------------------------------------------------- emphasis extractor
 
 def test_emphasis_extractor_on_synthetic_pdf(tmp_path):
