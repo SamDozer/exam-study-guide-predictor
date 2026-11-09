@@ -81,6 +81,8 @@ Rules:
 - If part of a question is unreadable, write `[illegible]`. Never invent the missing words; a guessed question pollutes every later signal.
 - The same paper often arrives as several photos from different students: merge them and fill gaps from the clearer copy.
 - Note the year of each paper (from the header, the filename, or ask). Undated papers count, but less.
+- **Count distinct exam sittings, not documents.** Versions of the same quiz (Quiz 2a / 2b, Form A / B), several photos of one paper, and a student's revision sheet that copies a quiz are **one** occurrence. Group them first (same date/doctor, overlapping questions), record the group, then count. Inflated "asked 3 times" counts are a common, silent error.
+- **Tag who wrote each answer** on the paper (see `reading-images.md` §5a): official key, graded correct, student's own (ungraded or marked wrong), or derived from the slides. Only official keys and graded-correct answers may be used as the answer key.
 - Count how often each topic and each stem type appears, per doctor. These counts are signal #1 below and the raw material for the style analysis in §3.
 
 ## 1. Signal-weighting hierarchy

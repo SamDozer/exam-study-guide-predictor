@@ -42,9 +42,13 @@ The objective is **scoring on this specific exam**, not comprehensive mastery. P
 
 ## Workflow
 
-### Step 1 — Intake interview (always first)
+### Step 1 — Intake (infer first, ask little)
 
-Batch these into one message; let the student answer in bulk or say "you decide." If an answer is already obvious from the files or conversation, state your assumption instead of asking.
+**Never block on a long interview.** First work out everything the files and conversation already answer (course, format, marks, doctors, scope, sources) and state those as assumptions in one short list. Then ask **at most 3 questions**, and only ones whose answers would change the plan (typically: total marks/split if unknown, exam scope or anything dropped, and whether they want flashcards). Start working on everything that doesn't depend on the answers.
+
+**Fast mode** — if the exam is less than about 24 hours away (or the student says it's tomorrow): ask nothing beyond one combined question if truly needed, skip the optional retention offer, read once except where the double-check rule in `reading-images.md` §3 applies, and lead the deliverable with the top predicted questions, the final-minute sheet, and the time plan.
+
+The full checklist below is what to *know*, not a script to recite:
 
 1. **Course & discipline.**
 2. **Exam type** — midterm / final / quiz; written / practical / OSPE / oral (viva) / mixed.
@@ -106,8 +110,11 @@ Before delivering, verify:
 - every purple item is verbatim, sourced, dated, and marked recorded/reported; superseded statements are shown as superseded;
 - every prediction names its signals and source tags; confidence isn't inflated;
 - predicted marks cover the paper per the coverage budget (§1b), split per doctor where relevant;
-- every past-paper photo is in the ledger; every slide file went through the emphasis pass; student annotations weren't counted as the professor's;
-- every photographed page was enhanced and read twice; every uncertain or illegible reading is listed for the student with its photo and tile name; no HIGH prediction rests on an unconfirmed reading; scientific errors found on a page are in the audit, not silently fixed;
+- **coverage count matches:** the number of source pages in (every PDF page + every photo) equals the number of pages in the ledger, each with a status (read / partly illegible / BLANK-checked). `enhance_scan.py` prints and saves this count (`scans/_inventory.json`); **stop and fix any mismatch or any BLANK page before delivering** — never let a page disappear silently;
+- every slide file went through the emphasis pass; student annotations weren't counted as the professor's;
+- **every answer used as a key has a provenance tag** (official key / graded correct / student's own / derived from slides), and only the first two were treated as correct answers;
+- repeat counts are per **distinct exam sitting** (versions 2a/2b of one quiz and copies on revision sheets count once);
+- every photographed page was enhanced, and pages needing it were read twice (see `reading-images.md` §3); every uncertain or illegible reading is listed for the student with its photo and tile name; no HIGH prediction rests on an unconfirmed reading; scientific errors found on a page are in the audit, not silently fixed;
 - every outside-source addition is flagged;
 - the solving-layer coverage audit (`solving-layer.md` §17) passes; where a topic has no real example, say so instead of inventing one;
 - the "Checked and skipped" list names every section that didn't activate.

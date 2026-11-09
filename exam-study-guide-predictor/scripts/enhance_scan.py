@@ -646,12 +646,29 @@ def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
 
-    reports = []
+    reports, inputs = [], []
     for p in a.images:
-        for name, img, source in load_inputs(p, a.pdf_dpi):
+        pages = load_inputs(p, a.pdf_dpi)
+        inputs.append({"file": str(p), "pages": len(pages)})
+        for name, img, source in pages:
             reports.append(process(name, img, source, a.out, a))
+
+    # Coverage inventory: every source page must come out, and blank outputs are listed by name,
+    # so a lost page can't disappear silently. The ledger must have the same page count.
+    pages_in = sum(i["pages"] for i in inputs)
+    blank = [r["name"] for r in reports if any(w.startswith("OUTPUT LOOKS BLANK") for w in r["warnings"])]
+    flagged = [r["name"] for r in reports if r["warnings"]]
+    inventory = {"inputs": inputs, "pages_in": pages_in, "pages_processed": len(reports),
+                 "pages": [r["name"] for r in reports], "blank": blank, "with_warnings": flagged,
+                 "ok": pages_in == len(reports) and not blank}
+    a.out.mkdir(parents=True, exist_ok=True)
+    (a.out / "_inventory.json").write_text(json.dumps(inventory, indent=2), encoding="utf-8")
+    summary = (f"COVERAGE: {pages_in} source pages in, {len(reports)} processed, {len(blank)} blank"
+               + (f" ({', '.join(blank)})" if blank else "")
+               + f", {len(flagged)} with quality warnings. The ledger must list all {pages_in} pages.")
     if a.json:
         print(json.dumps(reports, indent=2))
+        print(summary, file=sys.stderr)
         return
     for r in reports:
         q = r["quality"]
@@ -663,6 +680,9 @@ def main():
         for w in r["warnings"]:
             print(f"  ! {w}")
         print(f"  {len(r['outputs'])} files; start with contact_sheet.jpg, then 02_flat_color.jpg and 05_bw_sauvola.png")
+    print(summary)
+    if not inventory["ok"]:
+        print("STOP: fix the blank or missing pages above before building the ledger.")
 
 
 if __name__ == "__main__":
