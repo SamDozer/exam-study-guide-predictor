@@ -47,12 +47,15 @@ Ask:
 2. **Exam type** — midterm / final / quiz; and written / practical / OSPE-station / mixed.
 3. **Exam format** — which question types: MCQ, true/false, short answer, long/essay, spot-or-photo identification, calculations/problems, diagram labeling, viva. (If they don't know yet, proceed and note the guide isn't format-tuned.)
 4. **Total marks & distribution** — total marks and, if known, marks per section or per question type. This drives prioritization — push for it.
-5. **Sources they have** — run the source checklist below. Explicitly ask for the two prediction-critical ones if not mentioned: **past exam papers** and **official model answers**.
-6. **Deliverable** — one of: study guide, exam prediction, both (default), or **strict extract** (only the points the professor explicitly flagged as exam material — a lean product, no inference).
-7. **Depth** — deep no-missing-detail guide, ultra-condensed rapid-revision sheet, or both (full guide + rapid sheet appended).
-8. **Output format** — HTML (default; color-coded, collapsible, clickable table of contents) or Word .docx (printable). Ask each time.
-9. **Images** — does this exam include photo/diagram/spot identification? If yes, activate the visual-identification section and ask them to upload the relevant images.
-10. **Optional flashcard export** — offer (don't force) an Anki-ready CSV of Q/A pairs from the predicted questions. Note it's optional; skip if the user already uses a spaced-repetition plugin.
+5. **Doctors** — how many professors teach this course, which lectures/chapters each one covers, and how the marks are split between them (e.g., "Dr A: lectures 1–4, 30 marks; Dr B: lectures 5–8, 30 marks"). Each doctor usually writes their own questions in their own style, so this decides how everything below is split.
+6. **Exam scope** — where the material for *this* exam stops (e.g., "midterm up to lecture 5"), and anything announced as dropped (محذوف / برا المنهج / مش مقرر), plus anything announced as "read only" (اقروها بس). Material outside scope must not get predicted questions.
+7. **Sources they have** — run the source checklist below. Explicitly ask for the prediction-critical ones if not mentioned: **past exam papers** (photos and scans are fine), **official model answers**, and the **professor's own booklet or book** (المذكرة / كتاب الدكتور).
+8. **Own markings** — have they highlighted or underlined their own PDF copies? If yes, run the emphasis script with `--ignore-annotations`, or ask for a clean copy, so the student's own marks aren't mistaken for the professor's emphasis.
+9. **Deliverable** — one of: study guide, exam prediction, both (default), or **strict extract** (only the points the professor explicitly flagged as exam material — a lean product, no inference).
+10. **Depth** — deep no-missing-detail guide, ultra-condensed rapid-revision sheet, or both (full guide + rapid sheet appended).
+11. **Output format** — HTML (default; color-coded, collapsible, clickable table of contents) or Word .docx (printable). Ask each time.
+12. **Images** — does this exam include photo/diagram/spot identification? If yes, activate the visual-identification section and ask them to upload the relevant images.
+13. **Optional flashcard export** — offer (don't force) an Anki-ready CSV of Q/A pairs from the predicted questions. Note it's optional; skip if the user already uses a spaced-repetition plugin.
 
 **Source checklist** (tell them each source's role so they know what's worth digging up):
 
@@ -60,8 +63,9 @@ Ask:
 |---|---|---|
 | Lecture slides (original `.pptx` if available, else PDF) | Study guide + prediction | The exam's ground truth; repetition and bold/underline/coloured text = signal. The `.pptx` keeps formatting most exactly. |
 | Professor audio/voice-note transcripts (Ar/En) | Prediction (strong) | Contains spoken "exam alerts" never written on slides. |
-| **Past exam papers** | Prediction (strongest) | Reveals actual question style, recycled items, real depth. |
-| Official model answers | Study guide + prediction | Shows expected phrasing and how much earns full marks. |
+| **Past exam papers** (photos/scans from student groups are fine) | Prediction (strongest) | Reveals actual question style, recycled items, real depth. Note the year and which doctor set each part. |
+| **Professor's own booklet / book** (المذكرة / كتاب الدكتور) | Study guide + prediction (very strong) | In many Egyptian courses questions come almost verbatim from it — its wording beats the slides'. |
+| Official model answers (نموذج إجابة) | Study guide + prediction | Shows expected phrasing and how much earns full marks. |
 | Lab / practical manuals | Protocols + calculations + ID | Source for practical-exam workflow and spot questions. |
 | Textbook chapters | Study guide | Fills gaps; used cautiously, secondary to slides. |
 | Class / classmate notes | Prediction | Captures verbal emphasis the student may have missed. |
@@ -71,8 +75,10 @@ After intake, read `references/prediction-and-analysis.md` before doing anything
 
 ### Step 2 — Ingest and analyze all sources
 
-- **First, the explicit-marker extraction pass.** Before anything else, scan the transcripts and notes for statements where the professor *directly and unequivocally* said something is exam material (Arabic + English cue tables in `references/prediction-and-analysis.md`). Capture each as a verbatim quote (translate Arabic to English, keep the original too), with the topic it points to. These become the **purple** "Professor's Explicit Exam Statements" section and are the backbone of both the strict-extract deliverable and the highest-priority predictions. On large transcripts, do this scan first, then chunk-read the rest.
-- **Then, the formatting-emphasis pass — on every slide file, every time.** Run `python scripts/extract_emphasis.py <all slide PDFs/PPTXs> --out emphasis.md --render-dir emphasis_pages` (install `pymupdf python-pptx` if missing). It lists every phrase styled differently from the normal body text: bold, underline, highlight, red or other colour, with page and context, and flags phrases emphasized repeatedly. If it can't run, render the pages to images and inspect them visually instead; also inspect any image-only pages it reports. Weigh the hits as described in `references/prediction-and-analysis.md` §0b.
+- **Set the scope and the doctors first.** From intake and any announcements in the sources, write down: the scope cutoff, every dropped item (محذوف / برا المنهج / مش مقرر / مش هسأل فيها), every "read only" item, and which doctor owns which lectures. Tag every source and topic with its doctor. Exclusions are hard: no predicted questions on dropped material, though it can be listed once as "dropped" so the student doesn't waste time on it. See `references/prediction-and-analysis.md` §0a.
+- **Transcribe past papers into a ledger.** Past papers are often phone photos or scans, handwritten or mixed Arabic/English. Read each image directly and record every question: year, midterm/final, doctor, question number, stem type, marks, topic, and the exact wording. Mark illegible parts as illegible instead of guessing, and merge duplicate copies of the same paper. This ledger drives the past-paper signal and the question-style analysis (§0c).
+- **Then, the explicit-marker extraction pass.** Before anything else, scan the transcripts and notes for statements where the professor *directly and unequivocally* said something is exam material (Arabic + English cue tables in `references/prediction-and-analysis.md`). Capture each as a verbatim quote (translate Arabic to English, keep the original too), with the topic it points to. These become the **purple** "Professor's Explicit Exam Statements" section and are the backbone of both the strict-extract deliverable and the highest-priority predictions. On large transcripts, do this scan first, then chunk-read the rest.
+- **Then, the formatting-emphasis pass — on every slide file, every time.** Run `python scripts/extract_emphasis.py <all slide and booklet PDFs/PPTXs> --out emphasis.md --render-dir emphasis_pages` (install `pymupdf python-pptx` if missing; add `--ignore-annotations` if the student marked up their own copies). It lists every phrase styled differently from the normal body text: bold, underline, highlight, red or other colour, with page and context, and flags phrases emphasized repeatedly. If it can't run, render the pages to images and inspect them visually instead; also inspect any image-only pages it reports. Weigh the hits as described in `references/prediction-and-analysis.md` §0b.
 - Read every provided file fully. For Arabic transcripts, follow the Arabic-cue parsing in `references/prediction-and-analysis.md`.
 - Do **not** summarize each source in isolation. Cross-link: theory (slides) → practical step (manual) → how it was asked (past exam) → expected answer (model answer).
 - Build an internal signal map of every topic and the evidence weight behind it before writing anything.
@@ -87,7 +93,7 @@ Read `references/output-format.md` for the section catalog (which sections activ
 
 ### Step 5 — Faithfulness & self-check pass
 
-Before delivering, verify: every slide file went through the formatting-emphasis pass (and the guide says which method was used); every outside-source insight is flagged; every predicted question cites its signals; the section set matches the material (no empty lab tables on a non-lab course); the highest-mark topics got the most space. Then save the file and present it.
+Before delivering, verify: no predicted question touches dropped or out-of-scope material; predictions and marks are split per doctor when more than one teaches the course; every past-paper photo was transcribed into the ledger (illegible parts flagged, not guessed); every slide file went through the formatting-emphasis pass (and the guide says which method was used); student-made PDF annotations were not counted as the professor's emphasis; every outside-source insight is flagged; every predicted question cites its signals; the section set matches the material (no empty lab tables on a non-lab course); the highest-mark topics got the most space. Then save the file and present it.
 
 ## What good output looks like
 

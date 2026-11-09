@@ -9,7 +9,8 @@ Build a section only if its trigger is met. Order sections by the mark distribut
 | Section | Activate when | Notes |
 |---|---|---|
 | 1. Table of Contents | Always | Clickable anchors in HTML. |
-| 2. Exam Blueprint | Always | Exam type, total marks, per-section marks, question types, predicted paper structure. The prioritization map. |
+| 2. Exam Blueprint | Always | Exam type, total marks, per-section marks, question types, predicted paper structure (e.g., "Q1 short notes ×3, Q2 give reasons ×4…"). **Scope:** cutoff, a "Dropped — skip" list, and "Read only" items. **Doctors:** when several teach the course, one row per doctor with their lectures, their marks, and their favourite stems. The prioritization map. |
+| 2b. Asked Before | Past papers provided | From the past-paper ledger: each topic that has appeared, with years, doctor, the stems used, and marks. Repeat topics first. Note any `[illegible]` gaps. |
 | 3. Professor's Explicit Exam Statements | Transcripts/notes contain explicit markers | **Purple.** Verbatim quotes (Arabic + English translation) of everything the professor said is on the exam, each linked to its topic. This is the strict-extract deliverable on its own. |
 | 3b. Slide Emphasis Map | Formatting-emphasis pass found hits | Compact table of what the professor styled: phrase • how (bold/underline/red/highlight) • slide(s) • times emphasized • which predicted question it feeds. Put repeated and red/underlined/highlighted hits first; decode any consistent colour code ("red = enzymes"). |
 | 4. High-Yield Concepts & Frameworks | Always | The must-know core, sorted by confidence + marks. Tag must-memorize vs must-understand. Include mnemonics/memory triggers. Mark terms the professor styled on the slides with 🖍. |
@@ -17,7 +18,7 @@ Build a section only if its trigger is met. Order sections by the mark distribut
 | 6. Applied Methodologies / Workflows | Lab manual or protocol/code/pipeline present, OR practical/OSPE exam | Step → reason-for-step → critical-error point → result interpretation. Covers wet-lab protocols and computational/analysis pipelines. |
 | 7. Visual / Data Interpretation | Image/graph/code-based exam, OR user uploaded visuals | Table: item • purpose/function • distinguishing features • expected result • "how it appears in the exam." Covers specimens, plates, gels, graphs, code blocks, maps, diagrams. Keep this machinery available even when dormant. |
 | 8. Analytical / Calculations | Quantitative or formula content present (CFU/mL, dilutions, BOD, COD, enzyme activity/units, % solubilization, molarity, Beer–Lambert, yield, statistical tests, etc.) | Formula/framework + every variable defined + ≥2 solved step-by-step examples from the actual sources/past papers + common mistakes. |
-| 9. Predicted Exam Questions + Model Answers | Always (unless strict-extract) | Core deliverable. Each tagged HIGH/MEDIUM/LOW with signal justification. Mirror the professor's phrasing; answer to the mark depth. |
+| 9. Predicted Exam Questions + Model Answers | Always (unless strict-extract) | Core deliverable. Grouped by doctor when more than one teaches the course. Each tagged HIGH/MEDIUM/LOW with signal justification. Use the doctor's own stems (or the Egyptian stems in `prediction-and-analysis.md` §3b); write each model answer as markable points, as many points as the marks. Nothing from dropped material. |
 | 10. Exam Traps & Common Mistakes | Always | Confused-pair contrasts, unit traps, misread mechanisms. |
 | 11. Rapid Revision Sheet | User chose "rapid" or "both" | Ultra-condensed one-pager: memory triggers, mnemonics, must-memorize list, formula strip, top predicted Qs. |
 

@@ -16,6 +16,26 @@ For each hit, capture: the verbatim statement (original Arabic *and* an English 
 
 A topic can be both (professor flagged it *and* it's in past papers) — show the purple statement and the red prediction together.
 
+## 0a. Scope and doctors (set before predicting anything)
+
+**Scope ledger.** Before weighting topics, write down what this exam covers:
+
+- **Cutoff** — where the material for this exam stops ("midterm up to lecture 5", "final = everything after the midterm" or "cumulative"). Ask if unknown; if the student doesn't know, say the guide assumes full coverage.
+- **Dropped** (محذوف / برا المنهج / مش مقرر / مش هسأل فيها / "not included") — remove completely. No predicted questions, no study-guide depth. List them once in the blueprint as "Dropped — skip" so the student can trust the guide.
+- **Read only** (اقروها بس / "just read it" / "for understanding only" / دي للفهم بس) — keep in the guide, but cap predictions at LOW and short-answer depth.
+- Exclusions announced *later* override earlier material: a lecture taught in week 3 but dropped in week 8 is dropped.
+
+Announcements arrive through transcripts, class-group messages, and the student's own notes — scan them all for these cues (see the Arabic table in §4).
+
+**Doctors.** Many courses are split between two or three professors, each writing their own part of the paper. When that's the case:
+
+- Tag every lecture, source, and past-paper question with its doctor.
+- Do the whole analysis (signals, §1a scoring, question style in §3) **per doctor**. One doctor's habits say little about another's.
+- Allocate depth and predicted questions by each doctor's share of the marks, not by page count.
+- Group the blueprint and the predicted questions by doctor in the output.
+
+If the student doesn't know who wrote which part of a past paper, infer it from the topics (each doctor's questions cover their own lectures) and say it's inferred.
+
 ## 0b. Formatting-emphasis pass (always run on slides)
 
 Professors mark what matters by *styling* it: **bold**, underline, red or other off-palette colours, highlighter. Plain text extraction erases all of that, so reading a slide PDF as text alone misses one of the best signals in the material. Run this pass on **every** slide file (PDF or PPTX), right after §0.
@@ -32,6 +52,7 @@ Professors mark what matters by *styling* it: **bold**, underline, red or other 
 **How to weigh what it finds:**
 
 - **Normalize first.** Check `body_color` and `bold_is_normal_text` in the report. If a template makes *everything* bold or blue, that style is the norm, not emphasis — the script handles bold; judge colour themes by eye.
+- **Whose marks are they?** `BOLD`, `UNDERLINE`, `HIGHLIGHT` and `COLOR` come from the slide itself, so they're the author's emphasis. `ANNOT-HIGHLIGHT` / `ANNOT-UNDERLINE` are marks drawn on top of a PDF and are often the *student's own* highlighting. Count them only if the student confirms the copy came marked from the professor; otherwise ignore them (or re-run with `--ignore-annotations`). Never let the student's own highlights echo back as "the professor emphasized this."
 - **Red / highlighted / underlined** body text is the strongest formatting cue — professors use it as a written "exam alert." Treat as a MEDIUM signal on its own, HIGH when it converges with another signal (repeated, verbally flagged, in a past paper).
 - **Bold** is weaker: slides often bold definitions and key terms. Bold = "this is a term you must know"; that makes it a prime candidate for definition/MCQ questions.
 - **Emphasized more than once** (across slides or lectures) is far stronger than a single hit.
@@ -40,12 +61,27 @@ Professors mark what matters by *styling* it: **bold**, underline, red or other 
 
 This is still an **inference**, not a purple fact — formatting says "important," not "on the exam." Feed every hit into §1 (signal #3) and the §1a *structural emphasis* axis, and mark emphasized terms in the guide with 🖍 so the student sees which points the professor styled.
 
+## 0c. Past-paper ledger (from photos, scans, or text)
+
+Past papers usually circulate as phone photos or scans in student groups — tilted, handwritten, half Arabic. Before any analysis, transcribe every paper into one table:
+
+| Year | Midterm/Final | Doctor | Q no. | Stem type (§3b) | Marks | Topic | Exact wording |
+|---|---|---|---|---|---|---|---|
+
+Rules:
+- Read each image directly; rotate/zoom mentally as needed. Keep the professor's wording exactly — the rephrase prediction depends on it.
+- If part of a question is unreadable, write `[illegible]`. Never invent the missing words; a guessed question pollutes every later signal.
+- The same paper often arrives as several photos from different students: merge them and fill gaps from the clearer copy.
+- Note the year of each paper (from the header, the filename, or ask). Undated papers count, but less.
+- Count how often each topic and each stem type appears, per doctor. These counts are signal #1 below and the raw material for the style analysis in §3.
+
 ## 1. Signal-weighting hierarchy
 
 Rank every candidate topic by the evidence behind it. Signals from strongest to weakest:
 
 1. **Past exam papers (strongest).** If a topic, question stem, or figure appeared in a previous paper, weight it heavily. Professors recycle and lightly rephrase. Note whether the item repeats across *multiple* past papers — a recurring past question is close to a guarantee. Track the exact phrasing; predict the rephrase.
 2. **Official model answers.** Reveal the depth and wording that earn full marks. If a model answer is long/structured, the exam expects a long/structured answer.
+   **Professor's own booklet or book (المذكرة / كتاب الدكتور).** Same tier. In many Egyptian courses the exam is written from the doctor's own booklet, often word for word: its definitions, its lists, its diagrams. Where the booklet and the slides differ, follow the booklet's wording and numbering ("the 5 functions of X" in the booklet means the answer has exactly those 5). Run the §0b formatting pass on it too, and treat its end-of-chapter questions as strong candidates.
 3. **Repetition and formatting emphasis on the slides.** A concept restated on many slides, given its own summary/objectives slide, or styled differently from normal text (bold, underline, red/other colour, highlight — from the §0b pass). Count both repetitions and emphasis hits.
 4. **Professor verbal emphasis (transcripts / notes).** Explicit spoken exam cues — see the Arabic + English cue tables below. Treat "this is important for the exam" as a near-guarantee even if the topic looks minor on the slides.
 5. **Student-provided insider info.** "The Dr said the calculation is coming" — treat as high-value verbal emphasis. Always ask the student for this.
@@ -93,7 +129,7 @@ Never inflate confidence. A student allocating scarce revision time is relying o
 
 ## 3. Reverse-engineering the professor's question style
 
-Before writing predicted questions, extract the *pattern* from past exams + model answers:
+Before writing predicted questions, extract the *pattern* from the past-paper ledger (§0c) + model answers — **separately for each doctor** when more than one teaches the course:
 
 - **Question stems** the professor favors ("Compare…", "Explain the mechanism…", "Given the following data, calculate…", "Identify the organism/medium in the photo and justify…").
 - **Depth expected** — do short-answer questions want 2 lines or 10? Infer from model answers.
@@ -123,6 +159,29 @@ When there's no past-paper style to reverse-engineer, use the question shapes th
 
 If a concept fits no archetype, it's usually lower priority even if it scores well elsewhere — note that rather than forcing an artificial question.
 
+## 3b. Egyptian university exam conventions
+
+Written papers in Egyptian faculties (science, agriculture, pharmacy, medicine, etc.) reuse a small set of stems. Use the doctor's own stems from the ledger when you have them; otherwise default to these. Write predicted questions with these exact stems, and write each model answer the way it is marked — usually one mark per correct point, so the number of points must match the marks.
+
+| Stem | Arabic name students use | What a full-mark answer looks like |
+|---|---|---|
+| **Give reason(s) for…** / Explain why… | علل | One precise cause per item, 1–2 lines each, using the lecture's exact causal wording. No background paragraph. |
+| **Write short notes on…** | اكتب نبذة / short notes | 4–6 points per item: definition → key feature(s) → function/importance → example. A labeled diagram adds marks where the lecture had one. |
+| **Compare between X and Y** | قارن | A table with the lecture's own comparison points (structure, function, location, example…), one row per point. Points of difference only, matched pairwise. |
+| **Define** / What is meant by… | عرّف / ما المقصود | The booklet/slide definition word for word, then one example. |
+| **Put (✓) or (✗) and correct the wrong statement** | صح وخطأ مع التصحيح | Mark plus a corrected sentence that changes only the wrong word. Traps are usually a swapped term, number, or "increase/decrease". |
+| **Correct the underlined word(s)** | صحح ما تحته خط | The single correct term. Usually built from confused pairs — list those pairs in Exam Traps. |
+| **Complete the following** | أكمل | The exact missing term(s) from the slide sentence the item was copied from. |
+| **Choose the correct answer** (MCQ, often a bubble sheet in credit-hour midterms) | اختر | Distractors are near-synonyms, sibling items from the same list, and swapped numbers. |
+| **Draw a labeled diagram of…** | ارسم مع كتابة البيانات | The lecture's diagram with every label it had; marks go to labels. |
+| **Mention / Enumerate…** | اذكر / عدد | Exactly the number of items asked, in the booklet's order and wording. |
+| **What happens when…** / Explain the effect of… | ماذا يحدث | Cause → immediate effect → final consequence, using the mechanism from the lecture. |
+
+Practical points:
+- **Midterms** in credit-hour programs are often MCQ/true-false on paper or electronic forms; **finals** are usually written, "answer all questions," with several stems mixed per question. Predict the paper's skeleton (e.g., "Q1 short notes ×3, Q2 give reasons ×4, Q3 compare, Q4 diagram") from the ledger when possible.
+- When a past question repeats, the usual change is the stem, not the topic (last year "Define X", this year "Write short notes on X"). Predict the topic with the stems the doctor uses, not only last year's exact question.
+- Model answers stay in English (the exam's language) and use the doctor's terminology, not textbook synonyms.
+
 ## 4. Parsing professor transcripts (Arabic & code-switched)
 
 Transcripts are often spoken Arabic with English technical terms mixed in. Read them for meaning, then surface spoken exam cues. Output stays English; attribute as "professor's verbal emphasis."
@@ -140,6 +199,9 @@ Transcripts are often spoken Arabic with English technical terms mixed in. Read 
 | ده أساسي / دي نقطة أساسية | this is fundamental / key point | MEDIUM/HIGH |
 | النقطة دي مهمة | this point is important | MEDIUM |
 | اللي فات ده مش مهم / سيبوا ده | skip this / not important | de-prioritize |
+| محذوف / برا المنهج / مش مقرر / مش هسأل فيها / مش هتيجي | dropped / outside the syllabus / not on the exam | **exclude** — scope ledger (§0a) |
+| اقروها بس / دي للفهم بس / مش للحفظ | just read it / for understanding only | read-only: LOW at most (§0a) |
+| الامتحان لحد المحاضرة دي / لحد هنا | the exam goes up to here | scope cutoff (§0a) |
 
 **English cues** (for English transcripts): "important for the exam," "this will be on the test," "you must know this," "expect a question," "key concept for the exam," "focus your study on," "the most critical part here for the exam is," "guaranteed," "exam alert."
 

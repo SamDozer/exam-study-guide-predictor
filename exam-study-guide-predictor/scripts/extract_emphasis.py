@@ -90,7 +90,8 @@ class Hit:
 
 # ---------------------------------------------------------------- PDF
 
-def scan_pdf(path: Path, include_titles: bool, render_dir: Path | None):
+def scan_pdf(path: Path, include_titles: bool, render_dir: Path | None,
+             ignore_annotations: bool = False):
     try:
         import pymupdf as fitz
     except ImportError:
@@ -136,7 +137,7 @@ def scan_pdf(path: Path, include_titles: bool, render_dir: Path | None):
     body_size = statistics.median(sizes)
     bold_is_normal = bold_chars / total_chars > 0.5
 
-    hits, seen_on_pages = [], defaultdict(set)
+    hits, seen_on_pages, annot_count = [], defaultdict(set), 0
     for pno, (page, spans) in enumerate(pages, start=1):
         link_rects = [fitz.Rect(l["from"]) for l in page.get_links()]
         # thin horizontal strokes = drawn underlines
@@ -149,12 +150,15 @@ def scan_pdf(path: Path, include_titles: bool, render_dir: Path | None):
                         strokes.append(fitz.Rect(min(p1.x, p2.x), p1.y - 1, max(p1.x, p2.x), p1.y + 1))
                 elif item[0] == "re" and item[1].height < 2.5 and item[1].width > 4:
                     strokes.append(item[1])
-        # annotation marks (highlighter / underline / squiggly)
+        # Annotation marks (highlighter / underline / squiggly) sit on top of the
+        # page and are often added by the student, not the professor, so they get
+        # their own tag and can be ignored entirely.
         annot_marks = []
-        for a in page.annots() or []:
-            kind = {8: "HIGHLIGHT", 9: "UNDERLINE", 10: "UNDERLINE"}.get(a.type[0])
+        for a in ([] if ignore_annotations else (page.annots() or [])):
+            kind = {8: "ANNOT-HIGHLIGHT", 9: "ANNOT-UNDERLINE", 10: "ANNOT-UNDERLINE"}.get(a.type[0])
             if kind:
                 annot_marks.append((a.rect, kind))
+                annot_count += 1
 
         page_h = page.rect.height
         for s in spans:
@@ -190,7 +194,8 @@ def scan_pdf(path: Path, include_titles: bool, render_dir: Path | None):
     hits = merge_adjacent(hits)
     meta = {"file": path.name, "pages": n_pages, "body_color": f"{color_name(body_rgb)} {hexcol(body_rgb)}",
             "body_size": round(body_size, 1), "bold_is_normal_text": bold_is_normal,
-            "template_text_dropped": sorted(template), "no_text_pages": no_text_pages}
+            "template_text_dropped": sorted(template), "no_text_pages": no_text_pages,
+            "annotation_marks": "ignored" if ignore_annotations else annot_count}
     return hits, meta
 
 
@@ -284,8 +289,10 @@ def report_md(all_hits, metas) -> str:
     lines = ["# Formatting-emphasis extraction", ""]
     for m in metas:
         lines.append(f"- **{m['file']}** — " + ", ".join(f"{k}: {v}" for k, v in m.items() if k != "file" and v not in ([], None)))
-    lines += ["", "Tags: BOLD, UNDERLINE, HIGHLIGHT (highlighter annotation), COLOR:<name> <hex> "
-              "(off-palette colour vs. the normal body text). Template text repeated on most pages is dropped.", ""]
+    lines += ["", "Tags: BOLD, UNDERLINE, HIGHLIGHT and COLOR:<name> <hex> are part of the slide itself "
+              "(styled by its author). ANNOT-HIGHLIGHT / ANNOT-UNDERLINE are marks drawn on top of a PDF "
+              "and may be the student's own, so weigh them only if the copy came from the professor. "
+              "Template text repeated on most pages is dropped.", ""]
 
     freq = Counter(h.text.lower() for h in all_hits)
     repeated = [(t, c) for t, c in freq.most_common() if c > 1]
@@ -313,13 +320,15 @@ def main():
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--include-titles", action="store_true")
     ap.add_argument("--render-dir", type=Path)
+    ap.add_argument("--ignore-annotations", action="store_true",
+                    help="skip PDF highlight/underline annotations (use when the student marked up the copy)")
     a = ap.parse_args()
 
     all_hits, metas = [], []
     for f in a.files:
         ext = f.suffix.lower()
         if ext == ".pdf":
-            hits, meta = scan_pdf(f, a.include_titles, a.render_dir)
+            hits, meta = scan_pdf(f, a.include_titles, a.render_dir, a.ignore_annotations)
         elif ext == ".pptx":
             hits, meta = scan_pptx(f, a.include_titles)
         else:
