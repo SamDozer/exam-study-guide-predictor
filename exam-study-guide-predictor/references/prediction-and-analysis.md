@@ -77,7 +77,7 @@ Past papers usually circulate as phone photos or scans in student groups — til
 |---|---|---|---|---|---|---|---|
 
 Rules:
-- Read each image directly; rotate/zoom mentally as needed. Keep the professor's wording exactly — the rephrase prediction depends on it.
+- Enhance every photo first with `scripts/enhance_scan.py`, then read it with the two-pass, character-checked method in `references/reading-images.md`. Keep the professor's wording exactly — the rephrase prediction depends on it — and add a reading-status column (checked / corrected / uncertain / illegible) to the ledger.
 - If part of a question is unreadable, write `[illegible]`. Never invent the missing words; a guessed question pollutes every later signal.
 - The same paper often arrives as several photos from different students: merge them and fill gaps from the clearer copy.
 - Note the year of each paper (from the header, the filename, or ask). Undated papers count, but less.

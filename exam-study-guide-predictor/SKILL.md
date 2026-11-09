@@ -33,6 +33,7 @@ The objective is **scoring on this specific exam**, not comprehensive mastery. P
 - **Reads Arabic — including messy transcripts.** Transcripts may be Egyptian Arabic, code-switched with English terms, auto-transcribed with errors, or written in Franco-Arabic (Arabizi) in class-group messages. Catch the exam cues in all of them and fold their substance into English output. §4.
 - **Marks-driven.** Total marks and their split drive everything: how many questions to predict, how deep each answer goes (about one markable point per mark), and how revision time is divided. If the marks are unknown, read them off past papers or ask. §1b.
 - **Read the slides' formatting, not just their words.** Bold, underlined, red/off-palette, or highlighted text usually carries exam weight and is lost in plain text extraction. Always run `scripts/extract_emphasis.py` on every slide/booklet file. §0b.
+- **Photos get extra care.** Phone photos and scans (past papers, handwritten notes, model answers) are enhanced with `scripts/enhance_scan.py` (shadow removal, perspective, contrast, black-and-white, ink-colour layers, zoomed tiles), read twice from different versions, and checked character by character for digits, units, symbols, and scientific plausibility. A misread digit is worse than a missing one. `references/reading-images.md`.
 - **Scope and doctors first.** Know where the exam stops, what was dropped (محذوف / برا المنهج), and which doctor owns which lectures before predicting anything. Nothing dropped ever gets a predicted question. §0a.
 - **Executable, not just informative.** Prediction says *what* is asked; the solving layer (`references/solving-layer.md`) says *how to answer it*. Never stop at "here is what this concept means."
 - **Conditional sections.** Build only the sections the material justifies; never force lab machinery (calculations, spot-ID tables, protocols) onto material that doesn't contain it. List what was checked and skipped so the student knows nothing was missed silently. `references/output-format.md`.
@@ -80,7 +81,7 @@ After intake, read `references/prediction-and-analysis.md` before doing anything
 ### Step 2 — Ingest and analyze
 
 1. **Scope and doctors** (§0a). Write the scope ledger (cutoff, dropped, read-only) and tag every source and topic with its doctor.
-2. **Past-paper ledger** (§0c). Transcribe every past paper — including phone photos — into one table: year, midterm/final, doctor, question, stem type, marks, topic, exact wording. Unreadable parts are `[illegible]`, never guessed.
+2. **Past-paper ledger** (§0c). Transcribe every past paper — including phone photos — into one table: year, midterm/final, doctor, question, stem type, marks, topic, exact wording. For any photo or scan (past papers, handwritten notes, photographed model answers), first run `python scripts/enhance_scan.py <photos> --out scans` and follow `references/reading-images.md`: check quality, read in two independent passes from different versions, verify every digit, unit and symbol, check spelling against the course vocabulary, and give each item a reading status (checked / corrected / uncertain / illegible). Unreadable parts are `[illegible]`, never guessed.
 3. **Purple pass** (§0). Scan transcripts, notes and announcements for explicit exam statements; capture each verbatim with translation, topic, source location, date, and whether it's recorded or reported.
 4. **Formatting-emphasis pass** (§0b). Run `python scripts/extract_emphasis.py <all slide and booklet PDFs/PPTXs> --out emphasis.md --render-dir emphasis_pages` (install `pymupdf python-pptx` if missing; add `--ignore-annotations` if the student marked up their copies). If it can't run, inspect page images instead, and say which method was used.
 5. **Read everything else fully**, chunking large files. Cross-link instead of summarizing each source alone: lecture → booklet → practical step → how it was asked (ledger) → expected answer (model answer).
@@ -106,6 +107,7 @@ Before delivering, verify:
 - every prediction names its signals and source tags; confidence isn't inflated;
 - predicted marks cover the paper per the coverage budget (§1b), split per doctor where relevant;
 - every past-paper photo is in the ledger; every slide file went through the emphasis pass; student annotations weren't counted as the professor's;
+- every photographed page was enhanced and read twice; every uncertain or illegible reading is listed for the student with its photo and tile name; no HIGH prediction rests on an unconfirmed reading; scientific errors found on a page are in the audit, not silently fixed;
 - every outside-source addition is flagged;
 - the solving-layer coverage audit (`solving-layer.md` §17) passes; where a topic has no real example, say so instead of inventing one;
 - the "Checked and skipped" list names every section that didn't activate.

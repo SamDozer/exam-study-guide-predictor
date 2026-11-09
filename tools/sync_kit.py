@@ -22,6 +22,8 @@ PAIRS = [
     (SKILL / "references" / "prediction-and-analysis.md", KIT_SHARED / "references" / "exam_prediction.md"),
     (SKILL / "references" / "solving-layer.md", KIT_SHARED / "references" / "exam_solving.md"),
     (SKILL / "references" / "spaced-repetition.md", KIT_SHARED / "references" / "exam_retention.md"),
+    (SKILL / "references" / "reading-images.md", KIT_SHARED / "references" / "exam_reading_images.md"),
+    (SKILL / "scripts" / "enhance_scan.py", KIT_SHARED / "scripts" / "enhance_scan.py"),
     (SKILL / "scripts" / "extract_emphasis.py", KIT_SHARED / "scripts" / "extract_emphasis.py"),
     (SKILL / "scripts" / "anki_import.py", KIT_SHARED / "scripts" / "anki_import.py"),
 ]

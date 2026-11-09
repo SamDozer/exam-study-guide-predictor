@@ -23,7 +23,7 @@ Create `.learning/<topic-slug>/materials/` and save or reference each source the
 
 ### Step 3 — Scope ledger and past-paper ledger
 
-Following `exam_prediction.md` §0a and §0c: write `.learning/<topic-slug>/materials/scope.md` (cutoff, dropped, read-only, doctors and their lectures/marks), and transcribe every past paper — including photos — into `.learning/<topic-slug>/materials/past_papers.md` (year, midterm/final, doctor, Q no., stem type, marks, topic, exact wording; `[illegible]` instead of guesses).
+Following `exam_prediction.md` §0a and §0c: write `.learning/<topic-slug>/materials/scope.md` (cutoff, dropped, read-only, doctors and their lectures/marks), and transcribe every past paper — including photos — into `.learning/<topic-slug>/materials/past_papers.md` (year, midterm/final, doctor, Q no., stem type, marks, topic, exact wording, reading status; `[illegible]` instead of guesses). For photos and scans, first run `python3 .learning/scripts/enhance_scan.py <photos> --out .learning/<topic-slug>/materials/scans` (`pip install opencv-python-headless numpy` if missing) and follow `.learning/references/exam_reading_images.md`: two independent reading passes, every digit/unit/symbol checked, spelling checked against the course vocabulary, uncertain readings listed for the student.
 
 ### Step 4 — Explicit-marker extraction pass
 
