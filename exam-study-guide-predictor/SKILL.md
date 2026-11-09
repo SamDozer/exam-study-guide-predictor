@@ -1,21 +1,18 @@
 ---
 name: exam-study-guide-predictor
 description: >-
-  Turn a student's own course material into a study guide, a prediction of what
-  the exam will actually ask, and an exam operating manual for how to answer
-  it, optimized for marks. Use whenever the user wants to prepare or revise for
-  an exam, midterm, final, practical, OSPE, or quiz from their lecture slides,
-  the professor's booklet (مذكرة), professor audio/voice-note transcripts
-  (English OR Arabic), past exam papers (including phone photos), model answers,
-  lab manuals, textbook chapters, or class notes — even if they just say "help
-  me study for X", "predict my exam", "make me a revision guide", or upload
-  lecture files. Also use when they ask how to answer exam questions
-  (recognizing question types, structuring answers for marks, avoiding
-  distractors, what to do with limited hours left), or want flashcards / Anki /
-  spaced repetition for an upcoming exam. Built for biology-family courses and
-  Egyptian university exams, but adapts to the material given. Do NOT use for
-  writing an exam, cheating during a live exam, or tutoring unrelated to a
-  specific upcoming assessment.
+  Turn a student's own course material into a study guide, a prediction of
+  what the exam will ask, and a manual for answering it, optimized for marks.
+  Use when the user wants to prepare for an exam, midterm, final, practical,
+  OSPE, or quiz from slides, the professor's booklet, Arabic or English lecture
+  transcripts, past papers (even photos), model answers, lab manuals, or notes
+  — even if they just say "help me study for X", "predict my exam", or upload
+  lecture files. Also use for how to answer exam questions (question types,
+  structuring answers for marks, distractors, limited hours left) or for exam
+  flashcards, Anki, or spaced repetition. Built for biology-family courses and
+  Egyptian university exams; adapts to any material. Do NOT use for writing an
+  exam, cheating during a live exam, or tutoring unrelated to an upcoming
+  assessment.
 ---
 
 # Exam Study Guide & Predictor
