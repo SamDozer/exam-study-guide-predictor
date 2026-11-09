@@ -150,7 +150,10 @@ def load_pdf(path: Path, dpi: int) -> list[tuple[str, np.ndarray, str]]:
                 cover = fitz.Rect(r).intersect(page.rect).get_area() / parea
                 if best is None or cover > best[0]:
                     best = (cover, info[0], fitz.Rect(r).intersect(page.rect))
-        if best and best[0] >= 0.5:
+        # A page with no text layer is just a photo on a blank sheet: take the photo even when it
+        # covers only part of the page (rendering would hand page detection an empty margin).
+        min_cover = 0.15 if not page.get_text().strip() else 0.5
+        if best and best[0] >= min_cover:
             img = _extract_xref(doc, best[1], fitz)
             if img is not None:
                 img = _match_orientation(page, best[2], img)
@@ -251,7 +254,21 @@ def rotate_bound(img: np.ndarray, angle: float) -> np.ndarray:
     nw, nh = int(h * sin + w * cos), int(h * cos + w * sin)
     m[0, 2] += nw / 2 - w / 2
     m[1, 2] += nh / 2 - h / 2
-    return cv2.warpAffine(img, m, (nw, nh), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+    # fill the new corners with the paper colour (copying edge pixels smears streaks)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    paper_px = img[gray >= np.percentile(gray, 80)]
+    fill = tuple(int(c) for c in np.median(paper_px, axis=0)) if len(paper_px) else (255, 255, 255)
+    return cv2.warpAffine(img, m, (nw, nh), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_CONSTANT,
+                          borderValue=fill)
+
+
+def ink_fraction(img: np.ndarray) -> float:
+    """Share of the image covered by character-sized dark marks (≈0 means blank)."""
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    k = 1000 / max(gray.shape)
+    if k < 1:
+        gray = cv2.resize(gray, None, fx=k, fy=k, interpolation=cv2.INTER_AREA)
+    return float(text_mask(gray).mean())
 
 
 # ---------------------------------------------------------------- enhancement
@@ -306,9 +323,9 @@ def red_ink(flat: np.ndarray) -> np.ndarray:
     lab = cv2.cvtColor(flat, cv2.COLOR_BGR2LAB).astype(np.int16)
     chroma = np.hypot(lab[:, :, 1] - 128, lab[:, :, 2] - 128)
     h, s, v = hsv[:, :, 0], hsv[:, :, 1], hsv[:, :, 2]
-    mask = (((h <= 10) | (h >= 160)) & (s >= 60) & (v >= 60) & (chroma >= 25)).astype(np.uint8)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, np.ones((2, 2), np.uint8))
-    return mask > 0
+    # Loose on purpose: red pen fades to pink and thin lines in phone photos. No erosion,
+    # because thin ticks would disappear.
+    return ((h <= 12) | (h >= 155)) & (s >= 35) & (v >= 50) & (chroma >= 15)
 
 
 def ink_layers(flat: np.ndarray, binary: np.ndarray, max_k: int = 4) -> dict[str, np.ndarray]:
@@ -320,7 +337,7 @@ def ink_layers(flat: np.ndarray, binary: np.ndarray, max_k: int = 4) -> dict[str
     """
     masks: dict[str, np.ndarray] = {}
     red = red_ink(flat)
-    if red.sum() >= max(40, int(0.0002 * red.size)):
+    if red.sum() >= 30:
         masks["red"] = red
     ink = (binary == 0) & ~red
     n = int(ink.sum())
@@ -454,7 +471,7 @@ def check_edges(binary: np.ndarray) -> list[str]:
 
 
 def quality(native: np.ndarray, page: np.ndarray, binary: np.ndarray, skew: float,
-            page_found: bool, warp_tried: bool) -> tuple[dict, list[str]]:
+            page_found: bool, warp_tried: bool, residual: float = 0.0) -> tuple[dict, list[str]]:
     gray_native = cv2.cvtColor(native, cv2.COLOR_BGR2GRAY)
     k = 1000 / max(gray_native.shape)
     g = cv2.resize(gray_native, None, fx=k, fy=k, interpolation=cv2.INTER_AREA) if k < 1 else gray_native
@@ -491,10 +508,15 @@ def quality(native: np.ndarray, page: np.ndarray, binary: np.ndarray, skew: floa
     if moire >= 20:
         warn.append("moiré / screen pattern detected (photo of a screen or halftone): "
                     "fine detail may be distorted; ask for the original file if possible")
+    elif moire >= 8:
+        warn.append("possible moiré / screen pattern: check small characters closely in the tiles")
     if edges:
         warn.append(f"text touches the {', '.join(edges)} edge: words there may be cut off; "
                     "mark partial words [cut off] and ask for a wider photo")
-    if abs(skew) > 3:
+    if abs(skew) > 3 and abs(residual) > 2:
+        warn.append(f"page tilted {skew:+.1f} deg and only partly corrected (about {abs(residual):.0f} deg remains: "
+                    "the page was also photographed at an angle); lines near the edges are the least reliable")
+    elif abs(skew) > 3:
         warn.append(f"page tilted {skew:+.1f} deg (corrected in these versions); check lines near the edges")
     if not page_found and warp_tried:
         warn.append("page edges not found: perspective not corrected (fine for flat scans/screenshots)")
@@ -554,11 +576,22 @@ def process(name: str, native: np.ndarray, source: str, out_root: Path, args) ->
         s = min(3.0, WORK_MIN / max(h, w))
         img = cv2.resize(img, (int(w * s), int(h * s)), interpolation=cv2.INTER_CUBIC)
 
+    notes = []
     corners = None if args.no_warp else find_page(img)
     page = warp(img, corners) if corners is not None else img
+    img_ink = ink_fraction(img)
+    if corners is not None and img_ink > 0.0005 and ink_fraction(page) < 0.25 * img_ink:
+        # the detected "page" is an empty area (e.g. the white margin above a photo): ignore it
+        corners, page = None, img
+        notes.append("page detection picked an empty area; redone on the whole photo")
     skew = estimate_skew(page)
+    residual = 0.0
     if 0.7 <= abs(skew) <= 15:
         page = rotate_bound(page, skew)
+        residual = estimate_skew(page)
+    if ink_fraction(page) < 0.0005:
+        notes.append("OUTPUT LOOKS BLANK: no writing was found on this page. Check the original photo "
+                     "before treating the page as empty; never skip it silently")
 
     flat = flatten_illumination(page)
     gray = cv2.cvtColor(flat, cv2.COLOR_BGR2GRAY)
@@ -571,7 +604,9 @@ def process(name: str, native: np.ndarray, source: str, out_root: Path, args) ->
                                  odd(max(25, long_side // 50)), 12)
     sharp = cv2.addWeighted(flat, 1.7, cv2.GaussianBlur(flat, (0, 0), 2.5), -0.7, 0)
     inks = ink_layers(flat, bw_s)
-    q, warnings = quality(native, page, bw_s, skew, corners is not None, not args.no_warp)
+    q, warnings = quality(native, page, bw_s, skew, corners is not None, not args.no_warp, residual)
+    warnings = notes + warnings
+    q["skew_remaining_deg"] = residual
 
     d = out_root / name
     (d / "tiles").mkdir(parents=True, exist_ok=True)

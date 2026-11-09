@@ -191,8 +191,10 @@ def text_page(w: int = 1700, h: int = 2200, paper: int = 255, ink=(20, 20, 20), 
     import numpy as np
 
     page = np.full((h, w, 3), paper, np.uint8)
+    words = line.split()
     for i, y in enumerate(range(150, h - 120, 70)):
-        cv2.putText(page, f"{i + 1}. {line}", (x0, y), cv2.FONT_HERSHEY_SIMPLEX, 1.25, ink, 2, cv2.LINE_AA)
+        text = " ".join(words[i % len(words):] + words[:i % len(words)])  # vary lines like a real page
+        cv2.putText(page, f"{i + 1}. {text}", (x0, y), cv2.FONT_HERSHEY_SIMPLEX, 1.25, ink, 2, cv2.LINE_AA)
     return page
 
 
@@ -294,6 +296,58 @@ def test_scan_flags_moire_pattern(tmp_path):
     img += (28 * np.sin(2 * np.pi * (0.21 * xx + 0.17 * yy)))[:, :, None]
     rep = scan_report(tmp_path, np.clip(img, 0, 255).astype(np.uint8), "moire", "--no-warp")
     assert warned(rep, "moir"), (rep["quality"]["moire"], rep["warnings"])
+
+
+def test_scan_finds_faint_thin_pink_grader_marks(tmp_path):
+    pytest.importorskip("cv2")
+    import cv2
+
+    img = text_page()
+    cv2.line(img, (1450, 300), (1470, 320), (175, 150, 245), 1)   # faded pink tick, 1 px wide
+    cv2.line(img, (1470, 320), (1510, 270), (175, 150, 245), 1)
+    cv2.circle(img, (1480, 700), 28, (175, 150, 245), 1)          # circled score
+    rep = scan_report(tmp_path, img, "faint_ticks", "--no-warp")
+    assert "red" in rep["ink_colors"], rep["ink_colors"]
+
+
+def test_scan_rejects_empty_area_picked_as_page(tmp_path):
+    """Like the PDF page whose photo covers only part of it: the empty white margin must not win."""
+    pytest.importorskip("cv2")
+    import cv2
+    import numpy as np
+
+    canvas = np.full((3000, 2200, 3), 120, np.uint8)
+    cv2.rectangle(canvas, (100, 80), (2100, 1350), (250, 250, 250), -1)           # big empty white area
+    canvas[1450:2950, 300:1900] = cv2.resize(text_page(paper=230), (1600, 1500))  # the real page, smaller
+    rep = scan_report(tmp_path, canvas, "margin")
+    assert not any("BLANK" in w for w in rep["warnings"]), rep["warnings"]
+    bw = cv2.imread(str(tmp_path / "scans" / "margin" / "05_bw_sauvola.png"), cv2.IMREAD_GRAYSCALE)
+    assert (bw < 128).mean() > 0.005  # writing survived
+
+
+def test_scan_warns_loudly_on_blank_output(tmp_path):
+    pytest.importorskip("cv2")
+    import numpy as np
+
+    rep = scan_report(tmp_path, np.full((1600, 1200, 3), 235, np.uint8), "blank", "--no-warp")
+    assert any("BLANK" in w for w in rep["warnings"]), rep["warnings"]
+
+
+def test_scan_pdf_takes_partial_photo_on_textless_page(tmp_path):
+    pytest.importorskip("cv2")
+    pymupdf = pytest.importorskip("pymupdf")
+    import cv2
+
+    ok, jpg = cv2.imencode(".jpg", cv2.resize(text_page(paper=225), (900, 1160)))
+    doc = pymupdf.open()
+    p = doc.new_page(width=595, height=842)
+    p.insert_image(pymupdf.Rect(150, 420, 445, 800), stream=jpg.tobytes())  # ~22% of the page
+    pdf = tmp_path / "quiz.pdf"
+    doc.save(pdf)
+    r = run(SCRIPTS / "enhance_scan.py", pdf, "--out", tmp_path / "scans", "--json")
+    rep = json.loads(r.stdout)[0]
+    assert rep["source"].startswith("embedded photo") and rep["native_size"] == [900, 1160], rep
+    assert not any("BLANK" in w for w in rep["warnings"]), rep["warnings"]
 
 
 def test_scan_pdf_uses_embedded_photo_at_full_resolution(tmp_path):
