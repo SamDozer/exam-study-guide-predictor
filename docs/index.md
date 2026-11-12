@@ -9,6 +9,18 @@ It's a free, open-source [Claude skill](https://docs.claude.com/en/docs/agents-a
 
 [**See a real example →**](examples/environmental-biotechnology/) · [**Install the skill**](https://github.com/SamDozer/exam-study-guide-predictor#install-the-skill) · [**GitHub**](https://github.com/SamDozer/exam-study-guide-predictor)
 
+## Featured: a full midterm guide with the real slides explained
+
+[Open the BtBio 413 midterm guide →](examples/btbio-413-midterm/): built in one night from two lecture PDFs, past midterms and quizzes. Every important slide is shown and explained for the exam: what's tested, every label decoded, life cycles step by step.
+
+![The amoeba invasion slide followed by its five numbered steps explained](images/btbio-slide-steps.jpg)
+
+![Giardia cyst and trophozoite slides side by side with every label decoded](images/btbio-slide-labels-dark.jpg)
+
+![Questions ranked by how often past exams asked them](images/btbio-repeated.jpg)
+
+![Interactive past-paper questions](images/btbio-bank-dark.jpg)
+
 ## A real example
 
 A practical-exam guide for an Environmental Biotechnology course (BTBio 425), made from the lab manuals, lecture transcripts and specimen photos. [Open the full guide](examples/environmental-biotechnology/).

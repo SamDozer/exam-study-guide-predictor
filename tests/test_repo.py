@@ -426,3 +426,32 @@ def test_scan_writes_coverage_inventory_and_flags_blank_pages(tmp_path):
     assert "STOP" in r.stdout
     inv = json.loads((tmp_path / "scans" / "_inventory.json").read_text(encoding="utf-8"))
     assert inv["pages_in"] == 2 and inv["blank"] == ["blank"] and inv["ok"] is False
+
+
+def test_guide_template_has_engine_hooks_and_valid_script(tmp_path):
+    t = (ROOT / "exam-study-guide-predictor" / "assets" / "guide-template.html").read_text(encoding="utf-8")
+    for needle in ['id="bank-mcq"', 'id="bank-retry"', 'id="pred-score"', 'class="plan"', 'id="lb"',
+                   "const BANK_MCQ", "const PRED_MATCH", "--giemsa", "--eosin", "--methylene", "--iodine",
+                   "prefers-color-scheme: dark", "@media print", 'dl class="labels steps"']:
+        assert needle in t, needle
+    skill = (ROOT / "exam-study-guide-predictor" / "SKILL.md").read_text(encoding="utf-8")
+    assert "assets/guide-template.html" in skill and "study-guide-design.md" in skill
+
+
+def test_slide_images_renders_pages_with_manifest_and_stubs(tmp_path):
+    pymupdf = pytest.importorskip("pymupdf")
+    pytest.importorskip("cv2")
+    doc = pymupdf.open()
+    for i in range(3):
+        p = doc.new_page(width=720, height=540)
+        p.insert_text((60, 100), f"Slide {i + 1}: Giardia trophozoite, adhesive disk", fontsize=24)
+        p.draw_rect(pymupdf.Rect(60, 150, 400, 450), color=(0, 0, 1), width=3)
+    pdf = tmp_path / "lec.pdf"
+    doc.save(pdf)
+    r = run(SCRIPTS / "slide_images.py", pdf, "--pages", "1,3", "--lecture", "2", "--out", tmp_path / "slides")
+    assert r.returncode == 0, r.stderr
+    m = json.loads((tmp_path / "slides" / "manifest.json").read_text(encoding="utf-8"))
+    assert [x["slide"] for x in m] == [1, 3] and m[0]["width"] == 1400
+    assert "adhesive disk" in m[0]["text"]
+    stub = (tmp_path / "slides" / "L2_s003.html").read_text(encoding="utf-8")
+    assert stub.startswith('<figure class="fig"><img src="data:image/jpeg;base64,') and "LECTURE 2 · SLIDE 3" in stub

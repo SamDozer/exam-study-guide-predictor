@@ -17,6 +17,23 @@
   <br><em>A real guide made by the skill for an Environmental Biotechnology practical exam. <a href="https://samdozer.github.io/exam-study-guide-predictor/examples/environmental-biotechnology/">Open the full example →</a></em>
 </p>
 
+## Featured example: a full midterm guide with the real slides explained
+
+**[Open the BtBio 413 midterm guide →](https://samdozer.github.io/exam-study-guide-predictor/examples/btbio-413-midterm/)** (Infectious & Parasitic Diseases, Lectures 1–2). Built in one night from two lecture PDFs, two past midterms, five quizzes, class notes and a revision sheet, with an exam the next afternoon.
+
+| The lecture slide, then what it means for the exam | Labels on the diagram, decoded |
+|---|---|
+| [![A lecture slide of the amoeba invasion diagram, followed by its five numbered steps explained and a must-know box](docs/images/btbio-slide-steps.jpg)](https://samdozer.github.io/exam-study-guide-predictor/examples/btbio-413-midterm/#l1) | [![Two slides side by side, the Giardia cyst and trophozoite, with every label on the drawings decoded and a box showing how a past exam tested it](docs/images/btbio-slide-labels-dark.jpg)](https://samdozer.github.io/exam-study-guide-predictor/examples/btbio-413-midterm/#l1) |
+| **Life cycles step by step, infective and diagnostic stages marked** | **Questions ranked by how often they were asked** |
+| [![The CDC Leishmania life cycle slide with each numbered step explained](docs/images/btbio-life-cycle.jpg)](https://samdozer.github.io/exam-study-guide-predictor/examples/btbio-413-midterm/#l2) | [![Repeated questions ranked by count, with the papers that asked them](docs/images/btbio-repeated.jpg)](https://samdozer.github.io/exam-study-guide-predictor/examples/btbio-413-midterm/#hot) |
+| **Tonight's plan from the real clock, with tick boxes** | **Every past question, tap to answer** |
+| [![A study plan from 1:25 to 5:30 am with breaks and sleep](docs/images/btbio-plan-dark.jpg)](https://samdozer.github.io/exam-study-guide-predictor/examples/btbio-413-midterm/#plan) | [![Interactive past-paper questions with the accepted answer and why](docs/images/btbio-bank-dark.jpg)](https://samdozer.github.io/exam-study-guide-predictor/examples/btbio-413-midterm/#bank) |
+
+**What makes it work**, and what the skill now does by default (`assets/guide-template.html`, `references/study-guide-design.md`):
+- **The real slides, explained for the exam.** Each important slide is shown, then explained: what's tested on it and how, every label decoded (AD = adhesive disk…), and numbered steps with infective/diagnostic stages marked. Slide images come from `scripts/slide_images.py`.
+- **Colours named after lab stains, one meaning each:** Giemsa purple = what the professor said or keyed, eosin = repeated in past papers, methylene blue = must know, iodine amber = trap, grey = low yield, dashed = outside the slides. Light and dark themes.
+- **Built for the night before:** a plan built from the real time, the professor's question habits, past papers with where their answers came from, comparison tables, traps, a past-paper bank and practice questions with confidence tags, and a last-30-minutes sheet.
+
 ## See it in action
 
 | Predicted questions with model answers | Calculations solved step by step |
@@ -96,6 +113,11 @@ Everything added since the original skill (July 2026), by area:
 **Retention (optional, always asked first)**
 - **Anki** ([#3](https://github.com/SamDozer/exam-study-guide-predictor/pull/3)): atomic cards written in exam wording, with source tags and course/doctor/lecture/confidence tags, capped by days left. You get a CSV, or `anki_import.py` pushes them through AnkiConnect (preview first, `--push` to add, duplicates skipped). [anki-skill](https://github.com/doasfrancisco/anki-skill) is recommended for single cards while you study.
 - **Enhanced Learn FASTER** ([#3](https://github.com/SamDozer/exam-study-guide-predictor/pull/3)): the ExamForge kit, merged in and updated to the same method as the skill (scope, doctors, ledger, emphasis pass, optional Anki), with a hand-off file from the skill.
+
+**The study guide itself** ([#11](https://github.com/SamDozer/exam-study-guide-predictor/pull/11))
+- **House template** based on the best guide so far: slide cards with the real slide, its exam angle, decoded labels and numbered steps; stain-named colours with one meaning each; plan, brief, repeated list, comparison tables, traps, last-30-minutes sheet.
+- **Fixes over that guide:** repeat counts by distinct sitting; readable step badges instead of tiny circled digits; the quiz score is out of the total and survives reloads; "Retry wrong ones"; a print layout with answers shown; zoomable slides; source tags no longer run into sentences.
+- `scripts/slide_images.py` renders the chosen lecture slides into compressed images plus ready slide-card HTML.
 
 **Housekeeping**
 - ExamForge merged in and archived ([#3](https://github.com/SamDozer/exam-study-guide-predictor/pull/3)); description fitted to claude.ai's upload limit ([#4](https://github.com/SamDozer/exam-study-guide-predictor/pull/4)); `tools/sync_kit.py` keeps the kit identical to the skill; tests cover the sync, the Anki importer, the emphasis extractor and the skill's upload limits.
