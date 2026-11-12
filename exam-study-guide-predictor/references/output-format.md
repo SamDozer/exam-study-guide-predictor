@@ -46,6 +46,8 @@ The guide is built as nested compressions; each later layer is derived from the 
 
 ## Color coding (consistent across HTML and docx)
 
+> **HTML guides use the stain palette in `study-guide-design.md` §2** (giemsa purple = professor's statements and official keys, eosin = repeated / HIGH, methylene blue = must know, iodine amber = trap, grey = low yield, dashed = outside slides). The list below is the same scheme in plain colour names, for .docx and older guides.
+
 - 🟣 **Purple (solid)** — the professor's *recorded* explicit exam statements, quoted verbatim. Facts, not predictions. Highest priority.
 - 🟣 **Purple (outline)** — *reported* statements ("a classmate says the Dr said…"), with who reported them. Superseded statements are struck through.
 - 🔴 **Red** — Exam Alerts, Traps, HIGH-confidence *predictions*, "we think this is coming."
@@ -61,7 +63,7 @@ Never let these blur: a prediction must never look like a professor statement (r
 
 ## HTML template
 
-Self-contained single file, internal CSS, collapsible sections, sticky clickable TOC. Skeleton:
+**Use `assets/guide-template.html`** (the house template: colours, slide cards, plan, quiz engine with retry and saved progress, print layout, zoomable lightbox) together with `study-guide-design.md`. The skeleton below is only a minimal fallback for environments where the template file isn't available. Self-contained single file, internal CSS, collapsible sections, sticky clickable TOC:
 
 ```html
 <!DOCTYPE html>

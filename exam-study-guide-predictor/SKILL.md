@@ -101,7 +101,7 @@ Read `references/solving-layer.md` and build the execution half: question-type r
 
 ### Step 5 — Build the deliverable
 
-Read `references/output-format.md` for the section catalog (what activates when), colour coding, and the HTML/.docx templates. Assemble only the justified sections, ordered by marks, grouped by doctor when several teach the course.
+**HTML (default): start from `assets/guide-template.html` and follow `references/study-guide-design.md`.** That is the house style: stain-named colours with one fixed meaning each, a tonight's plan built from the real clock, and per-lecture **slide cards** (the real slide rendered with `scripts/slide_images.py`, then its exam angle, decoded labels and numbered steps). It also has interactive past-paper and practice banks. Read `references/output-format.md` for the section catalog (what activates when) and the .docx route. Assemble only the justified sections, ordered by marks, grouped by doctor when several teach the course.
 
 ### Step 6 — Self-check and coverage audit
 

@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>[COURSE CODE] Midterm Guide</title>
+<!--
+  exam-study-guide-predictor · house template (based on the BtBio 413 guide).
+  Fill every [PLACEHOLDER], delete sections that did not activate (and their nav chip),
+  keep the class names: the colours, quiz engine, plan ticks and lightbox depend on them.
+  See references/study-guide-design.md for what goes in each section.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,700;1,500&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Colours are named after lab stains. Meaning is fixed across every guide:
+   giemsa (purple) = what the professor said / official answer key  (fact)
+   eosin  (rose)   = repeated in past papers, HIGH prediction        (hot)
+   methylene (blue)= must know                                        (core)
+   iodine (amber)  = trap / distractor                                (warning)
+   extra  (grey)   = low yield, collapsed by default
+   dashed outline  = outside the slides (flag, never mix with course material) */
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --sunk:#f2f0f5; --fg:#1d1b24; --muted:#5d5869; --line:#e2dee8;
+  --giemsa:#6b2fa3; --giemsa-bg:#f3ecfa;
+  --eosin:#c2264f; --eosin-bg:#fdecf0;
+  --methylene:#1f5fa8; --methylene-bg:#e9f1fb;
+  --iodine:#9a5b00; --iodine-bg:#fdf3e1;
+  --extra:#7a7684; --extra-bg:#f1f0f3;
+  --ok:#1d7a4a; --ok-bg:#e6f5ec; --bad:#b3261e; --bad-bg:#fcebea;
+  --f-display:"Spectral", Georgia, "Times New Roman", serif;
+  --f-body:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#15131a; --surface:#1d1a24; --sunk:#24202d; --fg:#ece8f3; --muted:#a7a0b5; --line:#352f40;
+  --giemsa:#c79bf2; --giemsa-bg:#2c2040; --eosin:#ff7d9c; --eosin-bg:#3a1a24; --methylene:#86b6f0; --methylene-bg:#172a42;
+  --iodine:#f0b65a; --iodine-bg:#35270f; --extra:#9a95a5; --extra-bg:#25222b; --ok:#6fd39c; --ok-bg:#16301f; --bad:#ff8a80; --bad-bg:#3a1a18; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#15131a; --surface:#1d1a24; --sunk:#24202d; --fg:#ece8f3; --muted:#a7a0b5; --line:#352f40;
+  --giemsa:#c79bf2; --giemsa-bg:#2c2040; --eosin:#ff7d9c; --eosin-bg:#3a1a24; --methylene:#86b6f0; --methylene-bg:#172a42;
+  --iodine:#f0b65a; --iodine-bg:#35270f; --extra:#9a95a5; --extra-bg:#25222b; --ok:#6fd39c; --ok-bg:#16301f; --bad:#ff8a80; --bad-bg:#3a1a18; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:900px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-right,0px)) 64px max(16px,env(safe-area-inset-left,0px))}
+header.top{padding-block:28px 8px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--f-display);font-size:clamp(30px,5vw,44px);line-height:1.1;margin:6px 0 10px;text-wrap:balance}
+h2{font-family:var(--f-display);font-size:28px;line-height:1.2;margin:56px 0 6px;text-wrap:balance;scroll-margin-top:70px}
+h3{font-family:var(--f-display);font-size:21px;margin:36px 0 8px;text-wrap:balance;scroll-margin-top:70px}
+h4{font-size:15px;margin:18px 0 6px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+p{margin:8px 0}
+.lede{color:var(--muted);max-width:65ch}
+nav.chips{position:sticky;top:0;z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.chips .in{max-width:900px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+nav.chips a{flex:none;font-size:13px;font-weight:600;text-decoration:none;color:var(--fg);background:var(--sunk);padding:6px 11px;border-radius:999px;white-space:nowrap}
+nav.chips a:hover,nav.chips a:focus-visible{background:var(--giemsa-bg);color:var(--giemsa);outline:none}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.tag{display:inline-flex;align-items:center;gap:4px;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.03em;padding:2px 8px;border-radius:4px;white-space:nowrap;vertical-align:2px;max-width:100%}
+.t-hot{background:var(--eosin-bg);color:var(--eosin)}
+.t-must{background:var(--methylene-bg);color:var(--methylene)}
+.t-key{background:var(--giemsa-bg);color:var(--giemsa)}
+.t-trap{background:var(--iodine-bg);color:var(--iodine)}
+.t-extra{background:var(--extra-bg);color:var(--extra)}
+.t-out{border:1px dashed var(--muted);color:var(--muted);white-space:normal}
+a{color:var(--methylene)}
+.box{border-radius:8px;padding:12px 16px;margin:14px 0}
+.box>:first-child{margin-top:0}.box>:last-child{margin-bottom:0}
+.b-hot{background:var(--eosin-bg);border-left:4px solid var(--eosin)}
+.b-must{background:var(--methylene-bg);border-left:4px solid var(--methylene)}
+.b-key{background:var(--giemsa-bg);border-left:4px solid var(--giemsa)}
+.b-trap{background:var(--iodine-bg);border-left:4px solid var(--iodine)}
+.b-out{border:1px dashed var(--muted);color:var(--muted);font-size:14.5px}
+.box h4{margin-top:0;color:inherit}
+.b-hot h4{color:var(--eosin)}.b-must h4{color:var(--methylene)}.b-key h4{color:var(--giemsa)}.b-trap h4{color:var(--iodine)}
+ul{padding-left:20px;margin:6px 0} li{margin:3px 0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.grid2>*{min-width:0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.stat b{font-family:var(--f-display);font-size:26px;display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+/* slide cards: the real slide + what it means for the exam */
+figure.fig{margin:18px 0;background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+figure.fig img{display:block;width:100%;height:auto;cursor:zoom-in;background:#fff}
+figure.fig figcaption{padding:10px 14px 12px;font-size:14.5px;border-top:1px solid var(--line)}
+figure.fig figcaption .src{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);display:block;margin-bottom:2px}
+.figrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:14px}
+.figrow>figure{margin:0}
+dl.labels{display:grid;grid-template-columns:max-content 1fr;gap:4px 10px;margin:8px 0 0;font-size:14px;align-items:baseline}
+dl.labels dt{font-family:var(--f-mono);font-weight:500;color:var(--giemsa)}
+dl.labels dd{margin:0}
+/* numbered steps on a diagram: readable badges, not tiny circled digits */
+dl.labels.steps dt{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:var(--giemsa-bg);font-size:12.5px}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:var(--sunk);font-weight:700;font-size:13px}
+tr:last-child td{border-bottom:none}
+td:first-child{font-weight:600}
+details.extra{border:1px solid var(--line);border-radius:8px;margin:14px 0;background:var(--surface)}
+details.extra summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--extra);list-style:none}
+details.extra summary::before{content:"+ ";font-family:var(--f-mono)}
+details.extra[open] summary::before{content:"- "}
+details.extra .in{padding:0 14px 12px;color:var(--muted);font-size:14.5px}
+/* repeated list */
+ol.hot{list-style:none;padding:0;margin:14px 0;display:grid;gap:8px}
+ol.hot li{display:grid;grid-template-columns:60px 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:0}
+ol.hot .n{font-family:var(--f-display);font-weight:700;font-size:22px;color:var(--eosin);text-align:center;line-height:1.1;font-variant-numeric:tabular-nums}
+ol.hot .n small{display:block;font-family:var(--f-mono);font-size:10px;font-weight:500;color:var(--muted);letter-spacing:.04em}
+ol.hot .q{min-width:0}
+ol.hot .q b{display:block}
+ol.hot .q .s{display:block;margin-top:4px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+/* quiz */
+.qtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+button{font:inherit;cursor:pointer}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:6px 12px;font-size:14px;font-weight:600}
+.btn:hover{border-color:var(--giemsa);color:var(--giemsa)}
+.btn:focus-visible,.opt:focus-visible{outline:2px solid var(--giemsa);outline-offset:2px}
+.score{font-family:var(--f-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0}
+.qhead{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:4px}
+.qnum{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.qtext{font-weight:600;margin:4px 0 8px}
+.opts{display:grid;gap:6px}
+.opt{text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:6px;padding:7px 10px;font-size:14.5px}
+.opt:hover{border-color:var(--methylene)}
+.opt.right{background:var(--ok-bg);border-color:var(--ok)}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad)}
+.why{margin-top:8px;font-size:14px;padding:8px 10px;border-radius:6px;background:var(--sunk)}
+.why .flag{display:block;margin-top:6px;color:var(--iodine);font-weight:600}
+.mwrap{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:620px){.mwrap{grid-template-columns:1fr}.mwrap ol.mopts{order:-1}}
+.mitems .mrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:8px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line)}
+.mitems .mrow label{font-size:14.5px;font-weight:600}
+.mitems select{font:inherit;font-size:14px;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--fg);width:100%;min-width:0}
+.mitems select.right{border-color:var(--ok);background:var(--ok-bg)}
+.mitems select.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.mres{grid-column:1/-1;font-size:13px;font-weight:600}
+.mres.ok{color:var(--ok)}.mres.no{color:var(--bad)}
+ol.mopts{list-style:none;margin:0;padding:10px 12px;background:var(--sunk);border-radius:6px;font-size:14px}
+/* rapid sheet */
+.rapid{columns:2 300px;column-gap:28px;font-size:14.5px}
+.rapid>div{break-inside:avoid;margin-bottom:12px}
+.rapid h4{margin:0 0 4px;color:var(--methylene)}
+.ask li{margin:8px 0}
+/* plan */
+.plan{list-style:none;padding:0;margin:14px 0;display:grid;gap:8px}
+.plan li{display:grid;grid-template-columns:auto 96px 1fr;gap:10px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:0}
+.plan li.brk{background:var(--sunk);border-style:dashed}
+.plan input{width:18px;height:18px;margin-top:3px;accent-color:var(--giemsa)}
+.plan .t{font-family:var(--f-mono);font-size:13px;font-weight:500;color:var(--giemsa);font-variant-numeric:tabular-nums;padding-top:2px}
+.plan .d{min-width:0;font-size:14.5px}
+.plan .d b{display:block;font-size:15px}
+.plan li:has(input:checked) .d{opacity:.55}
+.plan li:has(input:checked) .d b{text-decoration:line-through}
+@media (max-width:480px){.plan li{grid-template-columns:auto 1fr}.plan .t,.plan .d{grid-column:2}}
+/* lightbox: tap to zoom in, drag/pinch to pan, tap outside or Esc to close */
+#lb{position:fixed;inset:0;z-index:50;background:rgba(10,8,14,.9);overflow:auto;display:grid;place-items:center;padding:16px;cursor:zoom-out}
+#lb img{max-width:100%;max-height:calc(100vh - 32px);border-radius:6px;background:#fff;cursor:zoom-in}
+#lb.zoom img{max-width:none;max-height:none;width:200%;cursor:zoom-out}
+#lb .hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);color:#fff;font:12px var(--f-mono);opacity:.75}
+@media (prefers-reduced-motion:no-preference){.opt,.btn,nav.chips a{transition:background .15s,border-color .15s,color .15s}}
+footer{margin-top:60px;font-size:13px;color:var(--muted)}
+/* print: answers visible, extras open, no navigation or buttons */
+@media print{
+  nav.chips,.qtools,#lb,.plan input{display:none!important}
+  body{background:#fff;color:#000;font-size:12pt}
+  .why[hidden],.mres[hidden]{display:block!important}
+  details.extra>.in{display:block!important}
+  figure.fig,.qcard,.box,ol.hot li,.plan li{break-inside:avoid}
+  h2{break-after:avoid}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<nav class="chips" aria-label="Sections"><div class="in">
+  <a href="#plan">Tonight's plan</a><a href="#brief">Exam brief</a><a href="#repeated">Repeated Qs</a>
+  <a href="#l1">[Lecture 1]</a><a href="#compare">Compare tables</a><a href="#traps">Traps</a>
+  <a href="#bank">Past-paper bank</a><a href="#pred">Practice Qs</a><a href="#last30">Last 30 min</a><a href="#improve">Help me improve</a>
+</div></nav>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">[COURSE CODE] · [COURSE NAME] · [MIDTERM/FINAL]</div>
+  <h1>[Lectures covered]: what will be asked, and how</h1>
+  <p class="lede">Built from [list every source]. [What is out of scope and why.]</p>
+  <div class="legend"><span class="tag t-hot">REPEATED ×n</span><span class="tag t-must">MUST KNOW</span><span class="tag t-key">PROF'S ANSWER KEY</span><span class="tag t-trap">TRAP</span><span class="tag t-extra">EXTRA / LOW YIELD</span><span class="tag t-out">OUTSIDE SLIDES</span></div>
+  <p class="lede">Tap any slide image to enlarge it.</p>
+</header>
+
+<h2 id="plan">Tonight's plan</h2>
+<p class="lede">[Built from the real clock and exam time: hours available, breaks, sleep. Ticks stay in this browser.]</p>
+<ol class="plan">
+  <li><input type="checkbox" id="p1" aria-label="Done"><span class="t">[HH:MM-HH:MM]</span><span class="d"><b>[Block title]</b>[What exactly to do, with links to sections.]</span></li>
+  <li class="brk"><input type="checkbox" id="p2" aria-label="Done"><span class="t">[HH:MM]</span><span class="d"><b>Break</b>Stand up, water, no phone scrolling.</span></li>
+</ol>
+
+<h2 id="brief">Exam brief</h2>
+<div class="grid2">
+  <div class="stat"><b>[~N marks]</b><span>[likely paper shape, e.g. 10 MCQ + 5 T/F + 5 matching]</span></div>
+  <div class="stat"><b>[N vs M]</b><span>[past-paper items per lecture, and what that implies]</span></div>
+</div>
+<div class="box b-key"><h4>How this professor writes questions</h4><ul><li>[stems, distractor habits, wording rules, from the past-paper ledger]</li></ul></div>
+<div class="box b-must"><h4>Where the past papers came from</h4><ul><li><b>[CODE]</b>: [paper, date, marks, layout, key provenance: official key / graded copy / student answers]</li></ul></div>
+
+<h2 id="repeated">The repeated questions</h2>
+<p class="lede">Ranked by how many <b>distinct exam sittings</b> asked them (versions of one quiz and copies on revision sheets count once).</p>
+<ol class="hot">
+  <li><span class="n">×[n]<small>SITTINGS</small></span><span class="q"><b>[The fact, phrased as the answer]</b>[How it was asked.]<span class="s">[M22 · Q2 · M23]</span></span></li>
+</ol>
+
+<h2 id="l1">[Lecture 1 · Title]</h2>
+<h3>[1.1 Topic]</h3>
+<!-- SLIDE CARD: the real slide, then what it means for the exam. See study-guide-design.md §3. -->
+<figure class="fig"><img src="[data:image/jpeg;base64,... from scripts/slide_images.py]" alt="[what the slide shows]">
+<figcaption><span class="src">LECTURE 1 · SLIDE [n] · [TOPIC]</span>[Exam angle: what is tested here and how, in one or two lines, bold the answerable words.]
+<dl class="labels"><dt>[AD]</dt><dd>[what the label means]</dd></dl>
+<dl class="labels steps"><dt>1</dt><dd>[first step of the cycle/diagram]</dd></dl>
+</figcaption></figure>
+<div class="box b-must"><h4>Must know: [topic]</h4><ul><li>[fact] <span class="tag t-key">[source]</span></li></ul></div>
+<div class="box b-key"><h4>Professor's key: [question]</h4><p>[accepted answer and its evidence]</p></div>
+<div class="box b-trap"><h4>Trap</h4><p>[the swapped word / distractor and the fix]</p></div>
+<div class="box b-out"><b>Outside slides:</b> [minimal clarification, with confidence]</div>
+<details class="extra"><summary>Extra / low yield: [what]</summary><div class="in">[details]</div></details>
+
+<h2 id="compare">Comparison tables</h2>
+<div class="tbl"><table><thead><tr><th></th><th>[A]</th><th>[B]</th></tr></thead><tbody><tr><td>[feature]</td><td>[..]</td><td>[..]</td></tr></tbody></table></div>
+
+<h2 id="traps">Traps the distractors are built on</h2>
+<div class="box b-trap"><ul><li>[trap and fix]</li></ul></div>
+
+<h2 id="bank">Past-paper bank</h2>
+<p class="lede">Every in-scope question from your papers, with the accepted answer. Tap an option to check yourself.</p>
+<div class="qtools"><button class="btn" type="button" id="bank-reveal">Show all answers</button><button class="btn" type="button" id="bank-retry">Retry wrong ones</button><button class="btn" type="button" id="bank-reset">Reset</button><span class="score" id="bank-score"></span></div>
+<h3>MCQ</h3><div id="bank-mcq"></div>
+<h3>True / False (underline the wrong part)</h3><div id="bank-tf"></div>
+<h3>Matching sets</h3><div id="bank-match"></div>
+
+<h2 id="pred">Practice questions</h2>
+<p class="lede">New questions in the professor's style on slide facts not asked yet. Confidence tags say how likely the topic is.</p>
+<div class="qtools"><button class="btn" type="button" id="pred-reveal">Show all answers</button><button class="btn" type="button" id="pred-retry">Retry wrong ones</button><button class="btn" type="button" id="pred-reset">Reset</button><span class="score" id="pred-score"></span></div>
+<h3>MCQ</h3><div id="pred-mcq"></div>
+<h3>True / False</h3><div id="pred-tf"></div>
+<h3>Matching</h3><div id="pred-match"></div>
+
+<h2 id="last30">Last 30 minutes before the exam</h2>
+<div class="rapid"><div><h4>[Topic]</h4>[the decisive facts only]</div></div>
+
+<h2 id="improve">Help me improve this guide</h2>
+<ol class="ask"><li>[questions whose answers would change the prediction]</li></ol>
+
+<footer>Sources: [files]. Slide images reproduced from your lecture files for personal study.</footer>
+</div>
+<div id="lb" hidden><img alt=""><span class="hint">tap image to zoom · tap outside or Esc to close</span></div>
+
+<script>
+/* ---------- DATA: fill these arrays (keep the field names) ----------
+   MCQ:   {q, o:[4 options], a:index, s:"sources", n:sittings, w:"why", f:"flag (optional)", c:"HIGH|MEDIUM|LOW" (practice only)}
+   T/F:   {s:"statement", t:true|false, u:"wrong part to underline", fix:"correction", src:"source", w, f, c}
+   Match: {title, rows:[[item, answer],...], x:[extra distractors]}                                   */
+const BANK_MCQ = [];
+const BANK_TF = [];
+const BANK_MATCH = [];
+const PRED_MCQ = [];
+const PRED_TF = [];
+const PRED_MATCH = [];
+
+/* ---------- engine ---------- */
+const KEY = "guide:" + location.pathname + ":";
+const store = { get(k){ try { return JSON.parse(localStorage.getItem(KEY + k)); } catch(e){ return null; } },
+                set(k, v){ try { localStorage.setItem(KEY + k, JSON.stringify(v)); } catch(e){} } };
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const tagC = c => c === "HIGH" ? "t-hot" : c === "MEDIUM" ? "t-must" : "t-extra";
+const esc = s => String(s).replace(/[&<>"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
+const L = "abcdefghijklmnop";
+
+function score(scope, total){
+  const st = store.get(scope) || {};
+  const vals = Object.values(st);
+  const answered = vals.length, ok = vals.filter(v => v === 1).length;
+  document.getElementById(scope + "-score").textContent =
+    `${ok} correct · ${answered - ok} wrong · ${total - answered} not tried (of ${total})`;
+}
+function mark(scope, id, good, total){ const st = store.get(scope) || {}; st[id] = good ? 1 : 0; store.set(scope, st); score(scope, total); }
+
+function mcqCard(item, i, scope, prefix, total){
+  const id = "m" + i, d = document.createElement("div"); d.className = "qcard"; d.dataset.id = id;
+  const tag = item.c ? `<span class="tag ${tagC(item.c)}">${item.c}</span>`
+    : `<span class="tag t-key">${esc(item.s)}</span>${item.n > 1 ? ` <span class="tag t-hot">×${item.n}</span>` : ""}`;
+  d.innerHTML = `<div class="qhead"><span class="qnum">${prefix}MCQ ${i + 1}</span>${tag}</div><div class="qtext">${esc(item.q)}</div><div class="opts"></div><div class="why" hidden></div>`;
+  const opts = d.querySelector(".opts"), why = d.querySelector(".why");
+  why.innerHTML = `<b>Answer: ${"ABCD"[item.a]}. ${esc(item.o[item.a])}</b><br>${esc(item.w || "")}${item.f ? `<span class="flag">⚠ ${esc(item.f)}</span>` : ""}`;
+  const show = picked => { opts.children[item.a].classList.add("right"); if (picked != null && picked !== item.a) opts.children[picked].classList.add("wrong"); why.hidden = false; };
+  item.o.forEach((o, k) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "opt"; b.textContent = `${"ABCD"[k]}. ${o}`;
+    b.addEventListener("click", () => { if (d.dataset.done) return; d.dataset.done = "1"; show(k); mark(scope, id, k === item.a, total); });
+    opts.appendChild(b);
+  });
+  d.reveal = () => show(null);
+  return d;
+}
+function tfCard(item, i, scope, prefix, total){
+  const id = "t" + i, d = document.createElement("div"); d.className = "qcard"; d.dataset.id = id;
+  const tag = item.c ? `<span class="tag ${tagC(item.c)}">${item.c}</span>` : `<span class="tag t-key">${esc(item.src)}</span>`;
+  d.innerHTML = `<div class="qhead"><span class="qnum">${prefix}T/F ${i + 1}</span>${tag}</div><div class="qtext">${esc(item.s)}</div><div class="opts" style="grid-template-columns:1fr 1fr"></div><div class="why" hidden></div>`;
+  const opts = d.querySelector(".opts"), why = d.querySelector(".why");
+  why.innerHTML = (item.t ? `<b>TRUE.</b> ` : `<b>FALSE.</b> Underline: <u>${esc(item.u)}</u> → correct: <b>${esc(item.fix)}</b>. `) + esc(item.w || "") + (item.f ? `<span class="flag">⚠ ${esc(item.f)}</span>` : "");
+  const show = v => { opts.children[item.t ? 0 : 1].classList.add("right"); if (v != null && v !== item.t) opts.children[v ? 0 : 1].classList.add("wrong"); why.hidden = false; };
+  [true, false].forEach(v => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "opt"; b.textContent = v ? "True" : "False";
+    b.addEventListener("click", () => { if (d.dataset.done) return; d.dataset.done = "1"; show(v); mark(scope, id, v === item.t, total); });
+    opts.appendChild(b);
+  });
+  d.reveal = () => show(null);
+  return d;
+}
+function matchCard(set, j, scope, total){
+  const id = "x" + j, d = document.createElement("div"); d.className = "qcard"; d.dataset.id = id;
+  const opts = shuffle(set.rows.map(r => r[1]).concat(set.x || []));
+  const list = opts.map((o, i) => `<li><b>${L[i]}.</b> ${esc(o)}</li>`).join("");
+  const rows = set.rows.map((r, i) => `<div class="mrow"><label for="${scope}-${id}-${i}">${i + 1}. ${esc(r[0])}</label><select id="${scope}-${id}-${i}"><option value="">Choose…</option>${opts.map((o, k) => `<option value="${k}">${L[k]}. ${esc(o)}</option>`).join("")}</select><span class="mres" hidden></span></div>`).join("");
+  d.innerHTML = `<div class="qhead"><span class="tag t-key">${esc(set.title)}</span><span class="qnum">Column A → Column B</span></div><div class="mwrap"><div class="mitems">${rows}</div><ol class="mopts" aria-label="Column B options">${list}</ol></div><div class="qtools"><button class="btn" type="button" data-act="check">Check</button><button class="btn" type="button" data-act="show">Show matches</button><span class="score mscore"></span></div>`;
+  const sels = [...d.querySelectorAll("select")], res = [...d.querySelectorAll(".mres")];
+  const grade = reveal => {
+    let ok = 0;
+    set.rows.forEach((r, i) => {
+      const right = opts.indexOf(r[1]), pick = sels[i].value === "" ? -1 : +sels[i].value, good = pick === right;
+      if (good) ok++;
+      if (reveal) sels[i].value = String(right);
+      sels[i].classList.toggle("right", good || reveal); sels[i].classList.toggle("wrong", !good && !reveal);
+      res[i].hidden = false; res[i].className = "mres " + (good || reveal ? "ok" : "no");
+      res[i].textContent = reveal ? `${L[right]}. ${r[1]}` : good ? "✓ correct" : pick < 0 ? `blank → ${L[right]}. ${r[1]}` : `✗ → ${L[right]}. ${r[1]}`;
+    });
+    d.querySelector(".mscore").textContent = reveal ? "" : `${ok} / ${set.rows.length}`;
+    sels.forEach(s => s.disabled = true);
+    if (!reveal && !d.dataset.done) { d.dataset.done = "1"; mark(scope, id, ok === set.rows.length, total); }
+  };
+  d.querySelector('[data-act="check"]').addEventListener("click", () => grade(false));
+  d.querySelector('[data-act="show"]').addEventListener("click", () => grade(true));
+  d.reveal = () => grade(true);
+  return d;
+}
+function build(scope, mcq, tf, match, prefix, only){
+  const total = mcq.length + tf.length + match.length;
+  const els = ["mcq", "tf", "match"].map(k => document.getElementById(`${scope}-${k}`));
+  els.forEach(e => e.innerHTML = "");
+  const keep = id => !only || only.has(id);
+  mcq.forEach((q, i) => keep("m" + i) && els[0].appendChild(mcqCard(q, i, scope, prefix, total)));
+  tf.forEach((q, i) => keep("t" + i) && els[1].appendChild(tfCard(q, i, scope, prefix, total)));
+  match.forEach((s, j) => keep("x" + j) && els[2].appendChild(matchCard(s, j, scope, total)));
+  score(scope, total);
+}
+function wire(scope, mcq, tf, match, prefix){
+  if (!document.getElementById(scope + "-mcq")) return;
+  build(scope, mcq, tf, match, prefix);
+  const all = () => ["mcq", "tf", "match"].flatMap(k => [...document.getElementById(`${scope}-${k}`).children]);
+  document.getElementById(scope + "-reveal").addEventListener("click", () => all().forEach(c => c.reveal && c.reveal()));
+  document.getElementById(scope + "-reset").addEventListener("click", () => { store.set(scope, {}); build(scope, mcq, tf, match, prefix); });
+  document.getElementById(scope + "-retry").addEventListener("click", () => {
+    const st = store.get(scope) || {}, wrong = new Set(Object.keys(st).filter(k => st[k] === 0));
+    const s = document.getElementById(scope + "-score");
+    if (!wrong.size) { s.textContent = "No wrong answers to retry. " + s.textContent; return; }
+    wrong.forEach(k => delete st[k]); store.set(scope, st);
+    build(scope, mcq, tf, match, prefix, wrong);
+  });
+}
+wire("bank", BANK_MCQ, BANK_TF, BANK_MATCH, "");
+wire("pred", PRED_MCQ, PRED_TF, PRED_MATCH, "P·");
+
+/* plan ticks */
+document.querySelectorAll(".plan input").forEach(cb => {
+  cb.checked = store.get("plan-" + cb.id) === 1;
+  cb.addEventListener("change", () => store.set("plan-" + cb.id, cb.checked ? 1 : 0));
+});
+/* lightbox with zoom */
+const lb = document.getElementById("lb"), lbi = lb.querySelector("img");
+document.querySelectorAll("figure.fig img").forEach(im => im.addEventListener("click", () => { lbi.src = im.src; lbi.alt = im.alt; lb.classList.remove("zoom"); lb.hidden = false; }));
+lbi.addEventListener("click", e => { e.stopPropagation(); lb.classList.toggle("zoom"); });
+lb.addEventListener("click", () => { lb.hidden = true; });
+document.addEventListener("keydown", e => { if (e.key === "Escape") lb.hidden = true; });
+</script>
+</body>
+</html>
